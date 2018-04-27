@@ -8,6 +8,9 @@
 #include <QProcess>
 #include <QElapsedTimer>
 #include <QMessageBox>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 
 LauncherWindow::LauncherWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::LauncherWindow) {
@@ -45,7 +48,22 @@ LauncherWindow::LauncherWindow(QWidget *parent)
         QString("<a href='%1'><span style='font-weight: 600; text-decoration: "
                 "underline; color: #fff'>Technical Support</span></a>")
             .arg(game_TechSupportUrl));
-    // TODO: read version from patchdef.json
+
+    QFile patchdefFile("languagebarrier/patchdef.json");
+    if (!patchdefFile.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, "Launcher error",
+                              "Couldn't open patch definition");
+        QApplication::quit();
+    }
+    QByteArray patchdefData = patchdefFile.readAll();
+    QJsonDocument patchdef = QJsonDocument::fromJson(patchdefData);
+    QString version = patchdef.object()["patchVersion"].toString();
+
+    ui->versionLabel->setTextFormat(Qt::RichText);
+    ui->versionLabel->setText(
+        QString("<a href='%1'><span style='font-weight: 600; text-decoration: "
+                "underline; color: #fff'>Version:</span></a> %2")
+            .arg(game_ReleaseUrl, version));
 }
 
 LauncherWindow::~LauncherWindow() { delete ui; }
