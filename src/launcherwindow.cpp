@@ -2,6 +2,7 @@
 #include "ui_launcherwindow.h"
 #include "launcherapplication.h"
 #include "globals.h"
+#include "gameconfig.h"
 
 #include <QMouseEvent>
 #include <QToolButton>
@@ -96,6 +97,9 @@ void LauncherWindow::cancelRequested() { QApplication::quit(); }
 
 void LauncherWindow::startGame() {
     setEnabled(false);
+
+    rbApp->gameConfig()->save();
+
     volatile void *ipc;
     HANDLE ipcFile;
     if (game_ipcEnabled) {
@@ -104,10 +108,12 @@ void LauncherWindow::startGame() {
         ipc = MapViewOfFile(ipcFile, FILE_MAP_ALL_ACCESS, 0, 0, 8);
         ((volatile uint32_t *)ipc)[1] = game_ipcOut;
     }
+
     // allow URLs
     QProcess::startDetached("cmd", QStringList()
                                        << "/c"
                                        << "start " + game_LaunchCommand);
+
     if (game_ipcEnabled) {
         QElapsedTimer timer;
         bool started = false;

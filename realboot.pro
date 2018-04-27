@@ -38,6 +38,7 @@ chaoschild {
 }
 
 DEFINES += WIN32_LEAN_AND_MEAN
+LIBS += Shell32.lib Ole32.lib
 
 INCLUDEPATH += src
 
