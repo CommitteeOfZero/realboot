@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/cross.png</file>
+        <file>assets/cross_hover.png</file>
+        <file>assets/cozlogo.png</file>
+    </qresource>
+</RCC>

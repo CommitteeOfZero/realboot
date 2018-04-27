@@ -1,0 +1,7 @@
+---
+BasedOnStyle: Google
+SortIncludes: false
+IndentWidth: 4
+UseTab: Never
+CommentPragmas: '^\^jsdoc' # I think this used to work but not anymore
+ReflowComments: false
