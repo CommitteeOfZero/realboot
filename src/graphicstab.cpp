@@ -27,6 +27,9 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     leftLabel->setText("<b>Game</b>");
     leftLayout->addWidget(leftLabel);
 
+    _fullscreenCb = new QCheckBox("Fullscreen", left);
+    leftLayout->addWidget(_fullscreenCb);
+
     QHBoxLayout *resolutionRow = new QHBoxLayout(left);
     resolutionRow->setSpacing(4);
     QLabel *resolutionLabel = new QLabel("Resolution:");
@@ -46,9 +49,6 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     resolutionRow->addWidget(r1080pButton);
     leftLayout->addLayout(resolutionRow);
 
-    _fullscreenCb = new QCheckBox("Fullscreen", left);
-    leftLayout->addWidget(_fullscreenCb);
-
     QWidget *right = new QWidget(this);
     right->setSizePolicy(colSp);
     QVBoxLayout *rightLayout = new QVBoxLayout(this);
@@ -61,6 +61,21 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     rightLabel->setText("<b>Videos</b>");
     rightLayout->addWidget(rightLabel);
 
+    QHBoxLayout *movieQualityRow = new QHBoxLayout(right);
+    movieQualityRow->setSpacing(4);
+    QLabel *movieQualityLabel = new QLabel("Quality:");
+    movieQualityRow->addWidget(movieQualityLabel);
+    _movieQualityGroup = new QButtonGroup(right);
+    QRadioButton *qualityLowButton = new QRadioButton("Low (720p)", right);
+    _movieQualityGroup->addButton(qualityLowButton,
+                                  (int)GameConfig::MovieQuality::Low720p);
+    movieQualityRow->addWidget(qualityLowButton);
+    QRadioButton *qualityHighButton = new QRadioButton("High (1080p)", right);
+    _movieQualityGroup->addButton(qualityHighButton,
+                                  (int)GameConfig::MovieQuality::High1080p);
+    movieQualityRow->addWidget(qualityHighButton);
+    rightLayout->addLayout(movieQualityRow);
+
     leftLayout->addStretch(1);
     rightLayout->addStretch(1);
 
@@ -68,6 +83,8 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
         ->setChecked(true);
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
+    _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
+        ->setChecked(true);
 }
 
 void GraphicsTab::setConfig() {
@@ -90,4 +107,6 @@ void GraphicsTab::setConfig() {
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
+    rbApp->gameConfig()->movieQuality =
+        (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
 }
