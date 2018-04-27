@@ -16,6 +16,7 @@ LauncherApplication::LauncherApplication(int& argc, char** argv)
     qssFile.open(QFile::ReadOnly | QFile::Text);
     QTextStream ts(&qssFile);
     setStyleSheet(ts.readAll());
+    // TODO: fix cross button - see also launcherwindow.cpp
 
     QDir(gameConfigDirectory()).mkpath(".");
 

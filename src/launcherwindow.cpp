@@ -3,6 +3,7 @@
 #include "launcherapplication.h"
 #include "globals.h"
 #include "gameconfig.h"
+#include "graphicstab.h"
 
 #include <QMouseEvent>
 #include <QToolButton>
@@ -26,6 +27,7 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     // gross but I haven't found any way to overlay a container over other
     // widgets while passing through input events that don't hit any of its
     // child widgets
+    // TODO: fix cross button - see also launcherapplication.cpp
     QToolButton *crossButton = new QToolButton(this);
     crossButton->setStyleSheet(
         "QToolButton { image: url(':/assets/cross.png'); }"
@@ -65,6 +67,10 @@ LauncherWindow::LauncherWindow(QWidget *parent)
         QString("<a href='%1'><span style='font-weight: 600; text-decoration: "
                 "underline; color: #fff'>Version:</span></a> %2")
             .arg(game_ReleaseUrl, version));
+
+    _graphicsTab = new GraphicsTab(this);
+    ui->tabWidget->addTab(_graphicsTab, "Graphics");
+    ui->tabWidget->addTab(new QWidget(this), "Dummy");
 }
 
 LauncherWindow::~LauncherWindow() { delete ui; }
@@ -98,6 +104,7 @@ void LauncherWindow::cancelRequested() { QApplication::quit(); }
 void LauncherWindow::startGame() {
     setEnabled(false);
 
+    _graphicsTab->setConfig();
     rbApp->gameConfig()->save();
 
     volatile void *ipc;

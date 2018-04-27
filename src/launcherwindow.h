@@ -9,6 +9,8 @@ namespace Ui {
 class LauncherWindow;
 }
 
+class GraphicsTab;
+
 class LauncherWindow : public QMainWindow {
     Q_OBJECT
    public:
@@ -29,4 +31,5 @@ class LauncherWindow : public QMainWindow {
 
    private:
     Ui::LauncherWindow *ui;
+    GraphicsTab *_graphicsTab;
 };
