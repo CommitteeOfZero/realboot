@@ -8,76 +8,61 @@
 #include <QRadioButton>
 
 GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
-    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(8);
+    mainLayout->setMargin(0);
     setLayout(mainLayout);
 
-    QSizePolicy colSp(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    colSp.setHorizontalStretch(1);
+    QLabel *gameLabel = new QLabel(this);
+    gameLabel->setText("<b>Game</b>");
+    mainLayout->addWidget(gameLabel);
 
-    QWidget *left = new QWidget(this);
-    left->setSizePolicy(colSp);
-    QVBoxLayout *leftLayout = new QVBoxLayout(this);
-    left->setLayout(leftLayout);
-    leftLayout->setSpacing(8);
-    leftLayout->setMargin(0);
-    mainLayout->addWidget(left);
+    _fullscreenCb = new QCheckBox("Fullscreen", this);
+    mainLayout->addWidget(_fullscreenCb);
 
-    QLabel *leftLabel = new QLabel(left);
-    leftLabel->setText("<b>Game</b>");
-    leftLayout->addWidget(leftLabel);
-
-    _fullscreenCb = new QCheckBox("Fullscreen", left);
-    leftLayout->addWidget(_fullscreenCb);
-
-    QHBoxLayout *resolutionRow = new QHBoxLayout(left);
-    resolutionRow->setSpacing(4);
+    QHBoxLayout *resolutionRow = new QHBoxLayout(this);
+    resolutionRow->setSpacing(8);
+    resolutionRow->setMargin(0);
     QLabel *resolutionLabel = new QLabel("Resolution:");
     resolutionRow->addWidget(resolutionLabel);
-    _resolutionGroup = new QButtonGroup(left);
-    QRadioButton *r576pButton = new QRadioButton("576p", left);
+    _resolutionGroup = new QButtonGroup(this);
+    QRadioButton *r576pButton = new QRadioButton("1024x576", this);
     _resolutionGroup->addButton(r576pButton,
                                 (int)GameConfig::Resolution::Res576p);
     resolutionRow->addWidget(r576pButton);
-    QRadioButton *r720pButton = new QRadioButton("720p", left);
+    QRadioButton *r720pButton = new QRadioButton("1280x720", this);
     _resolutionGroup->addButton(r720pButton,
                                 (int)GameConfig::Resolution::Res720p);
     resolutionRow->addWidget(r720pButton);
-    QRadioButton *r1080pButton = new QRadioButton("1080p", left);
+    QRadioButton *r1080pButton = new QRadioButton("1920x1080", this);
     _resolutionGroup->addButton(r1080pButton,
                                 (int)GameConfig::Resolution::Res1080p);
     resolutionRow->addWidget(r1080pButton);
-    leftLayout->addLayout(resolutionRow);
+    resolutionRow->addStretch(1);
+    mainLayout->addLayout(resolutionRow);
 
-    QWidget *right = new QWidget(this);
-    right->setSizePolicy(colSp);
-    QVBoxLayout *rightLayout = new QVBoxLayout(this);
-    right->setLayout(rightLayout);
-    rightLayout->setSpacing(8);
-    rightLayout->setMargin(0);
-    mainLayout->addWidget(right);
+    QLabel *fmvLabel = new QLabel(this);
+    fmvLabel->setText("<b>Videos</b>");
+    mainLayout->addWidget(fmvLabel);
 
-    QLabel *rightLabel = new QLabel(right);
-    rightLabel->setText("<b>Videos</b>");
-    rightLayout->addWidget(rightLabel);
-
-    QHBoxLayout *movieQualityRow = new QHBoxLayout(right);
-    movieQualityRow->setSpacing(4);
+    QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
+    movieQualityRow->setSpacing(8);
+    movieQualityRow->setMargin(0);
     QLabel *movieQualityLabel = new QLabel("Quality:");
     movieQualityRow->addWidget(movieQualityLabel);
-    _movieQualityGroup = new QButtonGroup(right);
-    QRadioButton *qualityLowButton = new QRadioButton("Low (720p)", right);
+    _movieQualityGroup = new QButtonGroup(this);
+    QRadioButton *qualityLowButton = new QRadioButton("Low (720p)", this);
     _movieQualityGroup->addButton(qualityLowButton,
                                   (int)GameConfig::MovieQuality::Low720p);
     movieQualityRow->addWidget(qualityLowButton);
-    QRadioButton *qualityHighButton = new QRadioButton("High (1080p)", right);
+    QRadioButton *qualityHighButton = new QRadioButton("High (1080p)", this);
     _movieQualityGroup->addButton(qualityHighButton,
                                   (int)GameConfig::MovieQuality::High1080p);
     movieQualityRow->addWidget(qualityHighButton);
-    rightLayout->addLayout(movieQualityRow);
+    movieQualityRow->addStretch(1);
+    mainLayout->addLayout(movieQualityRow);
 
-    leftLayout->addStretch(1);
-    rightLayout->addStretch(1);
+    mainLayout->addStretch(1);
 
     _resolutionGroup->button((int)rbApp->gameConfig()->resolution)
         ->setChecked(true);
