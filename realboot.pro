@@ -37,6 +37,8 @@ chaoschild {
     RESOURCES += chaoschild.qrc
 }
 
+DEFINES += WIN32_LEAN_AND_MEAN
+
 INCLUDEPATH += src
 
 SOURCES += $$files(src/*.cpp, true)
