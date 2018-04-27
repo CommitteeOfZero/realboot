@@ -19,11 +19,18 @@ GameConfig::GameConfig(QObject* parent) : QObject(parent) {
         controllerGuid = QString::fromWCharArray((const wchar_t*)(data + 4));
         width = *(const int*)(data + 0x2C);
         height = *(const int*)(data + 0x30);
-        displayMode = *(const DisplayMode*)(data + 0x34);
-        resolution = *(const Resolution*)(data + 0x38);
+        uint32_t displayMode_ = *(const uint32_t*)(data + 0x34);
+        if (displayMode_ < (uint32_t)DisplayMode::Num)
+            displayMode = (DisplayMode)displayMode_;
+        uint32_t resolution_ = *(const uint32_t*)(data + 0x38);
+        if (resolution_ < (uint32_t)Resolution::Num)
+            resolution = (Resolution)resolution_;
         startWindowX = *(const int*)(data + 0x3C);
         startWindowY = *(const int*)(data + 0x40);
         movieQuality = *(const MovieQuality*)(data + 0x44);
+        uint32_t movieQuality_ = *(const uint32_t*)(data + 0x44);
+        if (movieQuality_ < (uint32_t)MovieQuality::Num)
+            movieQuality = (MovieQuality)movieQuality_;
     }
 }
 

@@ -6,11 +6,16 @@ class GameConfig : public QObject {
     Q_OBJECT
 
    public:
-    enum class MovieQuality : uint32_t { High1080p = 0, Low720p = 1 };
+    enum class MovieQuality : uint32_t { High1080p = 0, Low720p = 1, Num };
     Q_ENUM(MovieQuality)
-    enum class DisplayMode : uint32_t { Windowed = 0, Fullscreen = 1 };
+    enum class DisplayMode : uint32_t { Windowed = 0, Fullscreen = 1, Num };
     Q_ENUM(DisplayMode)
-    enum class Resolution : uint32_t { Res576p = 0, Res720p = 1, Res1080p = 2 };
+    enum class Resolution : uint32_t {
+        Res576p = 0,
+        Res720p = 1,
+        Res1080p = 2,
+        Num
+    };
     Q_ENUM(Resolution)
 
     explicit GameConfig(QObject *parent = 0);
