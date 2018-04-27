@@ -46,6 +46,7 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 
     setWindowTitle(game_LauncherTitle);
     ui->techSupportLabel->setTextFormat(Qt::RichText);
+    ui->techSupportLabel->setOpenExternalLinks(true);
     ui->techSupportLabel->setText(
         QString("<a href='%1'><span style='font-weight: 600; text-decoration: "
                 "underline; color: #fff'>Technical Support</span></a>")
@@ -62,6 +63,7 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     QString version = patchdef.object()["patchVersion"].toString();
 
     ui->versionLabel->setTextFormat(Qt::RichText);
+    ui->versionLabel->setOpenExternalLinks(true);
     ui->versionLabel->setText(
         QString("<a href='%1'><span style='font-weight: 600; text-decoration: "
                 "underline; color: #fff'>Version:</span></a> %2")
