@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QWidget>
+#include <QButtonGroup>
+#include <QCheckBox>
 
 class GraphicsTab : public QWidget {
     Q_OBJECT
@@ -10,4 +12,8 @@ class GraphicsTab : public QWidget {
     ~GraphicsTab() {}
 
     void setConfig();
+
+   private:
+    QButtonGroup* _resolutionGroup;
+    QCheckBox* _fullscreenCb;
 };
