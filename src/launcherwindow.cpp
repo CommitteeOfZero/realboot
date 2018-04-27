@@ -27,7 +27,6 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     // gross but I haven't found any way to overlay a container over other
     // widgets while passing through input events that don't hit any of its
     // child widgets
-    // TODO: fix cross button - see also launcherapplication.cpp
     QToolButton *crossButton = new QToolButton(this);
     crossButton->setStyleSheet(
         "QToolButton { image: url(':/assets/cross.png'); }"

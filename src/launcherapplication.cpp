@@ -11,17 +11,18 @@
 
 LauncherApplication::LauncherApplication(int& argc, char** argv)
     : QApplication(argc, argv) {
-    setStyle(QStyleFactory::create("windows"));
-    QFile qssFile(":/kofuna/style.qss");
-    qssFile.open(QFile::ReadOnly | QFile::Text);
-    QTextStream ts(&qssFile);
-    setStyleSheet(ts.readAll());
-    // TODO: fix cross button - see also launcherwindow.cpp
-
     QDir(gameConfigDirectory()).mkpath(".");
 
     gc = new GameConfig(this);
     w = new LauncherWindow(0);
+
+    // I would *like* to apply the style to the whole application
+    // (for unparented MessageBoxes), but that breaks the X button image...
+    w->setStyle(QStyleFactory::create("windows"));
+    QFile qssFile(":/kofuna/style.qss");
+    qssFile.open(QFile::ReadOnly | QFile::Text);
+    QTextStream ts(&qssFile);
+    w->setStyleSheet(ts.readAll());
 
     w->show();
 }
