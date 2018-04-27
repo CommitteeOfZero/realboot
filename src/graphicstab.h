@@ -16,5 +16,7 @@ class GraphicsTab : public QWidget {
    private:
     QButtonGroup* _resolutionGroup;
     QCheckBox* _fullscreenCb;
+    QCheckBox* _outlineCb;
     QButtonGroup* _movieQualityGroup;
+    QCheckBox* _karaokeCb;
 };

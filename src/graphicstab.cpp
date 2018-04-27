@@ -9,7 +9,7 @@
 
 GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setSpacing(8);
+    mainLayout->setSpacing(12);
     mainLayout->setMargin(0);
     setLayout(mainLayout);
 
@@ -23,7 +23,7 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     QHBoxLayout *resolutionRow = new QHBoxLayout(this);
     resolutionRow->setSpacing(8);
     resolutionRow->setMargin(0);
-    QLabel *resolutionLabel = new QLabel("Resolution:");
+    QLabel *resolutionLabel = new QLabel("Resolution:", this);
     resolutionRow->addWidget(resolutionLabel);
     _resolutionGroup = new QButtonGroup(this);
     QRadioButton *r576pButton = new QRadioButton("1024x576", this);
@@ -41,6 +41,11 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     resolutionRow->addStretch(1);
     mainLayout->addLayout(resolutionRow);
 
+    _outlineCb = new QCheckBox("Improve dialogue outlines", this);
+    mainLayout->addWidget(_outlineCb);
+
+    mainLayout->addSpacing(16);
+
     QLabel *fmvLabel = new QLabel(this);
     fmvLabel->setText("<b>Videos</b>");
     mainLayout->addWidget(fmvLabel);
@@ -48,7 +53,7 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
     movieQualityRow->setMargin(0);
-    QLabel *movieQualityLabel = new QLabel("Quality:");
+    QLabel *movieQualityLabel = new QLabel("Quality:", this);
     movieQualityRow->addWidget(movieQualityLabel);
     _movieQualityGroup = new QButtonGroup(this);
     QRadioButton *qualityLowButton = new QRadioButton("Low (720p)", this);
@@ -61,6 +66,9 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     movieQualityRow->addWidget(qualityHighButton);
     movieQualityRow->addStretch(1);
     mainLayout->addLayout(movieQualityRow);
+
+    _karaokeCb = new QCheckBox("Karaoke subtitles for OP/ED", this);
+    mainLayout->addWidget(_karaokeCb);
 
     mainLayout->addStretch(1);
 
