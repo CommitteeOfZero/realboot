@@ -5,6 +5,7 @@
 
 #include <QMouseEvent>
 #include <QToolButton>
+#include <QProcess>
 
 LauncherWindow::LauncherWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::LauncherWindow) {
@@ -31,8 +32,10 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 
     ui->bottomBarLayout->setAlignment(Qt::AlignVCenter);
 
-    /*connect(ui->cancelButton, &QAbstractButton::clicked, this,
-            &InstallerWindow::cancelRequested);*/
+    connect(ui->startButton, &QAbstractButton::clicked, this,
+            &LauncherWindow::startGame);
+    connect(ui->cancelButton, &QAbstractButton::clicked, this,
+            &LauncherWindow::cancelRequested);
 
     setWindowTitle(game_LauncherTitle);
     ui->techSupportLabel->setTextFormat(Qt::RichText);
@@ -70,3 +73,12 @@ void LauncherWindow::closeEvent(QCloseEvent *event) {
 }
 
 void LauncherWindow::cancelRequested() { QApplication::quit(); }
+
+void LauncherWindow::startGame() {
+    // allow URLs
+    QProcess::startDetached("cmd", QStringList()
+                                       << "/c"
+                                       << "start " + game_LaunchCommand);
+    QApplication::quit();
+    // TODO: IPC bullshit
+}
