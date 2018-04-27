@@ -19,4 +19,5 @@ class GraphicsTab : public QWidget {
     QCheckBox* _outlineCb;
     QButtonGroup* _movieQualityGroup;
     QCheckBox* _karaokeCb;
+    QCheckBox* _hqAudioCb;
 };

@@ -1,6 +1,7 @@
 #include "launcherapplication.h"
 #include "launcherwindow.h"
 #include "gameconfig.h"
+#include "patchconfig.h"
 #include "globals.h"
 #include <QFile>
 #include <QTextStream>
@@ -14,6 +15,7 @@ LauncherApplication::LauncherApplication(int& argc, char** argv)
     QDir(gameConfigDirectory()).mkpath(".");
 
     gc = new GameConfig(this);
+    pc = new PatchConfig(this);
     w = new LauncherWindow(0);
 
     // I would *like* to apply the style to the whole application
@@ -36,6 +38,15 @@ QString LauncherApplication::gameConfigDirectory() const {
         QString::fromWCharArray(myDocumentsPath) + "/My Games/";
     CoTaskMemFree(myDocumentsPath);
     return myGamesPath + game_GameConfPath;
+}
+
+QString LauncherApplication::patchConfigDirectory() const {
+    PWSTR localAppDataPath;
+    SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &localAppDataPath);
+    QString patchConfigPath =
+        QString::fromWCharArray(localAppDataPath) + "/" + game_PatchConfPath;
+    CoTaskMemFree(localAppDataPath);
+    return patchConfigPath;
 }
 
 void LauncherApplication::showWindow() { w->show(); }

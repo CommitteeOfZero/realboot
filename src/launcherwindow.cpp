@@ -3,6 +3,7 @@
 #include "launcherapplication.h"
 #include "globals.h"
 #include "gameconfig.h"
+#include "patchconfig.h"
 #include "graphicstab.h"
 
 #include <QMouseEvent>
@@ -107,6 +108,7 @@ void LauncherWindow::startGame() {
 
     _graphicsTab->setConfig();
     rbApp->gameConfig()->save();
+    rbApp->patchConfig()->save();
 
     volatile void *ipc;
     HANDLE ipcFile;

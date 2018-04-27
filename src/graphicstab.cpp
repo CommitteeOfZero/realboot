@@ -1,6 +1,7 @@
 #include "graphicstab.h"
 #include "launcherapplication.h"
 #include "gameconfig.h"
+#include "patchconfig.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -70,6 +71,9 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     _karaokeCb = new QCheckBox("Karaoke subtitles for OP/ED", this);
     mainLayout->addWidget(_karaokeCb);
 
+    _hqAudioCb = new QCheckBox("Use high-quality audio tracks for OP/ED", this);
+    mainLayout->addWidget(_hqAudioCb);
+
     mainLayout->addStretch(1);
 
     _resolutionGroup->button((int)rbApp->gameConfig()->resolution)
@@ -78,6 +82,10 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
                               GameConfig::DisplayMode::Fullscreen);
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
+
+    _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
+    _karaokeCb->setChecked(rbApp->patchConfig()->karaokeSubs == "lowQuality");
+    _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
 }
 
 void GraphicsTab::setConfig() {
@@ -102,4 +110,9 @@ void GraphicsTab::setConfig() {
                                            : GameConfig::DisplayMode::Windowed;
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
+
+    rbApp->patchConfig()->improveDialogueOutlines = _outlineCb->isChecked();
+    rbApp->patchConfig()->karaokeSubs =
+        _karaokeCb->isChecked() ? "lowQuality" : "off";
+    rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
 }
