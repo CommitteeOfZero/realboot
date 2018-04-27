@@ -1,6 +1,7 @@
 #include "launcherwindow.h"
 #include "ui_launcherwindow.h"
 #include "launcherapplication.h"
+#include "globals.h"
 
 #include <QMouseEvent>
 #include <QToolButton>
@@ -32,6 +33,14 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 
     /*connect(ui->cancelButton, &QAbstractButton::clicked, this,
             &InstallerWindow::cancelRequested);*/
+
+    setWindowTitle(game_LauncherTitle);
+    ui->techSupportLabel->setTextFormat(Qt::RichText);
+    ui->techSupportLabel->setText(
+        QString("<a href='%1'><span style='font-weight: 600; text-decoration: "
+                "underline; color: #fff'>Technical Support</span></a>")
+            .arg(game_TechSupportUrl));
+    // TODO: read version from patchdef.json
 }
 
 LauncherWindow::~LauncherWindow() { delete ui; }
