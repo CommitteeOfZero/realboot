@@ -10,11 +10,13 @@
 #include <QLineEdit>
 #include <QMap>
 
+#include <QMetaEnum>
+
 static QMap<ControllerConfig::Bind, QString> bindLabelTexts{
     {ControllerConfig::Bind::Enter, "Enter / Send message"},
     {ControllerConfig::Bind::Cancel, "Cancel / Hide text"},
     {ControllerConfig::Bind::AutoMode, "Auto mode"},
-    {ControllerConfig::Bind::Skip, "Skip mode / Turn page (Right)"},
+    {ControllerConfig::Bind::Skip, "Skip / Turn page (Right)"},
     {ControllerConfig::Bind::SystemMenu, "System menu"},
     {ControllerConfig::Bind::Tips, "Tips"},
     {ControllerConfig::Bind::ForceSkip, "Force skip / Turn page (Left)"},
@@ -23,12 +25,21 @@ static QMap<ControllerConfig::Bind, QString> bindLabelTexts{
     {ControllerConfig::Bind::Custom1, game_Custom1ButtonLabel},
     {ControllerConfig::Bind::Custom2, game_Custom2ButtonLabel}};
 
+QString buttonToText(ControllerConfig::Button btn) {
+    if (rbApp->controllerManager()->activeController() == nullptr ||
+        !rbApp->controllerManager()->activeController()->isXinput()) {
+        return QString("%1").arg(((int)btn) + 1);
+    }
+    QMetaEnum metaEnum = QMetaEnum::fromType<ControllerConfig::Button>();
+    return QString(metaEnum.valueToKey((int)btn));
+}
+
 class ControllerTab::BtnLineEdit : public QLineEdit {
    public:
     explicit BtnLineEdit(QWidget *parent = 0) : QLineEdit(parent) {
         setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        setFixedSize(40, 24);
+        setFixedSize(56, 24);
         setReadOnly(true);
     }
     ~BtnLineEdit() {}
@@ -40,7 +51,7 @@ class ControllerTab::BtnRow : public QWidget {
         : QWidget(parent) {
         _bind = bind;
         QHBoxLayout *lay = new QHBoxLayout;
-        lay->setSpacing(8);
+        lay->setSpacing(0);
         lay->setMargin(0);
         lay->setAlignment(Qt::AlignVCenter);
         QLabel *lbl = new QLabel(bindLabelTexts[bind]);
