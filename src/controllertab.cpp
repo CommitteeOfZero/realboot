@@ -38,10 +38,6 @@ QString buttonToText(ControllerConfig::Button btn) {
 }
 
 ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
-    connect(rbApp->controllerManager(),
-            &ControllerManager::activeControllerChanged, this,
-            &ControllerTab::onActiveControllerChanged);
-
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(12);
     mainLayout->setMargin(0);
@@ -120,7 +116,23 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
 
         btnsLayout->addWidget(leftCol);
         btnsLayout->addWidget(rightCol);
+    }
 
+    mainLayout->addStretch(1);
+}
+
+void ControllerTab::showEvent(QShowEvent *e) {
+    QWidget::showEvent(e);
+    if (_firstShowCaught) return;
+    _firstShowCaught = true;
+
+    // We need the native window to exist for startTracking()
+    // So we can't track active controller changes in the constructor
+    connect(rbApp->controllerManager(),
+            &ControllerManager::activeControllerChanged, this,
+            &ControllerTab::onActiveControllerChanged);
+
+    if (!rbApp->controllerManager()->controllers().empty()) {
         // make sure we activate *some* controller
         // but preferably the one specified in config.dat
         int gcIndex = _controllerBox->findData(
@@ -131,8 +143,6 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
             _controllerBox->setCurrentIndex(0);
         }
     }
-
-    mainLayout->addStretch(1);
 }
 
 void ControllerTab::setConfig() {

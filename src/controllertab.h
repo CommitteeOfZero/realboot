@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QComboBox>
 #include <QPushButton>
+#include <QShowEvent>
 
 class ControllerTab : public QWidget {
     Q_OBJECT
@@ -23,8 +24,11 @@ class ControllerTab : public QWidget {
     QComboBox* _controllerBox;
     QPushButton* _resetButton;
     BtnRow* _binds[(int)ControllerConfig::Bind::Num];
+    bool _firstShowCaught = false;
 
     BtnRow* findFocusedBtnRow();
+
+    void showEvent(QShowEvent* e) override;
 
    private slots:
     void resetButtonClicked();
