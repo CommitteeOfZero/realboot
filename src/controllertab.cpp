@@ -209,6 +209,8 @@ void ControllerTab::onButtonPressed(ControllerConfig::Button button) {
 
     BtnRow *br = findFocusedBtnRow();
     if (br != nullptr) {
+        rbApp->controllerManager()->activeController()->config()->preset =
+            ControllerConfig::Preset::Custom;
         confBinds[(int)br->bind()] = button;
         br->le()->setText(buttonToText(button));
         int nextBind = ((int)br->bind() + 1) % (int)ControllerConfig::Bind::Num;
