@@ -61,6 +61,9 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
             _controllerBox->addItem(controller->deviceName(),
                                     QVariant(controller->guid()));
         }
+        // we may need setCurrentIndex(0) to fire currentIndexChanged later
+        // it won't do that if the current index is already 0
+        _controllerBox->setCurrentIndex(-1);
         connect(_controllerBox,
                 QOverload<int>::of(&QComboBox::currentIndexChanged), this,
                 &ControllerTab::controllerSelected);
