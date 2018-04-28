@@ -21,7 +21,8 @@ class ControllerConfig : public QObject {
         RS = 9,
         LT = 10,
         RT = 11,
-        Num
+        Num,
+        Invalid = 0xFF
     };
     Q_ENUM(Button)
     enum class Bind : uint32_t {

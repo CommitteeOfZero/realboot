@@ -3,6 +3,7 @@
 #include "controllermanager.h"
 #include "gameconfig.h"
 #include "globals.h"
+#include "launcherwindow.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -12,7 +13,7 @@
 
 #include <QMetaEnum>
 
-static QMap<ControllerConfig::Bind, QString> bindLabelTexts{
+QMap<ControllerConfig::Bind, QString> bindLabelTexts{
     {ControllerConfig::Bind::Enter, "Enter / Send message"},
     {ControllerConfig::Bind::Cancel, "Cancel / Hide text"},
     {ControllerConfig::Bind::AutoMode, "Auto mode"},
@@ -26,6 +27,8 @@ static QMap<ControllerConfig::Bind, QString> bindLabelTexts{
     {ControllerConfig::Bind::Custom2, game_Custom2ButtonLabel}};
 
 QString buttonToText(ControllerConfig::Button btn) {
+    if (btn == ControllerConfig::Button::Invalid) return "";
+
     if (rbApp->controllerManager()->activeController() == nullptr ||
         !rbApp->controllerManager()->activeController()->isXinput()) {
         return QString("%1").arg(((int)btn) + 1);
@@ -34,44 +37,11 @@ QString buttonToText(ControllerConfig::Button btn) {
     return QString(metaEnum.valueToKey((int)btn));
 }
 
-class ControllerTab::BtnLineEdit : public QLineEdit {
-   public:
-    explicit BtnLineEdit(QWidget *parent = 0) : QLineEdit(parent) {
-        setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        setFixedSize(56, 24);
-        setReadOnly(true);
-    }
-    ~BtnLineEdit() {}
-};
-
-class ControllerTab::BtnRow : public QWidget {
-   public:
-    explicit BtnRow(ControllerConfig::Bind bind, QWidget *parent = 0)
-        : QWidget(parent) {
-        _bind = bind;
-        QHBoxLayout *lay = new QHBoxLayout;
-        lay->setSpacing(0);
-        lay->setMargin(0);
-        lay->setAlignment(Qt::AlignVCenter);
-        QLabel *lbl = new QLabel(bindLabelTexts[bind]);
-        lay->addWidget(lbl);
-        lay->addStretch(1);
-        _le = new BtnLineEdit(this);
-        lay->addWidget(_le);
-        setLayout(lay);
-    }
-    ~BtnRow() {}
-
-    ControllerConfig::Bind bind() const { return _bind; }
-    BtnLineEdit *le() { return _le; }
-
-   private:
-    ControllerConfig::Bind _bind;
-    BtnLineEdit *_le;
-};
-
 ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
+    connect(rbApp->controllerManager(),
+            &ControllerManager::activeControllerChanged, this,
+            &ControllerTab::onActiveControllerChanged);
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(12);
     mainLayout->setMargin(0);
@@ -95,6 +65,9 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
             _controllerBox->addItem(controller->deviceName(),
                                     QVariant(controller->guid()));
         }
+        connect(_controllerBox,
+                QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+                &ControllerTab::controllerSelected);
         controllerRow->addWidget(_controllerBox);
 
         _resetButton = new QPushButton("Reset bindings", this);
@@ -147,6 +120,16 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
 
         btnsLayout->addWidget(leftCol);
         btnsLayout->addWidget(rightCol);
+
+        // make sure we activate *some* controller
+        // but preferably the one specified in config.dat
+        int gcIndex = _controllerBox->findData(
+            QVariant(rbApp->gameConfig()->controllerGuid));
+        if (gcIndex > -1) {
+            _controllerBox->setCurrentIndex(gcIndex);
+        } else {
+            _controllerBox->setCurrentIndex(0);
+        }
     }
 
     mainLayout->addStretch(1);
@@ -160,4 +143,64 @@ void ControllerTab::setConfig() {
     // rest is already set above
 }
 
-void ControllerTab::resetButtonClicked() {}
+void ControllerTab::reloadData() {
+    if (rbApp->controllerManager()->activeController() != nullptr) {
+        for (int i = 0; i < (int)ControllerConfig::Bind::Num; i++) {
+            _binds[i]->le()->setText(buttonToText(rbApp->controllerManager()
+                                                      ->activeController()
+                                                      ->config()
+                                                      ->binds[i]));
+        }
+    }
+}
+
+BtnRow *ControllerTab::findFocusedBtnRow() {
+    QWidget *fw = rbApp->focusWidget();
+    BtnRow *br = nullptr;
+    while (fw != nullptr && (br = qobject_cast<BtnRow *>(fw)) == nullptr) {
+        fw = fw->parentWidget();
+    }
+    return br;
+}
+
+void ControllerTab::resetButtonClicked() {
+    rbApp->controllerManager()->activeController()->config()->loadDefaults();
+    reloadData();
+}
+
+void ControllerTab::controllerSelected(int index) {
+    rbApp->controllerManager()->setActiveController(
+        _controllerBox->currentData().toString());
+}
+
+void ControllerTab::onActiveControllerChanged(DinputController *oldController,
+                                              DinputController *newController) {
+    if (oldController != nullptr) {
+        disconnect(oldController, 0, this, 0);
+        oldController->stopTracking();
+    }
+    if (newController != nullptr) {
+        connect(newController, &DinputController::buttonPressed, this,
+                &ControllerTab::onButtonPressed);
+        newController->startTracking((HWND)rbApp->window()->winId());
+    }
+}
+
+void ControllerTab::onButtonPressed(ControllerConfig::Button button) {
+    auto &confBinds =
+        rbApp->controllerManager()->activeController()->config()->binds;
+    for (int i = 0; i < (int)ControllerConfig::Bind::Num; i++) {
+        if (confBinds[i] == button) {
+            confBinds[i] = ControllerConfig::Button::Invalid;
+            _binds[i]->le()->setText("");
+        }
+    }
+
+    BtnRow *br = findFocusedBtnRow();
+    if (br != nullptr) {
+        confBinds[(int)br->bind()] = button;
+        br->le()->setText(buttonToText(button));
+        int nextBind = ((int)br->bind() + 1) % (int)ControllerConfig::Bind::Num;
+        _binds[nextBind]->le()->setFocus();
+    }
+}

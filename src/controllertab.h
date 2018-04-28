@@ -1,6 +1,9 @@
 #pragma once
 
 #include "controllerconfig.h"
+#include "dinputcontroller.h"
+#include "btnlineedit.h"
+#include "btnrow.h"
 
 #include <QWidget>
 #include <QComboBox>
@@ -14,14 +17,19 @@ class ControllerTab : public QWidget {
     ~ControllerTab() {}
 
     void setConfig();
+    void reloadData();
 
    private:
-    class BtnRow;
-    class BtnLineEdit;
     QComboBox* _controllerBox;
     QPushButton* _resetButton;
     BtnRow* _binds[(int)ControllerConfig::Bind::Num];
 
+    BtnRow* findFocusedBtnRow();
+
    private slots:
     void resetButtonClicked();
+    void controllerSelected(int index);
+    void onActiveControllerChanged(DinputController* oldController,
+                                   DinputController* newController);
+    void onButtonPressed(ControllerConfig::Button button);
 };

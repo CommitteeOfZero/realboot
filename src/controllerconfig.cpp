@@ -27,7 +27,9 @@ ControllerConfig::ControllerConfig(const QString& guid, QObject* parent)
         const uint8_t* pCurBtn = (const uint8_t*)(data + 8);
         for (int i = 0; i < (int)Bind::Num; i++) {
             uint8_t curBtn = *pCurBtn++;
-            if (curBtn < (uint8_t)Button::Num) binds[i] = (Button)curBtn;
+            if (curBtn < (uint8_t)Button::Num ||
+                curBtn == (uint8_t)Button::Invalid)
+                binds[i] = (Button)curBtn;
         }
     }
 }
