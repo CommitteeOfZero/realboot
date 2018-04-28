@@ -29,6 +29,8 @@ class LauncherWindow : public QMainWindow {
    private slots:
     void cancelRequested();
     void startGame();
+    void saveChanges();
+    void resetToDefaults();
 
    private:
     Ui::LauncherWindow *ui;

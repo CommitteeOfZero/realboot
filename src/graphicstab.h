@@ -12,6 +12,7 @@ class GraphicsTab : public QWidget {
     ~GraphicsTab() {}
 
     void setConfig();
+    void reloadData();
 
    private:
     QButtonGroup* _resolutionGroup;

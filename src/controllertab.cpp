@@ -78,8 +78,6 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addLayout(controllerRow);
 
     if (!rbApp->controllerManager()->controllers().empty()) {
-        mainLayout->addSpacing(12);
-
         /* diagnostics */
         /*
         _axesLabel = new QLabel(this);

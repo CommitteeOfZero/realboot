@@ -86,14 +86,10 @@
         </widget>
        </item>
        <item>
-        <widget class="QTabWidget" name="tabWidget">
-        </widget>
+        <widget class="QTabWidget" name="tabWidget"/>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="primaryButtonsLayout">
-         <property name="spacing">
-          <number>8</number>
-         </property>
+        <layout class="QGridLayout" name="primaryButtonsLayout">
          <property name="leftMargin">
           <number>8</number>
          </property>
@@ -103,17 +99,31 @@
          <property name="rightMargin">
           <number>8</number>
          </property>
-         <item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="saveButton">
+           <property name="text">
+            <string>Save changes</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
           <widget class="QPushButton" name="startButton">
            <property name="text">
             <string>Save &amp;&amp; Start Game</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="1">
           <widget class="QPushButton" name="cancelButton">
            <property name="text">
             <string>Discard &amp;&amp; Exit</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QPushButton" name="resetButton">
+           <property name="text">
+            <string>Reset to defaults</string>
            </property>
           </widget>
          </item>
@@ -175,6 +185,13 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>resetButton</tabstop>
+  <tabstop>startButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

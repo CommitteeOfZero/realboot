@@ -6,6 +6,8 @@
 GameConfig::GameConfig(QObject* parent) : QObject(parent) {
     _path = rbApp->gameConfigDirectory() + "/config.dat";
 
+    loadDefaults();
+
     if (QFileInfo(_path).exists()) {
         QFile inFile(_path);
         if (!inFile.open(QIODevice::ReadOnly)) {
@@ -54,4 +56,14 @@ void GameConfig::save() {
     outFile.write((const char*)&startWindowY, 4);
     outFile.write((const char*)&movieQuality, 4);
     outFile.seek(0x6C);  // padding
+}
+
+void GameConfig::loadDefaults() {
+    width = 1280;
+    height = 720;
+    displayMode = DisplayMode::Windowed;
+    resolution = Resolution::Res720p;
+    startWindowX = 0;
+    startWindowY = 0;
+    movieQuality = MovieQuality::Low720p;
 }

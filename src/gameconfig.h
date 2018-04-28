@@ -22,14 +22,15 @@ class GameConfig : public QObject {
     ~GameConfig() {}
 
     void save();
+    void loadDefaults();
 
-    int width = 1280;
-    int height = 720;
-    DisplayMode displayMode = DisplayMode::Windowed;
-    Resolution resolution = Resolution::Res720p;
-    int startWindowX = 0;
-    int startWindowY = 0;
-    MovieQuality movieQuality = MovieQuality::Low720p;
+    int width;
+    int height;
+    DisplayMode displayMode;
+    Resolution resolution;
+    int startWindowX;
+    int startWindowY;
+    MovieQuality movieQuality;
     QString controllerGuid = QString();
 
    private:

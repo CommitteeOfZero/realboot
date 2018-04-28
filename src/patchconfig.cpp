@@ -13,6 +13,8 @@ QStringList PatchConfig::KaraokeSubsOptions = QStringList() << "off"
 PatchConfig::PatchConfig(QObject *parent) : QObject(parent) {
     _path = rbApp->patchConfigDirectory() + "/config.json";
 
+    loadDefaults();
+
     if (QFileInfo(_path).exists()) {
         QFile inFile(_path);
         if (!inFile.open(QIODevice::ReadOnly)) {
@@ -55,4 +57,10 @@ void PatchConfig::save() {
 
     QJsonDocument outJsonDocument(outJson);
     outFile.write(outJsonDocument.toJson());
+}
+
+void PatchConfig::loadDefaults() {
+    hqFmvAudio = true;
+    improveDialogueOutlines = true;
+    karaokeSubs = "lowQuality";
 }

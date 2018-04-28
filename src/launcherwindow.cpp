@@ -47,6 +47,10 @@ LauncherWindow::LauncherWindow(QWidget *parent)
             &LauncherWindow::startGame);
     connect(ui->cancelButton, &QAbstractButton::clicked, this,
             &LauncherWindow::cancelRequested);
+    connect(ui->resetButton, &QAbstractButton::clicked, this,
+            &LauncherWindow::resetToDefaults);
+    connect(ui->saveButton, &QAbstractButton::clicked, this,
+            &LauncherWindow::saveChanges);
 
     setWindowTitle(game_LauncherTitle);
     ui->techSupportLabel->setTextFormat(Qt::RichText);
@@ -110,13 +114,7 @@ void LauncherWindow::cancelRequested() { QApplication::quit(); }
 void LauncherWindow::startGame() {
     setEnabled(false);
 
-    _graphicsTab->setConfig();
-    _controllerTab->setConfig();
-    rbApp->gameConfig()->save();
-    rbApp->patchConfig()->save();
-    if (rbApp->controllerManager()->activeController() != nullptr) {
-        rbApp->controllerManager()->activeController()->config()->save();
-    }
+    saveChanges();
 
     volatile void *ipc;
     HANDLE ipcFile;
@@ -155,4 +153,27 @@ void LauncherWindow::startGame() {
     } else {
         QApplication::quit();
     }
+}
+
+void LauncherWindow::saveChanges() {
+    _graphicsTab->setConfig();
+    _controllerTab->setConfig();
+    rbApp->gameConfig()->save();
+    rbApp->patchConfig()->save();
+    if (rbApp->controllerManager()->activeController() != nullptr) {
+        rbApp->controllerManager()->activeController()->config()->save();
+    }
+}
+
+void LauncherWindow::resetToDefaults() {
+    rbApp->gameConfig()->loadDefaults();
+    rbApp->patchConfig()->loadDefaults();
+    if (rbApp->controllerManager()->activeController() != nullptr) {
+        rbApp->controllerManager()
+            ->activeController()
+            ->config()
+            ->loadDefaults();
+        _controllerTab->reloadData();
+    }
+    _graphicsTab->reloadData();
 }

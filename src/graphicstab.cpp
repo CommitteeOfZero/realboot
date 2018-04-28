@@ -76,16 +76,7 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
 
     mainLayout->addStretch(1);
 
-    _resolutionGroup->button((int)rbApp->gameConfig()->resolution)
-        ->setChecked(true);
-    _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
-                              GameConfig::DisplayMode::Fullscreen);
-    _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
-        ->setChecked(true);
-
-    _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
-    _karaokeCb->setChecked(rbApp->patchConfig()->karaokeSubs == "lowQuality");
-    _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
+    reloadData();
 }
 
 void GraphicsTab::setConfig() {
@@ -115,4 +106,17 @@ void GraphicsTab::setConfig() {
     rbApp->patchConfig()->karaokeSubs =
         _karaokeCb->isChecked() ? "lowQuality" : "off";
     rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
+}
+
+void GraphicsTab::reloadData() {
+    _resolutionGroup->button((int)rbApp->gameConfig()->resolution)
+        ->setChecked(true);
+    _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
+                              GameConfig::DisplayMode::Fullscreen);
+    _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
+        ->setChecked(true);
+
+    _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
+    _karaokeCb->setChecked(rbApp->patchConfig()->karaokeSubs == "lowQuality");
+    _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
 }

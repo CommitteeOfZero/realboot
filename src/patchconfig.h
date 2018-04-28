@@ -14,10 +14,11 @@ class PatchConfig : public QObject {
     ~PatchConfig() {}
 
     void save();
+    void loadDefaults();
 
-    bool hqFmvAudio = true;
-    bool improveDialogueOutlines = true;
-    QString karaokeSubs = "lowQuality";
+    bool hqFmvAudio;
+    bool improveDialogueOutlines;
+    QString karaokeSubs;
 
    private:
     QString _path;
