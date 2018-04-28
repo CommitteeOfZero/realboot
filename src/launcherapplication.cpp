@@ -2,6 +2,7 @@
 #include "launcherwindow.h"
 #include "gameconfig.h"
 #include "patchconfig.h"
+#include "controllermanager.h"
 #include "globals.h"
 #include <QFile>
 #include <QTextStream>
@@ -16,6 +17,7 @@ LauncherApplication::LauncherApplication(int& argc, char** argv)
 
     gc = new GameConfig(this);
     pc = new PatchConfig(this);
+    cm = new ControllerManager(this);
     w = new LauncherWindow(0);
 
     // I would *like* to apply the style to the whole application
