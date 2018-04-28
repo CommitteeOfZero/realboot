@@ -194,6 +194,7 @@ void ControllerTab::onActiveControllerChanged(DinputController *oldController,
                 &ControllerTab::onButtonPressed);
         newController->startTracking((HWND)rbApp->window()->winId());
     }
+    reloadData();
 }
 
 void ControllerTab::onButtonPressed(ControllerConfig::Button button) {
