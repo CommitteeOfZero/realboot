@@ -6,6 +6,8 @@
 
 #include <stdexcept>
 
+BOOL IsXInputDevice(const GUID* pGuidProductFromDirectInput);
+
 DinputController::DinputController(const DIDEVICEINSTANCE* pdidInstance,
                                    ControllerManager* parent) {
     _isXinput = IsXInputDevice(&pdidInstance->guidProduct);
@@ -20,6 +22,13 @@ DinputController::DinputController(const DIDEVICEINSTANCE* pdidInstance,
     StringFromIID(pdidInstance->guidInstance, &wGuid);
     _guid = QString::fromWCharArray(wGuid);
     CoTaskMemFree(wGuid);
+
+    _deviceName = QString::fromWCharArray(pdidInstance->tszInstanceName) +
+                  " / " +
+                  QString::fromWCharArray(pdidInstance->tszProductName) +
+                  (_isXinput ? " (XInput)" : " (DirectInput)");
+
+    _config = new ControllerConfig(_guid, this);
 
     _timer.setSingleShot(true);
     _timer.setInterval((int)(1000.f / 30.f));

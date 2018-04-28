@@ -3,5 +3,6 @@
         <file>assets/cross.png</file>
         <file>assets/cross_hover.png</file>
         <file>assets/cozlogo.png</file>
+        <file>assets/realboot.qss</file>
     </qresource>
 </RCC>

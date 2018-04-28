@@ -4,7 +4,10 @@
 #include "globals.h"
 #include "gameconfig.h"
 #include "patchconfig.h"
+#include "controllerconfig.h"
+#include "controllermanager.h"
 #include "graphicstab.h"
+#include "controllertab.h"
 
 #include <QMouseEvent>
 #include <QToolButton>
@@ -72,7 +75,8 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 
     _graphicsTab = new GraphicsTab(this);
     ui->tabWidget->addTab(_graphicsTab, "Graphics");
-    ui->tabWidget->addTab(new QWidget(this), "Dummy");
+    _controllerTab = new ControllerTab(this);
+    ui->tabWidget->addTab(_controllerTab, "Controller");
 }
 
 LauncherWindow::~LauncherWindow() { delete ui; }
@@ -107,8 +111,12 @@ void LauncherWindow::startGame() {
     setEnabled(false);
 
     _graphicsTab->setConfig();
+    _controllerTab->setConfig();
     rbApp->gameConfig()->save();
     rbApp->patchConfig()->save();
+    if (rbApp->controllerManager()->activeController() != nullptr) {
+        rbApp->controllerManager()->activeController()->config()->save();
+    }
 
     volatile void *ipc;
     HANDLE ipcFile;

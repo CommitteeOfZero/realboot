@@ -38,7 +38,8 @@ chaoschild {
 }
 
 DEFINES += WIN32_LEAN_AND_MEAN
-LIBS += Shell32.lib Ole32.lib
+INCLUDEPATH += $$(DXSDK_DIR)/include
+LIBS += $$quote(-L$$(DXSDK_DIR)/lib/x86) dinput8.lib dxguid.lib Shell32.lib Ole32.lib OleAut32.lib
 
 INCLUDEPATH += src
 

@@ -24,24 +24,30 @@ class ControllerConfig : public QObject {
         Num
     };
     Q_ENUM(Button)
+    enum class Bind : uint32_t {
+        Enter = 0,
+        Cancel = 1,
+        AutoMode = 2,
+        Skip = 3,
+        SystemMenu = 4,
+        Tips = 5,
+        ForceSkip = 6,
+        Backlog = 7,
+        QuickSave = 8,
+        Custom1 = 9,
+        Custom2 = 10,
+        Num
+    };
+    Q_ENUM(Bind)
 
     explicit ControllerConfig(const QString& guid, QObject* parent = 0);
     ~ControllerConfig() {}
 
+    void loadDefaults();
     void save();
 
-    Preset preset = Preset::Default;
-    Button enter = Button::A;
-    Button cancel = Button::B;
-    Button autoMode = Button::X;
-    Button skip = Button::RB;
-    Button systemMenu = Button::START;
-    Button tips = Button::BACK;
-    Button forceSkip = Button::LB;
-    Button backlog = Button::Y;
-    Button quickSave = Button::RS;
-    Button custom1 = Button::LT;
-    Button custom2 = Button::RT;
+    Preset preset;
+    Button binds[(size_t)Bind::Num];
 
    private:
     QString _path;

@@ -10,6 +10,7 @@ class LauncherWindow;
 }
 
 class GraphicsTab;
+class ControllerTab;
 
 class LauncherWindow : public QMainWindow {
     Q_OBJECT
@@ -32,4 +33,5 @@ class LauncherWindow : public QMainWindow {
    private:
     Ui::LauncherWindow *ui;
     GraphicsTab *_graphicsTab;
+    ControllerTab *_controllerTab;
 };

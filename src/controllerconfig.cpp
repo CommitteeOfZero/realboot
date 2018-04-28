@@ -8,6 +8,8 @@ ControllerConfig::ControllerConfig(const QString& guid, QObject* parent)
     : QObject(parent) {
     _path = rbApp->gameConfigDirectory() + "/" + guid;
 
+    loadDefaults();
+
     if (QFileInfo(_path).exists()) {
         QFile inFile(_path);
         if (!inFile.open(QIODevice::ReadOnly)) {
@@ -23,29 +25,27 @@ ControllerConfig::ControllerConfig(const QString& guid, QObject* parent)
         if (preset_ < (uint32_t)Preset::Num) preset = (Preset)preset_;
 
         const uint8_t* pCurBtn = (const uint8_t*)(data + 8);
-        uint8_t curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) enter = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) cancel = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) autoMode = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) skip = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) systemMenu = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) tips = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) forceSkip = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) backlog = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) quickSave = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) custom1 = (Button)curBtn;
-        curBtn = *pCurBtn++;
-        if (curBtn < (uint8_t)Button::Num) custom2 = (Button)curBtn;
+        for (int i = 0; i < (int)Bind::Num; i++) {
+            uint8_t curBtn = *pCurBtn++;
+            if (curBtn < (uint8_t)Button::Num) binds[i] = (Button)curBtn;
+        }
     }
+}
+
+void ControllerConfig::loadDefaults() {
+    preset = Preset::Default;
+
+    binds[(int)Bind::Enter] = Button::A;
+    binds[(int)Bind::Cancel] = Button::B;
+    binds[(int)Bind::AutoMode] = Button::X;
+    binds[(int)Bind::Skip] = Button::RB;
+    binds[(int)Bind::SystemMenu] = Button::START;
+    binds[(int)Bind::Tips] = Button::BACK;
+    binds[(int)Bind::ForceSkip] = Button::LB;
+    binds[(int)Bind::Backlog] = Button::Y;
+    binds[(int)Bind::QuickSave] = Button::RS;
+    binds[(int)Bind::Custom1] = Button::LT;
+    binds[(int)Bind::Custom2] = Button::RT;
 }
 
 void ControllerConfig::save() {
@@ -57,17 +57,7 @@ void ControllerConfig::save() {
     }
     outFile.seek(4);
     outFile.write((const char*)&preset, 4);
-    outFile.write((const char*)&enter, 1);
-    outFile.write((const char*)&cancel, 1);
-    outFile.write((const char*)&autoMode, 1);
-    outFile.write((const char*)&skip, 1);
-    outFile.write((const char*)&systemMenu, 1);
-    outFile.write((const char*)&tips, 1);
-    outFile.write((const char*)&forceSkip, 1);
-    outFile.write((const char*)&backlog, 1);
-    outFile.write((const char*)&quickSave, 1);
-    outFile.write((const char*)&custom1, 1);
-    outFile.write((const char*)&custom2, 1);
+    outFile.write((const char*)&binds, (qint64)Bind::Num);
     outFile.write((const char*)game_ExtraControllerData,
                   sizeof(game_ExtraControllerData));
 }

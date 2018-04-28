@@ -26,7 +26,10 @@ LauncherApplication::LauncherApplication(int& argc, char** argv)
     QFile qssFile(":/kofuna/style.qss");
     qssFile.open(QFile::ReadOnly | QFile::Text);
     QTextStream ts(&qssFile);
-    w->setStyleSheet(ts.readAll());
+    QFile qssFile2(":/assets/realboot.qss");
+    qssFile2.open(QFile::ReadOnly | QFile::Text);
+    QTextStream ts2(&qssFile2);
+    w->setStyleSheet(ts.readAll() + ts2.readAll());
 
     w->show();
 }

@@ -31,6 +31,8 @@ class DinputController : public QObject {
 
     QString guid() const { return _guid; }
     bool isXinput() const { return _isXinput; }
+    ControllerConfig* config() { return _config; }
+    QString deviceName() const { return _deviceName; }
 
     void startTracking(HWND topLevelWindow);
     void stopTracking();
@@ -41,7 +43,9 @@ class DinputController : public QObject {
    private:
     bool _isXinput;
     QString _guid;
-    LPDIRECTINPUTDEVICE8 _joystick;
+    ControllerConfig* _config = nullptr;
+    QString _deviceName;
+    LPDIRECTINPUTDEVICE8 _joystick = nullptr;
     DIJOYSTATE _lastState = {0};
     QTimer _timer;
 
