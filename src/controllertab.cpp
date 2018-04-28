@@ -70,6 +70,8 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
         controllerRow->addWidget(_controllerBox);
 
         _resetButton = new QPushButton("Reset bindings", this);
+        connect(_resetButton, &QPushButton::clicked, this,
+                &ControllerTab::resetButtonClicked);
         controllerRow->addWidget(_resetButton);
     }
     controllerRow->addStretch(1);
