@@ -16,7 +16,7 @@ GameConfig::GameConfig(QObject* parent) : QObject(parent) {
         QByteArray inByteArray = inFile.readAll();
         const char* data = inByteArray.constData();
 
-        controllerGuid = QString::fromWCharArray((const wchar_t*)(data + 4));
+        controllerGuid = QString::fromUtf8(data + 4);
         width = *(const int*)(data + 0x2C);
         height = *(const int*)(data + 0x30);
         uint32_t displayMode_ = *(const uint32_t*)(data + 0x34);
@@ -42,8 +42,9 @@ void GameConfig::save() {
         QApplication::quit();
     }
     outFile.seek(4);
-    wchar_t outGuid[40] = {0};
-    controllerGuid.toWCharArray(outGuid);
+    char outGuid[40] = {0};
+    QByteArray baGuid = controllerGuid.toUtf8();
+    strncpy(outGuid, baGuid.constData(), qMin(40, baGuid.size()));
     outFile.write((const char*)outGuid, 40);
     outFile.write((const char*)&width, 4);
     outFile.write((const char*)&height, 4);
