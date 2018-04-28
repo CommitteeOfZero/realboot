@@ -80,6 +80,12 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
     if (!rbApp->controllerManager()->controllers().empty()) {
         mainLayout->addSpacing(12);
 
+        /* diagnostics */
+        /*
+        _axesLabel = new QLabel(this);
+        mainLayout->addWidget(_axesLabel);
+        */
+
         QSizePolicy spCol(QSizePolicy::Preferred, QSizePolicy::Preferred);
         spCol.setHorizontalStretch(1);
 
@@ -197,23 +203,45 @@ void ControllerTab::onActiveControllerChanged(DinputController *oldController,
     if (newController != nullptr) {
         connect(newController, &DinputController::buttonPressed, this,
                 &ControllerTab::onButtonPressed);
+        /* diagnostics */
+        /*
+        connect(newController, &DinputController::ticked, this,
+                &ControllerTab::updateAxesLabel);
+        */
         newController->startTracking((HWND)rbApp->window()->winId());
     }
     reloadData();
 }
 
-void ControllerTab::onButtonPressed(ControllerConfig::Button button) {
-    auto &confBinds =
-        rbApp->controllerManager()->activeController()->config()->binds;
-    for (int i = 0; i < (int)ControllerConfig::Bind::Num; i++) {
-        if (confBinds[i] == button) {
-            confBinds[i] = ControllerConfig::Button::Invalid;
-            _binds[i]->le()->setText("");
-        }
-    }
+void ControllerTab::updateAxesLabel() {
+    /* diagnostics */
+    /*
+    _axesLabel->setText(
+        QString("Two axes: %1, lZ: %2, lRZ: %3")
+            .arg(rbApp->controllerManager()->activeController()->twoAxes())
+            .arg(
+                rbApp->controllerManager()->activeController()->lastState()->lZ,
+                4, 16)
+            .arg(rbApp->controllerManager()
+                     ->activeController()
+                     ->lastState()
+                     ->lRz,
+                 4, 16));
+    */
+}
 
+void ControllerTab::onButtonPressed(ControllerConfig::Button button) {
     BtnRow *br = findFocusedBtnRow();
     if (br != nullptr) {
+        auto &confBinds =
+            rbApp->controllerManager()->activeController()->config()->binds;
+        for (int i = 0; i < (int)ControllerConfig::Bind::Num; i++) {
+            if (confBinds[i] == button) {
+                confBinds[i] = ControllerConfig::Button::Invalid;
+                _binds[i]->le()->setText("");
+            }
+        }
+
         rbApp->controllerManager()->activeController()->config()->preset =
             ControllerConfig::Preset::Custom;
         confBinds[(int)br->bind()] = button;

@@ -28,6 +28,16 @@ DinputController::DinputController(const DIDEVICEINSTANCE* pdidInstance,
 
     _config = new ControllerConfig(_guid, this);
 
+    DIDEVICEOBJECTINSTANCE obj = {0};
+    obj.dwSize = sizeof(DIDEVICEOBJECTINSTANCE);
+    _joystick->GetObjectInfo(&obj, 20, DIPH_BYOFFSET);
+    // this is how they do it in the original launcher...
+    if (obj.dwType == DIDFT_ALL) {
+        _twoAxes = false;
+    } else {
+        _twoAxes = true;
+    }
+
     _timer.setSingleShot(true);
     _timer.setInterval((int)(1000.f / 30.f));
     connect(&_timer, &QTimer::timeout, this, &DinputController::timerTick);
@@ -66,14 +76,27 @@ void DinputController::timerTick() {
         return;
     }
 
-    for (int i = 0; i < (int)ControllerConfig::Button::Num; i++) {
+    for (int i = 0; i < (int)ControllerConfig::Button::LT; i++) {
         if (newState.rgbButtons[i] & 0x80 &&
             !(_lastState.rgbButtons[i] & 0x80)) {
             emit buttonPressed((ControllerConfig::Button)i);
         }
     }
 
+    if (_twoAxes) {
+        // TODO: this
+    } else {
+        if (newState.lZ > 0x8FFF && _lastState.lZ <= 0x8FFF) {
+            emit buttonPressed(ControllerConfig::Button::LT);
+        }
+        if (newState.lZ < 0x6FFF && _lastState.lZ >= 0x6FFF) {
+            emit buttonPressed(ControllerConfig::Button::RT);
+        }
+    }
+
     _lastState = newState;
+
+    emit ticked();
 
     _timer.start();
 }

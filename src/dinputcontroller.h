@@ -37,8 +37,14 @@ class DinputController : public QObject {
     void startTracking(HWND topLevelWindow);
     void stopTracking();
 
+    /* diagnostics */
+    const DIJOYSTATE* lastState() { return &_lastState; }
+    bool twoAxes() { return _twoAxes; }
+
    signals:
     void buttonPressed(ControllerConfig::Button button);
+    /* diagnostics */
+    void ticked();
 
    private:
     bool _isXinput;
@@ -46,6 +52,7 @@ class DinputController : public QObject {
     ControllerConfig* _config = nullptr;
     QString _deviceName;
     LPDIRECTINPUTDEVICE8 _joystick = nullptr;
+    bool _twoAxes;
     DIJOYSTATE _lastState = {0};
     QTimer _timer;
 

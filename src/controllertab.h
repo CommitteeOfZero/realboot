@@ -25,6 +25,7 @@ class ControllerTab : public QWidget {
     QPushButton* _resetButton;
     BtnRow* _binds[(int)ControllerConfig::Bind::Num];
     bool _firstShowCaught = false;
+    QLabel* _axesLabel;
 
     BtnRow* findFocusedBtnRow();
 
@@ -36,4 +37,5 @@ class ControllerTab : public QWidget {
     void onActiveControllerChanged(DinputController* oldController,
                                    DinputController* newController);
     void onButtonPressed(ControllerConfig::Button button);
+    void updateAxesLabel();
 };
