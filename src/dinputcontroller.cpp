@@ -24,8 +24,6 @@ DinputController::DinputController(const DIDEVICEINSTANCE* pdidInstance,
     CoTaskMemFree(wGuid);
 
     _deviceName = QString::fromWCharArray(pdidInstance->tszInstanceName) +
-                  " / " +
-                  QString::fromWCharArray(pdidInstance->tszProductName) +
                   (_isXinput ? " (XInput)" : " (DirectInput)");
 
     _config = new ControllerConfig(_guid, this);
