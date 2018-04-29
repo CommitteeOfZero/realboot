@@ -19,7 +19,7 @@ QMap<ControllerConfig::Bind, QString> bindLabelTexts{
     {ControllerConfig::Bind::AutoMode, "Auto mode"},
     {ControllerConfig::Bind::Skip, "Skip / Turn page (Right)"},
     {ControllerConfig::Bind::SystemMenu, "System menu"},
-    {ControllerConfig::Bind::Tips, "Tips"},
+    {ControllerConfig::Bind::Tips, "TIPS"},
     {ControllerConfig::Bind::ForceSkip, "Force skip / Turn page (Left)"},
     {ControllerConfig::Bind::Backlog, "Backlog"},
     {ControllerConfig::Bind::QuickSave, "Quick save"},
