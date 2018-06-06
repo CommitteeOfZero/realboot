@@ -100,7 +100,7 @@
           <number>8</number>
          </property>
          <property name="bottomMargin">
-          <number>16</number>
+          <number>8</number>
          </property>
          <property name="horizontalSpacing">
           <number>16</number>

@@ -17,11 +17,21 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QFileInfo>
 
 LauncherWindow::LauncherWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::LauncherWindow) {
     setWindowFlag(Qt::FramelessWindowHint);
     ui->setupUi(this);
+
+    if (QFileInfo(":/assets/start_button.png").exists()) {
+        ui->startButton->setIcon(QIcon(":/assets/start_button.png"));
+        ui->startButton->setIconSize(QSize(24, 24));
+        ui->startButton->setProperty("hasIcon", true);
+        // following is needed for dynamic property based styles to update
+        ui->startButton->style()->unpolish(ui->startButton);
+        ui->startButton->style()->polish(ui->startButton);
+    }
 
     ui->headerImage->setStyleSheet("background-color: #000");
 
