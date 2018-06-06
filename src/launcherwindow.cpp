@@ -45,12 +45,8 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 
     connect(ui->startButton, &QAbstractButton::clicked, this,
             &LauncherWindow::startGame);
-    connect(ui->cancelButton, &QAbstractButton::clicked, this,
-            &LauncherWindow::cancelRequested);
     connect(ui->resetButton, &QAbstractButton::clicked, this,
             &LauncherWindow::resetToDefaults);
-    connect(ui->saveButton, &QAbstractButton::clicked, this,
-            &LauncherWindow::saveChanges);
 
     setWindowTitle(game_LauncherTitle);
     ui->techSupportLabel->setTextFormat(Qt::RichText);
@@ -109,7 +105,10 @@ void LauncherWindow::closeEvent(QCloseEvent *event) {
     cancelRequested();
 }
 
-void LauncherWindow::cancelRequested() { QApplication::quit(); }
+void LauncherWindow::cancelRequested() {
+    saveChanges();
+    QApplication::quit();
+}
 
 void LauncherWindow::startGame() {
     setEnabled(false);
