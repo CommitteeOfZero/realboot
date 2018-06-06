@@ -10,7 +10,7 @@
 
 GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setSpacing(12);
+    mainLayout->setSpacing(8);
     mainLayout->setMargin(0);
     setLayout(mainLayout);
 
