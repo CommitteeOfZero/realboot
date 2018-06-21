@@ -14,6 +14,8 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     mainLayout->setMargin(0);
     setLayout(mainLayout);
 
+    mainLayout->addSpacing(8);
+
     QLabel *gameLabel = new QLabel(this);
     gameLabel->setText("<b>Game</b>");
     mainLayout->addWidget(gameLabel);
