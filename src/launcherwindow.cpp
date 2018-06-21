@@ -6,7 +6,7 @@
 #include "patchconfig.h"
 #include "controllerconfig.h"
 #include "controllermanager.h"
-#include "graphicstab.h"
+#include "generaltab.h"
 #include "controllertab.h"
 
 #include <QMouseEvent>
@@ -83,8 +83,8 @@ LauncherWindow::LauncherWindow(QWidget *parent)
                 "underline; color: #fff'>Version:</span></a> %2")
             .arg(game_ReleaseUrl, version));
 
-    _graphicsTab = new GraphicsTab(this);
-    ui->tabWidget->addTab(_graphicsTab, "Graphics");
+    _generalTab = new GeneralTab(this);
+    ui->tabWidget->addTab(_generalTab, "General");
     _controllerTab = new ControllerTab(this);
     ui->tabWidget->addTab(_controllerTab, "Controller");
 }
@@ -165,7 +165,7 @@ void LauncherWindow::startGame() {
 }
 
 void LauncherWindow::saveChanges() {
-    _graphicsTab->setConfig();
+    _generalTab->setConfig();
     _controllerTab->setConfig();
     rbApp->gameConfig()->save();
     rbApp->patchConfig()->save();
@@ -184,5 +184,5 @@ void LauncherWindow::resetToDefaults() {
             ->loadDefaults();
         _controllerTab->reloadData();
     }
-    _graphicsTab->reloadData();
+    _generalTab->reloadData();
 }

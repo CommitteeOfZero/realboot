@@ -4,12 +4,12 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 
-class GraphicsTab : public QWidget {
+class GeneralTab : public QWidget {
     Q_OBJECT
 
    public:
-    explicit GraphicsTab(QWidget* parent = 0);
-    ~GraphicsTab() {}
+    explicit GeneralTab(QWidget* parent = 0);
+    ~GeneralTab() {}
 
     void setConfig();
     void reloadData();

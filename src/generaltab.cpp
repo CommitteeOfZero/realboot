@@ -1,4 +1,4 @@
-#include "graphicstab.h"
+#include "generaltab.h"
 #include "launcherapplication.h"
 #include "gameconfig.h"
 #include "patchconfig.h"
@@ -8,17 +8,13 @@
 #include <QLabel>
 #include <QRadioButton>
 
-GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
+GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(8);
     mainLayout->setMargin(0);
     setLayout(mainLayout);
 
     mainLayout->addSpacing(8);
-
-    QLabel *gameLabel = new QLabel(this);
-    gameLabel->setText("<b>Game</b>");
-    mainLayout->addWidget(gameLabel);
 
     _fullscreenCb = new QCheckBox("Fullscreen", this);
     mainLayout->addWidget(_fullscreenCb);
@@ -81,7 +77,7 @@ GraphicsTab::GraphicsTab(QWidget *parent) : QWidget(parent) {
     reloadData();
 }
 
-void GraphicsTab::setConfig() {
+void GeneralTab::setConfig() {
     rbApp->gameConfig()->resolution =
         (GameConfig::Resolution)_resolutionGroup->checkedId();
     switch (rbApp->gameConfig()->resolution) {
@@ -110,7 +106,7 @@ void GraphicsTab::setConfig() {
     rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
 }
 
-void GraphicsTab::reloadData() {
+void GeneralTab::reloadData() {
     _resolutionGroup->button((int)rbApp->gameConfig()->resolution)
         ->setChecked(true);
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
