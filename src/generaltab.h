@@ -18,6 +18,7 @@ class GeneralTab : public QWidget {
     QButtonGroup* _resolutionGroup;
     QCheckBox* _fullscreenCb;
     QCheckBox* _outlineCb;
+    QCheckBox* _consistencyCb;
     QButtonGroup* _movieQualityGroup;
     QCheckBox* _karaokeCb;
     QCheckBox* _hqAudioCb;

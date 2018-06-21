@@ -30,6 +30,8 @@ PatchConfig::PatchConfig(QObject *parent) : QObject(parent) {
 
         if (inJson["hqFmvAudio"].isBool())
             hqFmvAudio = inJson["hqFmvAudio"].toBool();
+        if (inJson["consistency"].isBool())
+            consistency = inJson["consistency"].toBool();
         if (inJson["improveDialogueOutlines"].isBool())
             improveDialogueOutlines =
                 inJson["improveDialogueOutlines"].toBool();
@@ -52,6 +54,7 @@ void PatchConfig::save() {
     QJsonObject outJson;
     outJson["__schema_version"] = 2;
     outJson["hqFmvAudio"] = hqFmvAudio;
+    outJson["consistency"] = consistency;
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
     outJson["karaokeSubs"] = karaokeSubs;
 
@@ -61,6 +64,7 @@ void PatchConfig::save() {
 
 void PatchConfig::loadDefaults() {
     hqFmvAudio = true;
+    consistency = true;
     improveDialogueOutlines = true;
     karaokeSubs = "lowQuality";
 }

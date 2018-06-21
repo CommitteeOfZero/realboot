@@ -17,6 +17,7 @@ class PatchConfig : public QObject {
     void loadDefaults();
 
     bool hqFmvAudio;
+    bool consistency;
     bool improveDialogueOutlines;
     QString karaokeSubs;
 
