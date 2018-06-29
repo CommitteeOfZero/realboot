@@ -10,3 +10,7 @@ QLineEdit {
 QLineEdit:focus {
     border: 1px solid #fff;
 }
+
+#resetButton {
+    padding-right: 8px;
+}
