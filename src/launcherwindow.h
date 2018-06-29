@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QEvent>
 #include <QCloseEvent>
+#include <QtNetwork>
 #include "launcherapplication.h"
 
 namespace Ui {
@@ -32,15 +33,21 @@ class LauncherWindow : public QMainWindow {
     void saveChanges();
     void resetToDefaults();
     void toggleSettings();
+    void updateCheckReplyReceived(QNetworkReply *reply);
 
    private:
     Ui::LauncherWindow *ui;
     GeneralTab *_generalTab;
     ControllerTab *_controllerTab;
 
+    QNetworkAccessManager _qnam;
+    int _runningIntVersion;
+    QString _updateChannel;
+
     bool _allSettingsMode;
 
     void showMiniLayout();
     void showFullLayout();
     void reloadData();
+    void startUpdateCheck();
 };

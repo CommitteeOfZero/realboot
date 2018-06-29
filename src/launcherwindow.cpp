@@ -113,6 +113,8 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     } else {
         showMiniLayout();
     }
+
+    startUpdateCheck();
 }
 
 LauncherWindow::~LauncherWindow() { delete ui; }
@@ -267,4 +269,61 @@ void LauncherWindow::toggleSettings() {
     rbApp->patchConfig()->showAllSettings = _allSettingsMode;
     rbApp->patchConfig()->save();
     reloadData();
+}
+
+void LauncherWindow::startUpdateCheck() {
+    QFile versioninfoFile("languagebarrier/versioninfo.json");
+    if (!versioninfoFile.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, "Launcher error",
+                              "Couldn't open update info");
+        ui->updateCheckLabel->setText("(update check failed)");
+        return;
+    }
+    QByteArray versioninfoData = versioninfoFile.readAll();
+    QJsonDocument versioninfo = QJsonDocument::fromJson(versioninfoData);
+    _runningIntVersion = versioninfo.object()["intVersion"].toInt();
+    _updateChannel = versioninfo.object()["channel"].toString();
+    QUrl updateCheckUrl =
+        QUrl(versioninfo.object()["updateCheckUrl"].toString());
+
+    ui->updateCheckLabel->setText("(checking for updates...)");
+
+    connect(&_qnam, &QNetworkAccessManager::finished, this,
+            &LauncherWindow::updateCheckReplyReceived);
+    _qnam.get(QNetworkRequest(updateCheckUrl));
+}
+
+void LauncherWindow::updateCheckReplyReceived(QNetworkReply *reply) {
+    if (reply->error()) {
+        qDebug() << reply->error();
+        reply->deleteLater();
+        ui->updateCheckLabel->setText("(update check failed)");
+        return;
+    }
+    QByteArray updateData = reply->readAll();
+    reply->deleteLater();
+    QJsonDocument update = QJsonDocument::fromJson(updateData);
+    if (!update.object().contains("channels") ||
+        !update.object()["channels"].toObject().contains(_updateChannel) ||
+        !update.object()["channels"]
+             .toObject()[_updateChannel]
+             .toObject()
+             .contains("intVersion")) {
+        ui->updateCheckLabel->setText("(update check failed)");
+        return;
+    } else {
+        int latestVersion = update.object()["channels"]
+                                .toObject()[_updateChannel]
+                                .toObject()["intVersion"]
+                                .toInt();
+        if (latestVersion > _runningIntVersion) {
+            QMessageBox::information(
+                this, "New version available",
+                "A newer version of the patch is available. Click the "
+                "\"Version:\" link to go to the release page.");
+            ui->updateCheckLabel->setText("(update available!)");
+        } else {
+            ui->updateCheckLabel->setText("(latest version)");
+        }
+    }
 }
