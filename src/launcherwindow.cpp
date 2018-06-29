@@ -26,11 +26,28 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 
     if (QFileInfo(":/assets/start_button.png").exists()) {
         ui->startButton->setIcon(QIcon(":/assets/start_button.png"));
-        ui->startButton->setIconSize(QSize(24, 24));
+        ui->startButton->setIconSize(QSize(32, 32));
         ui->startButton->setProperty("hasIcon", true);
         // following is needed for dynamic property based styles to update
         ui->startButton->style()->unpolish(ui->startButton);
         ui->startButton->style()->polish(ui->startButton);
+    }
+    if (QFileInfo(":/assets/settings_button.png").exists()) {
+        ui->toggleSettingsButton->setIcon(
+            QIcon(":/assets/settings_button.png"));
+        ui->toggleSettingsButton->setIconSize(QSize(32, 32));
+        ui->toggleSettingsButton->setProperty("hasIcon", true);
+        // following is needed for dynamic property based styles to update
+        ui->toggleSettingsButton->style()->unpolish(ui->toggleSettingsButton);
+        ui->toggleSettingsButton->style()->polish(ui->toggleSettingsButton);
+    }
+    if (QFileInfo(":/assets/reset_button.png").exists()) {
+        ui->resetButton->setIcon(QIcon(":/assets/reset_button.png"));
+        ui->resetButton->setIconSize(QSize(24, 24));
+        ui->resetButton->setProperty("hasIcon", true);
+        // following is needed for dynamic property based styles to update
+        ui->resetButton->style()->unpolish(ui->resetButton);
+        ui->resetButton->style()->polish(ui->resetButton);
     }
 
     ui->headerImage->setStyleSheet("background-color: #000");
@@ -57,6 +74,8 @@ LauncherWindow::LauncherWindow(QWidget *parent)
             &LauncherWindow::startGame);
     connect(ui->resetButton, &QAbstractButton::clicked, this,
             &LauncherWindow::resetToDefaults);
+    connect(ui->toggleSettingsButton, &QAbstractButton::clicked, this,
+            &LauncherWindow::toggleSettings);
 
     setWindowTitle(game_LauncherTitle);
     ui->techSupportLabel->setTextFormat(Qt::RichText);
@@ -87,6 +106,13 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     ui->tabWidget->addTab(_generalTab, "General");
     _controllerTab = new ControllerTab(this);
     ui->tabWidget->addTab(_controllerTab, "Controller");
+
+    _allSettingsMode = rbApp->patchConfig()->showAllSettings;
+    if (_allSettingsMode) {
+        showFullLayout();
+    } else {
+        showMiniLayout();
+    }
 }
 
 LauncherWindow::~LauncherWindow() { delete ui; }
@@ -165,12 +191,27 @@ void LauncherWindow::startGame() {
 }
 
 void LauncherWindow::saveChanges() {
-    _generalTab->setConfig();
-    _controllerTab->setConfig();
+    if (_allSettingsMode) {
+        _generalTab->setConfig();
+        _controllerTab->setConfig();
+    } else {
+        ui->miniSettingsWidget->setConfig();
+    }
     rbApp->gameConfig()->save();
     rbApp->patchConfig()->save();
     if (rbApp->controllerManager()->activeController() != nullptr) {
         rbApp->controllerManager()->activeController()->config()->save();
+    }
+}
+
+void LauncherWindow::reloadData() {
+    if (_allSettingsMode) {
+        if (rbApp->controllerManager()->activeController() != nullptr) {
+            _controllerTab->reloadData();
+        }
+        _generalTab->reloadData();
+    } else {
+        ui->miniSettingsWidget->reloadData();
     }
 }
 
@@ -182,7 +223,48 @@ void LauncherWindow::resetToDefaults() {
             ->activeController()
             ->config()
             ->loadDefaults();
-        _controllerTab->reloadData();
     }
-    _generalTab->reloadData();
+    reloadData();
+}
+
+void LauncherWindow::showMiniLayout() {
+    ui->tabWidget->setVisible(false);
+    ui->miniSettingsWidget->setVisible(true);
+    ui->bottomButtonsWidget->setVisible(false);
+    ui->miniBottomSpacer->changeSize(1, 1, QSizePolicy::Minimum,
+                                     QSizePolicy::Expanding);
+    ui->miniBottomSpacer->invalidate();
+
+    ui->toggleSettingsButton->setText("More Settings");
+
+    setFixedSize(500, 320);
+    adjustSize();
+}
+
+void LauncherWindow::showFullLayout() {
+    ui->tabWidget->setVisible(true);
+    ui->miniSettingsWidget->setVisible(false);
+    ui->bottomButtonsWidget->setVisible(true);
+    ui->miniBottomSpacer->changeSize(0, 0, QSizePolicy::Fixed,
+                                     QSizePolicy::Fixed);
+    ui->miniBottomSpacer->invalidate();
+
+    ui->toggleSettingsButton->setText("Less Settings");
+
+    setFixedSize(500, 600);
+    adjustSize();
+}
+
+void LauncherWindow::toggleSettings() {
+    saveChanges();
+    if (_allSettingsMode) {
+        _allSettingsMode = false;
+        showMiniLayout();
+    } else {
+        _allSettingsMode = true;
+        showFullLayout();
+    }
+    rbApp->patchConfig()->showAllSettings = _allSettingsMode;
+    rbApp->patchConfig()->save();
+    reloadData();
 }

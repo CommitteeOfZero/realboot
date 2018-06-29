@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>580</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>500</width>
-    <height>580</height>
+    <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>500</width>
-    <height>580</height>
+    <height>600</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -86,26 +86,33 @@
         </widget>
        </item>
        <item>
-        <widget class="QTabWidget" name="tabWidget"/>
-       </item>
-       <item>
-        <layout class="QGridLayout" name="primaryButtonsLayout">
+        <layout class="QHBoxLayout" name="topButtonsLayout">
+         <property name="spacing">
+          <number>24</number>
+         </property>
          <property name="leftMargin">
-          <number>12</number>
+          <number>40</number>
          </property>
          <property name="topMargin">
-          <number>0</number>
+          <number>1</number>
          </property>
          <property name="rightMargin">
-          <number>12</number>
+          <number>40</number>
          </property>
          <property name="bottomMargin">
           <number>8</number>
          </property>
-         <property name="horizontalSpacing">
-          <number>16</number>
-         </property>
-         <item row="2" column="1">
+         <item>
+          <widget class="QPushButton" name="toggleSettingsButton">
+           <property name="text">
+            <string>More Settings</string>
+           </property>
+           <property name="primaryButton" stdset="0">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="startButton">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -116,22 +123,78 @@
            <property name="text">
             <string>Start Game</string>
            </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QPushButton" name="resetButton">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Restore default settings</string>
+           <property name="primaryButton" stdset="0">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QTabWidget" name="tabWidget"/>
+       </item>
+       <item>
+        <widget class="MiniSettingsWidget" name="miniSettingsWidget" native="true"/>
+       </item>
+       <item>
+        <spacer name="miniBottomSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>1</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QWidget" name="bottomButtonsWidget" native="true">
+         <layout class="QGridLayout" name="bottomButtonsLayout">
+          <property name="leftMargin">
+           <number>12</number>
+          </property>
+          <property name="topMargin">
+           <number>1</number>
+          </property>
+          <property name="rightMargin">
+           <number>12</number>
+          </property>
+          <property name="bottomMargin">
+           <number>8</number>
+          </property>
+          <property name="horizontalSpacing">
+           <number>16</number>
+          </property>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="resetButton">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Restore defaults</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="bottomBarLayout">
@@ -189,9 +252,16 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MiniSettingsWidget</class>
+   <extends>QWidget</extends>
+   <header>minisettingswidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>startButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

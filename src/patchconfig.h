@@ -16,6 +16,7 @@ class PatchConfig : public QObject {
     void save();
     void loadDefaults();
 
+    bool showAllSettings;
     bool hqFmvAudio;
     bool consistency;
     bool improveDialogueOutlines;

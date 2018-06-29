@@ -31,9 +31,16 @@ class LauncherWindow : public QMainWindow {
     void startGame();
     void saveChanges();
     void resetToDefaults();
+    void toggleSettings();
 
    private:
     Ui::LauncherWindow *ui;
     GeneralTab *_generalTab;
     ControllerTab *_controllerTab;
+
+    bool _allSettingsMode;
+
+    void showMiniLayout();
+    void showFullLayout();
+    void reloadData();
 };

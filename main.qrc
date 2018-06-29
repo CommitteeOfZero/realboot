@@ -4,5 +4,7 @@
         <file>assets/cross_hover.png</file>
         <file>assets/cozlogo.png</file>
         <file>assets/realboot.qss</file>
+        <file>assets/settings_button.png</file>
+        <file>assets/reset_button.png</file>
     </qresource>
 </RCC>
