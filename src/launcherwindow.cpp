@@ -319,7 +319,7 @@ void LauncherWindow::updateCheckReplyReceived(QNetworkReply *reply) {
         if (latestVersion > _runningIntVersion) {
             QMessageBox::information(
                 this, "New version available",
-                "A newer version of the patch is available. Click the "
+                "A newer version of the patch is available.\nClick the "
                 "\"Version:\" link to go to the release page.");
             ui->updateCheckLabel->setText("(update available!)");
         } else {
