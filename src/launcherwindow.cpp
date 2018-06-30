@@ -8,6 +8,7 @@
 #include "controllermanager.h"
 #include "generaltab.h"
 #include "controllertab.h"
+#include "troubleshootingtab.h"
 
 #include <QMouseEvent>
 #include <QToolButton>
@@ -106,6 +107,8 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     ui->tabWidget->addTab(_generalTab, "General");
     _controllerTab = new ControllerTab(this);
     ui->tabWidget->addTab(_controllerTab, "Controller");
+    TroubleshootingTab *troubleshootingTab = new TroubleshootingTab(this);
+    ui->tabWidget->addTab(troubleshootingTab, "Troubleshooting");
 
     _allSettingsMode = rbApp->patchConfig()->showAllSettings;
     if (_allSettingsMode) {
