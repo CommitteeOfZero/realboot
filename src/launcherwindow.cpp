@@ -19,6 +19,7 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QFileInfo>
+#include <QDesktopServices>
 
 LauncherWindow::LauncherWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::LauncherWindow) {
@@ -320,11 +321,16 @@ void LauncherWindow::updateCheckReplyReceived(QNetworkReply *reply) {
                                 .toObject()["intVersion"]
                                 .toInt();
         if (latestVersion > _runningIntVersion) {
-            QMessageBox::information(
-                this, "New version available",
-                "A newer version of the patch is available.\nClick the "
-                "\"Version:\" link to go to the release page.");
             ui->updateCheckLabel->setText("(update available!)");
+            QMessageBox::StandardButton reply = QMessageBox::question(
+                this, "New version available",
+                "A newer version of the patch is available.\n"
+                "Close launcher and open download page?",
+                QMessageBox::Yes | QMessageBox::No);
+            if (reply == QMessageBox::Yes) {
+                QDesktopServices::openUrl(QUrl(game_ReleaseUrl));
+                cancelRequested();
+            }
         } else {
             ui->updateCheckLabel->setText("(latest version)");
         }
