@@ -15,6 +15,8 @@
 #include <QDir>
 #include <QSizePolicy>
 
+#include <windows.h>
+
 TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(8);
@@ -64,6 +66,50 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     troubleshootingData +=
         "Operating System: " + QSysInfo::prettyProductName() + " (" +
         QSysInfo::kernelVersion() + ")\n";
+
+    QString wine = "Not detected\n";
+    typedef const char *(__cdecl * wine_info_proc)();
+    wine_info_proc wine_get_version;
+    wine_info_proc wine_get_build_id;
+    typedef void(__cdecl * wine_get_host_version_proc)(const char **sysname,
+                                                       const char **release);
+    wine_get_host_version_proc wine_get_host_version;
+
+    HMODULE ntdll = GetModuleHandleA("ntdll.dll");
+    wine_get_host_version = (wine_get_host_version_proc)GetProcAddress(
+        ntdll, "wine_get_host_version");
+    wine_get_version =
+        (wine_info_proc)GetProcAddress(ntdll, "wine_get_version");
+    wine_get_build_id =
+        (wine_info_proc)GetProcAddress(ntdll, "wine_get_build_id");
+
+    if (wine_get_version != nullptr || wine_get_build_id != nullptr ||
+        wine_get_host_version != nullptr) {
+        wine = "Yes\n";
+        if (wine_get_version != nullptr) {
+            wine += "Wine version: " + QString::fromLatin1(wine_get_version()) +
+                    "\n";
+        }
+        if (wine_get_build_id != nullptr) {
+            wine +=
+                "Wine build ID: " + QString::fromLatin1(wine_get_build_id()) +
+                "\n";
+        }
+        if (wine_get_host_version != nullptr) {
+            const char *sysname;
+            const char *release;
+            wine_get_host_version(&sysname, &release);
+            wine +=
+                "Wine host version sysname: " + QString::fromLatin1(sysname) +
+                "\n";
+            wine +=
+                "Wine host version release: " + QString::fromLatin1(release) +
+                "\n";
+        }
+    }
+
+    troubleshootingData += "Wine: " + wine;  // no newline here!
+
     troubleshootingData += "Game path: " + QDir(".").canonicalPath() + "\n";
     troubleshootingData +=
         "Save path: " + QDir(rbApp->gameConfigDirectory()).canonicalPath() +
@@ -77,6 +123,24 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     troubleshootingData +=
         "enscript_c.mpk hash: " + md5sum("languagebarrier/enscript_c.mpk") +
         "\n";
+
+    QString canLoadD3D = "No !!!";
+    QString canLoadXAudio = "No !!!";
+
+    HMODULE hD3D = LoadLibraryA("d3dx9_43.dll");
+    HMODULE hXAudio = LoadLibraryA("XAudio2_7.dll");
+
+    if (hD3D) {
+        canLoadD3D = "Yes";
+        FreeLibrary(hD3D);
+    }
+    if (hXAudio) {
+        canLoadXAudio = "Yes";
+        FreeLibrary(hXAudio);
+    }
+
+    troubleshootingData += "Can load d3dx9_43.dll: " + canLoadD3D + "\n";
+    troubleshootingData += "Can load XAudio2_7.dll: " + canLoadXAudio + "\n";
 
     troubleshootingData += "\n";
     troubleshootingData += "------------------------------------------------\n";
