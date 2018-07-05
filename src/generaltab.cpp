@@ -72,8 +72,22 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     movieQualityRow->addStretch(1);
     mainLayout->addLayout(movieQualityRow);
 
-    _karaokeCb = new QCheckBox("Karaoke subtitles for OP/ED", this);
-    mainLayout->addWidget(_karaokeCb);
+    QHBoxLayout *songSubsRow = new QHBoxLayout(this);
+    songSubsRow->setSpacing(8);
+    songSubsRow->setMargin(0);
+    QLabel *songSubsLabel = new QLabel("Song subtitles:", this);
+    songSubsRow->addWidget(songSubsLabel);
+    _songSubsComboBox = new QComboBox(this);
+    _songSubsComboBox->addItem("Off", (int)PatchConfig::SongSubs::Off);
+    _songSubsComboBox->addItem("Karaoke + translation",
+                               (int)PatchConfig::SongSubs::All);
+    _songSubsComboBox->addItem("Karaoke only",
+                               (int)PatchConfig::SongSubs::KaraOnly);
+    _songSubsComboBox->addItem("Translation only",
+                               (int)PatchConfig::SongSubs::TLOnly);
+    songSubsRow->addWidget(_songSubsComboBox);
+    songSubsRow->addStretch(1);
+    mainLayout->addLayout(songSubsRow);
 
     _hqAudioCb = new QCheckBox("Use high-quality audio tracks for OP/ED", this);
     mainLayout->addWidget(_hqAudioCb);
@@ -109,7 +123,7 @@ void GeneralTab::setConfig() {
     rbApp->patchConfig()->improveDialogueOutlines = _outlineCb->isChecked();
     rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
     rbApp->patchConfig()->karaokeSubs =
-        _karaokeCb->isChecked() ? "lowQuality" : "off";
+        PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
     rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
 }
 
@@ -123,6 +137,8 @@ void GeneralTab::reloadData() {
 
     _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
     _consistencyCb->setChecked(rbApp->patchConfig()->consistency);
-    _karaokeCb->setChecked(rbApp->patchConfig()->karaokeSubs == "lowQuality");
+    _songSubsComboBox->setCurrentIndex(
+        _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
+            rbApp->patchConfig()->karaokeSubs)));
     _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
 }

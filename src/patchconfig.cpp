@@ -7,10 +7,12 @@
 #include <QJsonValue>
 #include <QJsonObject>
 
-QStringList PatchConfig::KaraokeSubsOptions = QStringList() << "off"
-                                                            << "lowQuality";
+QStringList PatchConfig::SongSubsOptions = QStringList() << "off"
+                                                         << "all"
+                                                         << "karaonly"
+                                                         << "tlonly";
 
-PatchConfig::PatchConfig(QObject *parent) : QObject(parent) {
+PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
     _path = rbApp->patchConfigDirectory() + "/config.json";
 
     loadDefaults();
@@ -28,6 +30,8 @@ PatchConfig::PatchConfig(QObject *parent) : QObject(parent) {
         if (!inJsonDoc.isObject()) return;
         QJsonObject inJson = inJsonDoc.object();
 
+        migrate(inJson);
+
         if (inJson["showAllSettings"].isBool())
             showAllSettings = inJson["showAllSettings"].toBool();
         if (inJson["hqFmvAudio"].isBool())
@@ -39,7 +43,7 @@ PatchConfig::PatchConfig(QObject *parent) : QObject(parent) {
                 inJson["improveDialogueOutlines"].toBool();
         if (inJson["karaokeSubs"].isString()) {
             QString karaokeSubs_ = inJson["karaokeSubs"].toString();
-            if (PatchConfig::KaraokeSubsOptions.contains(karaokeSubs_))
+            if (PatchConfig::SongSubsOptions.contains(karaokeSubs_))
                 karaokeSubs = karaokeSubs_;
         }
     }
@@ -54,7 +58,7 @@ void PatchConfig::save() {
     }
 
     QJsonObject outJson;
-    outJson["__schema_version"] = 2;
+    outJson["__schema_version"] = 3;
     outJson["showAllSettings"] = showAllSettings;
     outJson["hqFmvAudio"] = hqFmvAudio;
     outJson["consistency"] = consistency;
@@ -70,5 +74,15 @@ void PatchConfig::loadDefaults() {
     hqFmvAudio = true;
     consistency = true;
     improveDialogueOutlines = true;
-    karaokeSubs = "lowQuality";
+    karaokeSubs = "all";
+}
+
+void PatchConfig::migrate(QJsonObject& conf) {
+    int oldVersion = conf["__schema_version"].toInt();
+    if (oldVersion < 3) {
+        if (conf["karaokeSubs"].isString() &&
+            conf["karaokeSubs"].toString() == "lowQuality") {
+            conf["karaokeSubs"] = "all";
+        }
+    }
 }

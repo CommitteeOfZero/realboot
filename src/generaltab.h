@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QButtonGroup>
 #include <QCheckBox>
+#include <QComboBox>
 
 class GeneralTab : public QWidget {
     Q_OBJECT
@@ -20,6 +21,6 @@ class GeneralTab : public QWidget {
     QCheckBox* _outlineCb;
     QCheckBox* _consistencyCb;
     QButtonGroup* _movieQualityGroup;
-    QCheckBox* _karaokeCb;
+    QComboBox* _songSubsComboBox;
     QCheckBox* _hqAudioCb;
 };
