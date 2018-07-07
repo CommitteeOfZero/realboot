@@ -14,6 +14,8 @@
 #include <QClipboard>
 #include <QDir>
 #include <QSizePolicy>
+#include <QTextStream>
+#include <QProcess>
 
 #include <windows.h>
 
@@ -141,6 +143,20 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
 
     troubleshootingData += "Can load d3dx9_43.dll: " + canLoadD3D + "\n";
     troubleshootingData += "Can load XAudio2_7.dll: " + canLoadXAudio + "\n";
+
+    // This stuff isn't as easy to collect in LanguageBarrier, so we'll log it
+    // persistently here.
+    // Don't want to store log.txt redundantly, so we save before the cut
+    // Also, kick off dxdiag, again for crash report or manual collection
+    QFile launcherdiag(rbApp->patchConfigDirectory() + "/launcherdiag.txt");
+    if (launcherdiag.open(QFile::WriteOnly)) {
+        QTextStream launcherdiagOut(&launcherdiag);
+        launcherdiagOut << troubleshootingData << endl;
+    }
+    QProcess::startDetached(
+        "dxdiag", QStringList()
+                      << "/whql:off"
+                      << "/t" << rbApp->patchConfigDirectory() + "/dxdiag.txt");
 
     troubleshootingData += "\n";
     troubleshootingData += "------------------------------------------------\n";
