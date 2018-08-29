@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QJsonObject>
+#include <QDir>
 
 QStringList PatchConfig::SongSubsOptions = QStringList() << "off"
                                                          << "all"
@@ -50,6 +51,9 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
 }
 
 void PatchConfig::save() {
+    QDir dir(rbApp->patchConfigDirectory());
+    if (!dir.exists()) dir.mkpath(".");
+
     QFile outFile(_path);
     if (!outFile.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(0, "Launcher error",
