@@ -16,7 +16,7 @@ class GeneralTab : public QWidget {
     void reloadData();
 
    private:
-    QButtonGroup* _resolutionGroup;
+    QComboBox* _resolutionComboBox;
     QCheckBox* _fullscreenCb;
     QCheckBox* _outlineCb;
     QCheckBox* _consistencyCb;

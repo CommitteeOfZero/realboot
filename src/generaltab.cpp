@@ -16,27 +16,22 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 
     mainLayout->addSpacing(8);
 
-    _fullscreenCb = new QCheckBox("Fullscreen", this);
-    mainLayout->addWidget(_fullscreenCb);
-
     QHBoxLayout *resolutionRow = new QHBoxLayout(this);
     resolutionRow->setSpacing(8);
     resolutionRow->setMargin(0);
     QLabel *resolutionLabel = new QLabel("Resolution:", this);
     resolutionRow->addWidget(resolutionLabel);
-    _resolutionGroup = new QButtonGroup(this);
-    QRadioButton *r576pButton = new QRadioButton("1024x576", this);
-    _resolutionGroup->addButton(r576pButton,
-                                (int)GameConfig::Resolution::Res576p);
-    resolutionRow->addWidget(r576pButton);
-    QRadioButton *r720pButton = new QRadioButton("1280x720", this);
-    _resolutionGroup->addButton(r720pButton,
-                                (int)GameConfig::Resolution::Res720p);
-    resolutionRow->addWidget(r720pButton);
-    QRadioButton *r1080pButton = new QRadioButton("1920x1080", this);
-    _resolutionGroup->addButton(r1080pButton,
-                                (int)GameConfig::Resolution::Res1080p);
-    resolutionRow->addWidget(r1080pButton);
+    _resolutionComboBox = new QComboBox(this);
+    _resolutionComboBox->addItem("1024x576",
+                                 (int)GameConfig::Resolution::Res576p);
+    _resolutionComboBox->addItem("1280x720",
+                                 (int)GameConfig::Resolution::Res720p);
+    _resolutionComboBox->addItem("1920x1080",
+                                 (int)GameConfig::Resolution::Res1080p);
+    resolutionRow->addWidget(_resolutionComboBox);
+    resolutionRow->addSpacing(4);
+    _fullscreenCb = new QCheckBox("Fullscreen", this);
+    resolutionRow->addWidget(_fullscreenCb);
     resolutionRow->addStretch(1);
     mainLayout->addLayout(resolutionRow);
 
@@ -99,21 +94,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 
 void GeneralTab::setConfig() {
     rbApp->gameConfig()->resolution =
-        (GameConfig::Resolution)_resolutionGroup->checkedId();
-    switch (rbApp->gameConfig()->resolution) {
-        case GameConfig::Resolution::Res576p:
-            rbApp->gameConfig()->width = 1024;
-            rbApp->gameConfig()->height = 576;
-            break;
-        case GameConfig::Resolution::Res720p:
-            rbApp->gameConfig()->width = 1280;
-            rbApp->gameConfig()->height = 720;
-            break;
-        case GameConfig::Resolution::Res1080p:
-            rbApp->gameConfig()->width = 1920;
-            rbApp->gameConfig()->height = 1080;
-            break;
-    }
+        (GameConfig::Resolution)_resolutionComboBox->currentData().toInt();
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
@@ -128,8 +109,8 @@ void GeneralTab::setConfig() {
 }
 
 void GeneralTab::reloadData() {
-    _resolutionGroup->button((int)rbApp->gameConfig()->resolution)
-        ->setChecked(true);
+    _resolutionComboBox->setCurrentIndex(
+        _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
