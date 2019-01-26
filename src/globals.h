@@ -17,7 +17,7 @@ const QString game_ReleaseUrl =
 #if defined(GAME_STEAM)
 const QString game_LauncherTitle = "Chaos;Child Steam Patch Launcher";
 const QString game_PatchConfPath = "Committee of Zero/CCSteam";
-const QString game_GameConfPath = "mages_steam/CHAOS CHILD";
+const QString game_GameConfPath = "mages_steam/CHAOS CHILD/eng";
 const QString game_LaunchCommand = "Game.exe chaoschild EN";
 #else
 const QString game_LauncherTitle = "Chaos;Child English Launcher";
