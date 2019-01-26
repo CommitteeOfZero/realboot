@@ -157,43 +157,42 @@ void LauncherWindow::startGame() {
 
     saveChanges();
 
+#ifdef IPC_ENABLED
     volatile void *ipc;
     HANDLE ipcFile;
-    if (game_ipcEnabled) {
-        ipcFile = CreateFileMappingW(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0,
-                                     8, game_ipcName);
-        ipc = MapViewOfFile(ipcFile, FILE_MAP_ALL_ACCESS, 0, 0, 8);
-        ((volatile uint32_t *)ipc)[1] = game_ipcOut;
-    }
+    ipcFile = CreateFileMappingW(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, 8,
+                                 game_ipcName);
+    ipc = MapViewOfFile(ipcFile, FILE_MAP_ALL_ACCESS, 0, 0, 8);
+    ((volatile uint32_t *)ipc)[1] = game_ipcOut;
+#endif
 
     // allow URLs
     QProcess::startDetached("cmd", QStringList()
                                        << "/c"
                                        << "start " + game_LaunchCommand);
 
-    if (game_ipcEnabled) {
-        QElapsedTimer timer;
-        bool started = false;
-        timer.start();
-        while (timer.elapsed() < 5000) {
-            if (((volatile uint32_t *)ipc)[0] == game_ipcIn) {
-                started = true;
-                break;
-            }
-            Sleep(1);
+#ifdef IPC_ENABLED
+    QElapsedTimer timer;
+    bool started = false;
+    timer.start();
+    while (timer.elapsed() < 5000) {
+        if (((volatile uint32_t *)ipc)[0] == game_ipcIn) {
+            started = true;
+            break;
         }
-        UnmapViewOfFile((LPCVOID)ipc);
-        CloseHandle(ipcFile);
-        if (started) {
-            QApplication::quit();
-        } else {
-            QMessageBox::critical(this, "Launcher error",
-                                  "Couldn't start game");
-            setEnabled(true);
-        }
-    } else {
-        QApplication::quit();
+        Sleep(1);
     }
+    UnmapViewOfFile((LPCVOID)ipc);
+    CloseHandle(ipcFile);
+    if (started) {
+        QApplication::quit();
+    } else {
+        QMessageBox::critical(this, "Launcher error", "Couldn't start game");
+        setEnabled(true);
+    }
+#else
+    QApplication::quit();
+#endif
 }
 
 void LauncherWindow::saveChanges() {

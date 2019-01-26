@@ -36,6 +36,9 @@ chaoschild {
     DEFINES += GAME_CHAOSCHILD
     RESOURCES += chaoschild.qrc
 }
+steam {
+    DEFINES += GAME_STEAM
+}
 
 DEFINES += WIN32_LEAN_AND_MEAN
 INCLUDEPATH += $$(DXSDK_DIR)/include
