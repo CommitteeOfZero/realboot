@@ -112,13 +112,18 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     ui->tabWidget->addTab(troubleshootingTab, "Troubleshooting");
 
     _allSettingsMode = rbApp->patchConfig()->showAllSettings;
-    if (_allSettingsMode) {
-        showFullLayout();
-    } else {
-        showMiniLayout();
-    }
+    // We respect the user's choice in afterShow(), but we show the full layout first
+    // so that's what the window manager uses for setting initial window position
+    showFullLayout();
 
     startUpdateCheck();
+}
+
+void LauncherWindow::afterShow() {
+    // Window has been positioned, we can switch now
+    if (!_allSettingsMode) {
+        showMiniLayout();
+    }
 }
 
 LauncherWindow::~LauncherWindow() { delete ui; }

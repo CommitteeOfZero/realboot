@@ -19,6 +19,8 @@ class LauncherWindow : public QMainWindow {
     explicit LauncherWindow(QWidget *parent = nullptr);
     ~LauncherWindow();
 
+    void afterShow();
+
    protected:
     bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;

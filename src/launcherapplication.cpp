@@ -32,6 +32,7 @@ LauncherApplication::LauncherApplication(int& argc, char** argv)
     w->setStyleSheet(ts.readAll() + ts2.readAll());
 
     w->show();
+    w->afterShow();
 }
 
 LauncherApplication::~LauncherApplication() { delete w; }
