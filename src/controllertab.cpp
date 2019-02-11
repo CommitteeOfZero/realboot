@@ -79,7 +79,7 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
                 &ControllerTab::resetButtonClicked);
         controllerRow->addWidget(_resetButton);
     }
-
+    controllerRow->addStretch(1);
     mainLayout->addLayout(controllerRow);
 
     if (!rbApp->controllerManager()->controllers().empty()) {
@@ -149,9 +149,14 @@ void ControllerTab::showEvent(QShowEvent *e) {
 
     if (!rbApp->controllerManager()->controllers().empty()) {
         // make sure we activate *some* controller
-        // but preferably the one specified in config.dat
+        // but preferably the one specified in patch config (survives controller disabling)
+        // then the one in config.dat
         int gcIndex = _controllerBox->findData(
-            QVariant(rbApp->gameConfig()->controllerGuid));
+            QVariant(rbApp->patchConfig()->selectedController));
+        if (gcIndex < 0) {
+            gcIndex = _controllerBox->findData(
+                QVariant(rbApp->gameConfig()->controllerGuid));
+        }
         if (gcIndex > -1) {
             _controllerBox->setCurrentIndex(gcIndex);
         } else {
@@ -205,6 +210,8 @@ void ControllerTab::resetButtonClicked() {
 void ControllerTab::controllerSelected(int index) {
     rbApp->controllerManager()->setActiveController(
         _controllerBox->currentData().toString());
+    rbApp->patchConfig()->selectedController =
+        _controllerBox->currentData().toString();
 }
 
 void ControllerTab::onActiveControllerChanged(DinputController *oldController,

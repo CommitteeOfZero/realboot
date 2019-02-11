@@ -31,6 +31,7 @@ class PatchConfig : public QObject {
     bool consistency;
     bool improveDialogueOutlines;
     QString karaokeSubs;
+    QString selectedController;
 
    private:
     QString _path;

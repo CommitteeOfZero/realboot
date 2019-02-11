@@ -49,6 +49,8 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
             if (PatchConfig::SongSubsOptions.contains(karaokeSubs_))
                 karaokeSubs = karaokeSubs_;
         }
+        if (inJson["selectedController"].isString())
+            selectedController = inJson["selectedController"].toString();
     }
 }
 
@@ -71,6 +73,7 @@ void PatchConfig::save() {
     outJson["consistency"] = consistency;
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
     outJson["karaokeSubs"] = karaokeSubs;
+    outJson["selectedController"] = selectedController;
 
     QJsonDocument outJsonDocument(outJson);
     outFile.write(outJsonDocument.toJson());
@@ -83,6 +86,7 @@ void PatchConfig::loadDefaults() {
     consistency = true;
     improveDialogueOutlines = true;
     karaokeSubs = "all";
+    selectedController = "";
 }
 
 void PatchConfig::migrate(QJsonObject& conf) {
@@ -95,5 +99,6 @@ void PatchConfig::migrate(QJsonObject& conf) {
     }
     if (oldVersion < 4) {
         conf["controllerEnabled"] = true;
+        conf["selectedController"] = "";
     }
 }
