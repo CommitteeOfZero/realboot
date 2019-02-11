@@ -78,6 +78,7 @@ void PatchConfig::save() {
 
 void PatchConfig::loadDefaults() {
     showAllSettings = false;
+    controllerEnabled = true;
     hqFmvAudio = true;
     consistency = true;
     improveDialogueOutlines = true;
