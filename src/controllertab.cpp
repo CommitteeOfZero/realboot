@@ -158,6 +158,8 @@ void ControllerTab::setConfig() {
     if (rbApp->controllerManager()->activeController() != nullptr) {
         rbApp->gameConfig()->controllerGuid =
             rbApp->controllerManager()->activeController()->guid();
+    } else {
+        rbApp->gameConfig()->controllerGuid = "";
     }
     // rest is already set above
 }
