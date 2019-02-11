@@ -35,6 +35,8 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
 
         if (inJson["showAllSettings"].isBool())
             showAllSettings = inJson["showAllSettings"].toBool();
+        if (inJson["controllerEnabled"].isBool())
+            controllerEnabled = inJson["controllerEnabled"].toBool();
         if (inJson["hqFmvAudio"].isBool())
             hqFmvAudio = inJson["hqFmvAudio"].toBool();
         if (inJson["consistency"].isBool())
@@ -62,8 +64,9 @@ void PatchConfig::save() {
     }
 
     QJsonObject outJson;
-    outJson["__schema_version"] = 3;
+    outJson["__schema_version"] = 4;
     outJson["showAllSettings"] = showAllSettings;
+    outJson["controllerEnabled"] = controllerEnabled;
     outJson["hqFmvAudio"] = hqFmvAudio;
     outJson["consistency"] = consistency;
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
@@ -88,5 +91,8 @@ void PatchConfig::migrate(QJsonObject& conf) {
             conf["karaokeSubs"].toString() == "lowQuality") {
             conf["karaokeSubs"] = "all";
         }
+    }
+    if (oldVersion < 4) {
+        conf["controllerEnabled"] = true;
     }
 }

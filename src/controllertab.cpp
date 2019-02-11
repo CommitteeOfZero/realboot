@@ -2,6 +2,7 @@
 #include "launcherapplication.h"
 #include "controllermanager.h"
 #include "gameconfig.h"
+#include "patchconfig.h"
 #include "globals.h"
 #include "launcherwindow.h"
 
@@ -47,6 +48,10 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
     controllerRow->setSpacing(8);
     controllerRow->setMargin(0);
     controllerRow->setAlignment(Qt::AlignVCenter);
+
+    _controllerCb = new QCheckBox("Enabled", this);
+    controllerRow->addWidget(_controllerCb);
+
     controllerRow->addStretch(1);
     QLabel *controllerLabel = new QLabel("Controller:", this);
     controllerRow->addWidget(controllerLabel);
@@ -74,7 +79,7 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
                 &ControllerTab::resetButtonClicked);
         controllerRow->addWidget(_resetButton);
     }
-    controllerRow->addStretch(1);
+
     mainLayout->addLayout(controllerRow);
 
     if (!rbApp->controllerManager()->controllers().empty()) {
@@ -128,6 +133,7 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
     }
 
     mainLayout->addStretch(1);
+    reloadData();
 }
 
 void ControllerTab::showEvent(QShowEvent *e) {
@@ -155,16 +161,23 @@ void ControllerTab::showEvent(QShowEvent *e) {
 }
 
 void ControllerTab::setConfig() {
-    if (rbApp->controllerManager()->activeController() != nullptr) {
-        rbApp->gameConfig()->controllerGuid =
-            rbApp->controllerManager()->activeController()->guid();
+    if (_controllerCb->isChecked()) {
+        rbApp->patchConfig()->controllerEnabled = true;
+        if (rbApp->controllerManager()->activeController() != nullptr) {
+            rbApp->gameConfig()->controllerGuid =
+                rbApp->controllerManager()->activeController()->guid();
+        } else {
+            rbApp->gameConfig()->controllerGuid = "";
+        }
     } else {
+        rbApp->patchConfig()->controllerEnabled = false;
         rbApp->gameConfig()->controllerGuid = "";
     }
     // rest is already set above
 }
 
 void ControllerTab::reloadData() {
+    _controllerCb->setChecked(rbApp->patchConfig()->controllerEnabled);
     if (rbApp->controllerManager()->activeController() != nullptr) {
         for (int i = 0; i < (int)ControllerConfig::Bind::Num; i++) {
             _binds[i]->le()->setText(buttonToText(rbApp->controllerManager()

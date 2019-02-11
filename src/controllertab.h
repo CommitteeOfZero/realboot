@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QComboBox>
 #include <QPushButton>
+#include <QCheckBox>
 #include <QShowEvent>
 
 class ControllerTab : public QWidget {
@@ -23,6 +24,7 @@ class ControllerTab : public QWidget {
    private:
     QComboBox* _controllerBox;
     QPushButton* _resetButton;
+    QCheckBox* _controllerCb;
     BtnRow* _binds[(int)ControllerConfig::Bind::Num];
     bool _firstShowCaught = false;
     QLabel* _axesLabel;
