@@ -392,7 +392,8 @@ void LauncherWindow::updateCheckReplyReceived(const UpdateCheckReply &reply) {
     const QJsonObject &channel =
         update.object()["channels"].toObject()[_updateChannel].toObject();
     if (channel["intVersion"].type() != QJsonValue::Double) {
-        "Update check got malformed response (version is not a number)");
+        updateCheckFailed(
+            "Update check got malformed response (version is not a number)");
         return;
     } else {
         int latestVersion = channel["intVersion"].toInt();
