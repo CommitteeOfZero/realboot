@@ -3,8 +3,8 @@
 #include <QMainWindow>
 #include <QEvent>
 #include <QCloseEvent>
-#include <QtNetwork>
 #include "launcherapplication.h"
+#include <curl/curl.h>
 
 namespace Ui {
 class LauncherWindow;
@@ -12,6 +12,11 @@ class LauncherWindow;
 
 class GeneralTab;
 class ControllerTab;
+
+struct UpdateCheckReply {
+    CURLcode responseCode;
+    QByteArray responseBody;
+};
 
 class LauncherWindow : public QMainWindow {
     Q_OBJECT
@@ -35,14 +40,13 @@ class LauncherWindow : public QMainWindow {
     void saveChanges();
     void resetToDefaults();
     void toggleSettings();
-    void updateCheckReplyReceived(QNetworkReply *reply);
+    void updateCheckReplyReceived(const UpdateCheckReply &reply);
 
    private:
     Ui::LauncherWindow *ui;
     GeneralTab *_generalTab;
     ControllerTab *_controllerTab;
 
-    QNetworkAccessManager _qnam;
     int _runningIntVersion;
     QString _updateChannel;
 
@@ -50,6 +54,7 @@ class LauncherWindow : public QMainWindow {
 
     void showMiniLayout();
     void showFullLayout();
+    void updateCheckFailed(const QString &error);
     void reloadData();
     void startUpdateCheck();
 };

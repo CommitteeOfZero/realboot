@@ -20,6 +20,35 @@
 #include <QJsonValue>
 #include <QFileInfo>
 #include <QDesktopServices>
+#include <QtConcurrent>
+#include <QFuture>
+#include <QFutureWatcher>
+
+// https://curl.haxx.se/libcurl/c/getinmemory.html
+struct MemoryStruct {
+    char *memory;
+    size_t size;
+};
+
+static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb,
+                                  void *userp) {
+    size_t realsize = size * nmemb;
+    struct MemoryStruct *mem = (struct MemoryStruct *)userp;
+
+    char *ptr = (char *)realloc(mem->memory, mem->size + realsize + 1);
+    if (ptr == NULL) {
+        /* out of memory! */
+        printf("not enough memory (realloc returned NULL)\n");
+        return 0;
+    }
+
+    mem->memory = ptr;
+    memcpy(&(mem->memory[mem->size]), contents, realsize);
+    mem->size += realsize;
+    mem->memory[mem->size] = 0;
+
+    return realsize;
+}
 
 LauncherWindow::LauncherWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::LauncherWindow) {
@@ -282,48 +311,91 @@ void LauncherWindow::toggleSettings() {
 void LauncherWindow::startUpdateCheck() {
     QFile versioninfoFile("languagebarrier/versioninfo.json");
     if (!versioninfoFile.open(QIODevice::ReadOnly)) {
-        QMessageBox::critical(this, "Launcher error",
-                              "Couldn't open update info");
-        ui->updateCheckLabel->setText("(update check failed)");
+        updateCheckFailed("Couldn't open update info");
         return;
     }
     QByteArray versioninfoData = versioninfoFile.readAll();
     QJsonDocument versioninfo = QJsonDocument::fromJson(versioninfoData);
-    _runningIntVersion = versioninfo.object()["intVersion"].toInt();
-    _updateChannel = versioninfo.object()["channel"].toString();
-    QUrl updateCheckUrl =
-        QUrl(versioninfo.object()["updateCheckUrl"].toString());
+    if (versioninfo.isNull()) {
+        updateCheckFailed("Couldn't parse update info");
+        return;
+    }
+    QJsonObject const &obj = versioninfo.object();
+    if (obj["intVersion"].type() != QJsonValue::Double ||
+        obj["channel"].type() != QJsonValue::String ||
+        obj["updateCheckUrl"].type() != QJsonValue::String) {
+        updateCheckFailed("Update info is missing required data");
+        return;
+    }
+    _runningIntVersion = obj["intVersion"].toInt();
+    _updateChannel = obj["channel"].toString();
+    QString updateCheckUrl = obj["updateCheckUrl"].toString();
 
     ui->updateCheckLabel->setText("(checking for updates...)");
 
-    connect(&_qnam, &QNetworkAccessManager::finished, this,
-            &LauncherWindow::updateCheckReplyReceived);
-    _qnam.get(QNetworkRequest(updateCheckUrl));
+    QFutureWatcher<UpdateCheckReply> *watcher =
+        new QFutureWatcher<UpdateCheckReply>(this);
+    QFuture<UpdateCheckReply> future = QtConcurrent::run([=]() {
+        CURL *curl = curl_easy_init();
+        MemoryStruct chunk;
+        chunk.memory = (char *)malloc(1);
+        chunk.size = 0;
+        curl_easy_setopt(curl, CURLOPT_URL,
+                         updateCheckUrl.toUtf8().constData());
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+        UpdateCheckReply result;
+        result.responseCode = curl_easy_perform(curl);
+        if (result.responseCode == CURLE_OK) {
+            result.responseBody = QByteArray(chunk.memory, chunk.size);
+        } else {
+            result.responseBody =
+                QByteArray(curl_easy_strerror(result.responseCode));
+        }
+        free(chunk.memory);
+        curl_easy_cleanup(curl);
+        return result;
+    });
+    connect(watcher, &QFutureWatcher<UpdateCheckReply>::finished, [=]() {
+        updateCheckReplyReceived(watcher->result());
+        delete watcher;
+    });
+    watcher->setFuture(future);
 }
 
-void LauncherWindow::updateCheckReplyReceived(QNetworkReply *reply) {
-    if (reply->error()) {
-        qDebug() << reply->error();
-        reply->deleteLater();
-        ui->updateCheckLabel->setText("(update check failed)");
+void LauncherWindow::updateCheckFailed(const QString &error) {
+    if (!error.isEmpty()) QMessageBox::critical(this, "Launcher error", error);
+    ui->updateCheckLabel->setText("(update check failed)");
+}
+
+void LauncherWindow::updateCheckReplyReceived(const UpdateCheckReply &reply) {
+    if (reply.responseCode != CURLE_OK) {
+        updateCheckFailed(QString("Update check request error: %1")
+                              .arg(QString(reply.responseBody)));
         return;
     }
-    QByteArray updateData = reply->readAll();
-    reply->deleteLater();
-    QJsonDocument update = QJsonDocument::fromJson(updateData);
-    if (!update.object().contains("channels") ||
-        !update.object()["channels"].toObject().contains(_updateChannel) ||
-        !update.object()["channels"]
-             .toObject()[_updateChannel]
-             .toObject()
-             .contains("intVersion")) {
-        ui->updateCheckLabel->setText("(update check failed)");
+    QJsonDocument update = QJsonDocument::fromJson(reply.responseBody);
+    if (!update.isObject()) {
+        updateCheckFailed(
+            "Update check got malformed response (not a JSON object)");
+        return;
+    }
+    const QJsonObject &obj = update.object();
+    if (obj["channels"].type() != QJsonValue::Object ||
+        obj["channels"].toObject()[_updateChannel].type() !=
+            QJsonValue::Object) {
+        updateCheckFailed("Update check failed (no such channel)");
+        return;
+    }
+    const QJsonObject &channel =
+        update.object()["channels"].toObject()[_updateChannel].toObject();
+    if (channel["intVersion"].type() != QJsonValue::Double) {
+        "Update check got malformed response (version is not a number)");
         return;
     } else {
-        int latestVersion = update.object()["channels"]
-                                .toObject()[_updateChannel]
-                                .toObject()["intVersion"]
-                                .toInt();
+        int latestVersion = channel["intVersion"].toInt();
         if (latestVersion > _runningIntVersion) {
             ui->updateCheckLabel->setText("(update available!)");
             QMessageBox::StandardButton reply = QMessageBox::question(

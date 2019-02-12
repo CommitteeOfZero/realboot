@@ -1,4 +1,4 @@
-QT += core gui widgets network
+QT += core gui widgets concurrent
 
 TARGET = realboot
 TEMPLATE = app
@@ -43,8 +43,8 @@ steam {
 }
 
 DEFINES += WIN32_LEAN_AND_MEAN
-INCLUDEPATH += $$(DXSDK_DIR)/include
-LIBS += $$quote(-L$$(DXSDK_DIR)/lib/x86) dinput8.lib dxguid.lib Shell32.lib Ole32.lib OleAut32.lib
+INCLUDEPATH += $$(DXSDK_DIR)/include vendor/curl/include
+LIBS += $$quote(-L$$PWD/vendor/curl/lib) libcurl.lib $$quote(-L$$(DXSDK_DIR)/lib/x86) dinput8.lib dxguid.lib Shell32.lib Ole32.lib OleAut32.lib
 
 INCLUDEPATH += src
 
