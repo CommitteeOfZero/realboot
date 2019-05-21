@@ -355,7 +355,8 @@ void LauncherWindow::startUpdateCheck() {
                 QByteArray(curl_easy_strerror(result.responseCode));
         }
         free(chunk.memory);
-        curl_easy_cleanup(curl);
+        // leak the handle because freeing it apparently crashes on wine
+        // curl_easy_cleanup(curl);
         return result;
     });
     connect(watcher, &QFutureWatcher<UpdateCheckReply>::finished, [=]() {
