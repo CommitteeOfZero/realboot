@@ -37,6 +37,12 @@ class PatchConfig : public QObject {
     bool improveDialogueOutlines;
     bool hasCosplayPatch = true;
     bool cosplayPatch;
+    bool rneMouseControls;
+    bool scrollDownToAdvanceText;
+    bool disableScrollDownToCloseBacklog;
+    bool swimsuitPatch;
+    int fontSize;
+    QString fontPath;
     QString karaokeSubs;
     QString selectedController;
 

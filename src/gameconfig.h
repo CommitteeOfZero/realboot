@@ -16,6 +16,16 @@ class GameConfig : public QObject {
         Res1080p = 2,
         Num
     };
+
+    enum class FontSize : uint32_t {
+        Size100 = 100,
+        Size125 = 125,
+        Size150 = 150,
+        Size175 = 175,
+        Size200 = 200
+
+    };
+
     Q_ENUM(Resolution)
 
     explicit GameConfig(QObject *parent = 0);

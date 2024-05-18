@@ -35,6 +35,7 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
     resolutionRow->addStretch(1);
     mainLayout->addLayout(resolutionRow);
 
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
     movieQualityRow->setMargin(0);
@@ -52,8 +53,8 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
     movieQualityRow->addWidget(qualityHighButton);
     movieQualityRow->addStretch(1);
     mainLayout->addLayout(movieQualityRow);
-
     mainLayout->addStretch(1);
+#endif
 
     reloadData();
 }
@@ -64,8 +65,10 @@ void MiniSettingsWidget::setConfig() {
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
+#endif
 }
 
 void MiniSettingsWidget::reloadData() {
@@ -73,6 +76,8 @@ void MiniSettingsWidget::reloadData() {
         _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
+#endif
 }

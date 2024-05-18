@@ -34,6 +34,25 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     resolutionRow->addWidget(_fullscreenCb);
     resolutionRow->addStretch(1);
     mainLayout->addLayout(resolutionRow);
+#if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
+    mainLayout->addSpacing(8);
+    _rneMouseControls = new QCheckBox("Enable mouse controls", this);
+    mainLayout->addWidget(_rneMouseControls);
+    _scrollDownToAdvanceText =
+        new QCheckBox("Use scroll wheel for advancing text", this);
+    mainLayout->addWidget(_scrollDownToAdvanceText);
+    _disableScrollDownToCloseBacklog =
+        new QCheckBox("Use scroll wheel for exiting the backlog", this);
+    mainLayout->addWidget(_disableScrollDownToCloseBacklog);
+#endif
+#if defined(GAME_ROBOTICSNOTESD)
+    mainLayout->addSpacing(8);
+    _swimsuitPatch = new QCheckBox(
+        "Enable Swimsuit Patch\n(Force characters to wear swimsuits at all "
+        "times)",
+        this);
+    mainLayout->addWidget(_swimsuitPatch);
+#endif
 
     if (rbApp->patchConfig()->hasConsistency) {
         _consistencyCb = new QCheckBox(
@@ -50,8 +69,10 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
         mainLayout->addWidget(_honorificsCb);
     }
 
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     _outlineCb = new QCheckBox("Improve dialogue outlines", this);
     mainLayout->addWidget(_outlineCb);
+#endif
 
     if (rbApp->patchConfig()->hasrineBlackNames) {
         _rineBlackNamesCb =
@@ -65,6 +86,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     fmvLabel->setText("<b>Videos</b>");
     mainLayout->addWidget(fmvLabel);
 
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
     movieQualityRow->setMargin(0);
@@ -81,6 +103,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     movieQualityRow->addWidget(qualityHighButton);
     movieQualityRow->addStretch(1);
     mainLayout->addLayout(movieQualityRow);
+#endif
 
     QHBoxLayout *songSubsRow = new QHBoxLayout(this);
     songSubsRow->setSpacing(8);
@@ -99,8 +122,10 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     songSubsRow->addStretch(1);
     mainLayout->addLayout(songSubsRow);
 
+#ifndef GAME_ROBOTICSNOTESELITE
     _hqAudioCb = new QCheckBox("Use high-quality audio tracks for OP/ED", this);
     mainLayout->addWidget(_hqAudioCb);
+#endif
 
     mainLayout->addStretch(1);
     if (rbApp->patchConfig()->hasCosplayPatch) {
@@ -109,8 +134,8 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
             "effect forces everyone to cosplay!)",
             this);
         mainLayout->addWidget(_cosplayPatch);
-        mainLayout->addStretch(1);
     }
+    mainLayout->addStretch(1);
     reloadData();
 }
 
@@ -120,9 +145,11 @@ void GeneralTab::setConfig() {
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
+#ifndef GAME_ROBOTICSNOTESELITE
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
-
+    rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
+#endif
     rbApp->patchConfig()->improveDialogueOutlines = _outlineCb->isChecked();
     if (rbApp->patchConfig()->hasConsistency) {
         rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
@@ -135,10 +162,19 @@ void GeneralTab::setConfig() {
     }
     rbApp->patchConfig()->karaokeSubs =
         PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
-    rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
     if (rbApp->patchConfig()->hasCosplayPatch) {
         rbApp->patchConfig()->cosplayPatch = _cosplayPatch->isChecked();
     }
+#ifdef defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
+    rbApp->patchConfig()->rneMouseControls = _rneMouseControls->isChecked();
+    rbApp->patchConfig()->scrollDownToAdvanceText =
+        _scrollDownToAdvanceText->isChecked();
+    rbApp->patchConfig()->disableScrollDownToCloseBacklog =
+        !_disableScrollDownToCloseBacklog->isChecked();
+#endif
+#if defined(GAME_ROBOTICSNOTESDASH)
+    rbApp->patchConfig()->swimsuitPatch = _swimsuitPatch->isChecked();
+#endif
 }
 
 void GeneralTab::reloadData() {
@@ -146,8 +182,10 @@ void GeneralTab::reloadData() {
         _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
+#endif
 
     _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
     if (rbApp->patchConfig()->hasConsistency) {
@@ -162,8 +200,20 @@ void GeneralTab::reloadData() {
     _songSubsComboBox->setCurrentIndex(
         _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
             rbApp->patchConfig()->karaokeSubs)));
-    _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
     if (rbApp->patchConfig()->hasCosplayPatch) {
         _cosplayPatch->setChecked(rbApp->patchConfig()->cosplayPatch);
     }
+#if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
+    _rneMouseControls->setChecked(rbApp->patchConfig()->rneMouseControls);
+    _scrollDownToAdvanceText->setChecked(
+        rbApp->patchConfig()->scrollDownToAdvanceText);
+    _disableScrollDownToCloseBacklog->setChecked(
+        !rbApp->patchConfig()->disableScrollDownToCloseBacklog);
+#endif
+#if defined(GAME_ROBOTICSNOTESDASH)
+    _swimsuitPatch->setChecked(rbApp->patchConfig()->swimsuitPatch);
+#endif
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+    _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
+#endif
 }

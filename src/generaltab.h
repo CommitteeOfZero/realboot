@@ -26,4 +26,12 @@ class GeneralTab : public QWidget {
     QComboBox* _songSubsComboBox;
     QCheckBox* _hqAudioCb;
     QCheckBox* _cosplayPatch;
+#if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
+    QCheckBox* _rneMouseControls;
+    QCheckBox* _scrollDownToAdvanceText;
+    QCheckBox* _disableScrollDownToCloseBacklog;
+#endif
+#if defined(GAME_ROBOTICSNOTESDASH)
+    QCheckBox* _swimsuitPatch;
+#endif
 };

@@ -35,6 +35,18 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
             showAllSettings = inJson["showAllSettings"].toBool();
         if (inJson["controllerEnabled"].isBool())
             controllerEnabled = inJson["controllerEnabled"].toBool();
+
+#if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
+        if (inJson["rneMouseControls"].isBool())
+            rneMouseControls = inJson["rneMouseControls"].toBool();
+        if (inJson["scrollDownToAdvanceText"].isBool())
+            scrollDownToAdvanceText =
+                inJson["scrollDownToAdvanceText"].toBool();
+        if (inJson["disableScrollDownToCloseBacklog"].isBool())
+            disableScrollDownToCloseBacklog =
+                inJson["disableScrollDownToCloseBacklog"].toBool();
+#endif
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
         if (inJson["hqFmvAudio"].isBool())
             hqFmvAudio = inJson["hqFmvAudio"].toBool();
         if (inJson["consistency"].isBool()) {
@@ -55,7 +67,11 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
 
         if (inJson["cosplayPatch"].isBool()) hasCosplayPatch = true;
         cosplayPatch = inJson["cosplayPatch"].toBool();
-
+#endif
+#if defined(GAME_ROBOTICSNOTESDASH)
+        if (inJson["swimsuitPatch"].isBool())
+            swimsuitPatch = inJson["swimsuitPatch"].toBool();
+#endif
         if (inJson["karaokeSubs"].isString()) {
             QString karaokeSubs_ = inJson["karaokeSubs"].toString();
             if (PatchConfig::SongSubsOptions.contains(karaokeSubs_))
@@ -80,15 +96,27 @@ void PatchConfig::save() {
     QJsonObject outJson;
     outJson["__schema_version"] = 4;
     outJson["showAllSettings"] = showAllSettings;
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     outJson["controllerEnabled"] = controllerEnabled;
     outJson["hqFmvAudio"] = hqFmvAudio;
+#endif
     if (hasConsistency) outJson["consistency"] = consistency;
     if (hasHonorifics) outJson["honorifics"] = honorifics;
     if (hasrineBlackNames) outJson["rineBlackNames"] = rineBlackNames;
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
+#endif
     if (hasCosplayPatch) outJson["cosplayPatch"] = cosplayPatch;
+#if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
+    outJson["rneMouseControls"] = rneMouseControls;
+    outJson["scrollDownToAdvanceText"] = scrollDownToAdvanceText;
+    outJson["disableScrollDownToCloseBacklog"] =
+        disableScrollDownToCloseBacklog;
+#endif
     outJson["karaokeSubs"] = karaokeSubs;
+#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     outJson["selectedController"] = selectedController;
+#endif
 
     QJsonDocument outJsonDocument(outJson);
     outFile.write(outJsonDocument.toJson());
@@ -100,6 +128,10 @@ void PatchConfig::loadDefaults() {
     hqFmvAudio = true;
     consistency = true;
     honorifics = true;
+    rneMouseControls = true;
+    scrollDownToAdvanceText = false;
+    disableScrollDownToCloseBacklog = false;
+    swimsuitPatch = false;
     improveDialogueOutlines = true;
     cosplayPatch = false;
     karaokeSubs = "all";
