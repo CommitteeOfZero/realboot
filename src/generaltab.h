@@ -19,8 +19,11 @@ class GeneralTab : public QWidget {
     QComboBox* _resolutionComboBox;
     QCheckBox* _fullscreenCb;
     QCheckBox* _outlineCb;
+    QCheckBox* _rineBlackNamesCb;
     QCheckBox* _consistencyCb;
+    QCheckBox* _honorificsCb;
     QButtonGroup* _movieQualityGroup;
     QComboBox* _songSubsComboBox;
     QCheckBox* _hqAudioCb;
+    QCheckBox* _cosplayPatch;
 };

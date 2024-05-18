@@ -8,10 +8,8 @@
 #include <QJsonObject>
 #include <QDir>
 
-QStringList PatchConfig::SongSubsOptions = QStringList() << "off"
-                                                         << "all"
-                                                         << "karaonly"
-                                                         << "tlonly";
+QStringList PatchConfig::SongSubsOptions =
+    QStringList() << "off" << "all" << "karaonly" << "tlonly";
 
 PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
     _path = rbApp->patchConfigDirectory() + "/config.json";
@@ -39,11 +37,25 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
             controllerEnabled = inJson["controllerEnabled"].toBool();
         if (inJson["hqFmvAudio"].isBool())
             hqFmvAudio = inJson["hqFmvAudio"].toBool();
-        if (inJson["consistency"].isBool())
+        if (inJson["consistency"].isBool()) {
+            hasConsistency = true;
             consistency = inJson["consistency"].toBool();
+        }
+        if (inJson["honorifics"].isBool()) {
+            hasHonorifics = true;
+            honorifics = inJson["honorifics"].toBool();
+        }
+        if (inJson["rineBlackNames"].isBool()) {
+            hasrineBlackNames = true;
+            rineBlackNames = inJson["rineBlackNames"].toBool();
+        }
         if (inJson["improveDialogueOutlines"].isBool())
             improveDialogueOutlines =
                 inJson["improveDialogueOutlines"].toBool();
+
+        if (inJson["cosplayPatch"].isBool()) hasCosplayPatch = true;
+        cosplayPatch = inJson["cosplayPatch"].toBool();
+
         if (inJson["karaokeSubs"].isString()) {
             QString karaokeSubs_ = inJson["karaokeSubs"].toString();
             if (PatchConfig::SongSubsOptions.contains(karaokeSubs_))
@@ -70,8 +82,11 @@ void PatchConfig::save() {
     outJson["showAllSettings"] = showAllSettings;
     outJson["controllerEnabled"] = controllerEnabled;
     outJson["hqFmvAudio"] = hqFmvAudio;
-    outJson["consistency"] = consistency;
+    if (hasConsistency) outJson["consistency"] = consistency;
+    if (hasHonorifics) outJson["honorifics"] = honorifics;
+    if (hasrineBlackNames) outJson["rineBlackNames"] = rineBlackNames;
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
+    if (hasCosplayPatch) outJson["cosplayPatch"] = cosplayPatch;
     outJson["karaokeSubs"] = karaokeSubs;
     outJson["selectedController"] = selectedController;
 
@@ -84,7 +99,9 @@ void PatchConfig::loadDefaults() {
     controllerEnabled = true;
     hqFmvAudio = true;
     consistency = true;
+    honorifics = true;
     improveDialogueOutlines = true;
+    cosplayPatch = false;
     karaokeSubs = "all";
     selectedController = "";
 }

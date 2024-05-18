@@ -35,14 +35,29 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     resolutionRow->addStretch(1);
     mainLayout->addLayout(resolutionRow);
 
-    /*_consistencyCb = new QCheckBox(
-        "Edit text for consistency with other SciADV localizations\n(Change "
-        "name order to Japanese, use established terms, etc.)",
-        this);
-    mainLayout->addWidget(_consistencyCb);*/
+    if (rbApp->patchConfig()->hasConsistency) {
+        _consistencyCb = new QCheckBox(
+            "Edit text for consistency with other SciADV "
+            "localizations\n(Change "
+            "name order to Japanese, use established terms, etc.)",
+            this);
+        mainLayout->addWidget(_consistencyCb);
+    }
+
+    if (rbApp->patchConfig()->hasHonorifics) {
+        _honorificsCb =
+            new QCheckBox("Edit text to use Japanese honorifics", this);
+        mainLayout->addWidget(_honorificsCb);
+    }
 
     _outlineCb = new QCheckBox("Improve dialogue outlines", this);
     mainLayout->addWidget(_outlineCb);
+
+    if (rbApp->patchConfig()->hasrineBlackNames) {
+        _rineBlackNamesCb =
+            new QCheckBox("Use solid black text for names in RINE", this);
+        mainLayout->addWidget(_rineBlackNamesCb);
+    }
 
     mainLayout->addSpacing(16);
 
@@ -88,7 +103,14 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addWidget(_hqAudioCb);
 
     mainLayout->addStretch(1);
-
+    if (rbApp->patchConfig()->hasCosplayPatch) {
+        _cosplayPatch = new QCheckBox(
+            "Enable Cosplay Patch\n(Mayuri's Tutturu beam has been fired?! Its "
+            "effect forces everyone to cosplay!)",
+            this);
+        mainLayout->addWidget(_cosplayPatch);
+        mainLayout->addStretch(1);
+    }
     reloadData();
 }
 
@@ -102,10 +124,21 @@ void GeneralTab::setConfig() {
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
 
     rbApp->patchConfig()->improveDialogueOutlines = _outlineCb->isChecked();
-    //rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
+    if (rbApp->patchConfig()->hasConsistency) {
+        rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
+    }
+    if (rbApp->patchConfig()->hasHonorifics) {
+        rbApp->patchConfig()->honorifics = _honorificsCb->isChecked();
+    }
+    if (rbApp->patchConfig()->hasrineBlackNames) {
+        rbApp->patchConfig()->rineBlackNames = _rineBlackNamesCb->isChecked();
+    }
     rbApp->patchConfig()->karaokeSubs =
         PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
     rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
+    if (rbApp->patchConfig()->hasCosplayPatch) {
+        rbApp->patchConfig()->cosplayPatch = _cosplayPatch->isChecked();
+    }
 }
 
 void GeneralTab::reloadData() {
@@ -117,9 +150,20 @@ void GeneralTab::reloadData() {
         ->setChecked(true);
 
     _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
-    //_consistencyCb->setChecked(rbApp->patchConfig()->consistency);
+    if (rbApp->patchConfig()->hasConsistency) {
+        _consistencyCb->setChecked(rbApp->patchConfig()->consistency);
+    }
+    if (rbApp->patchConfig()->hasHonorifics) {
+        _honorificsCb->setChecked(rbApp->patchConfig()->honorifics);
+    }
+    if (rbApp->patchConfig()->hasrineBlackNames) {
+        _rineBlackNamesCb->setChecked(rbApp->patchConfig()->rineBlackNames);
+    }
     _songSubsComboBox->setCurrentIndex(
         _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
             rbApp->patchConfig()->karaokeSubs)));
     _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
+    if (rbApp->patchConfig()->hasCosplayPatch) {
+        _cosplayPatch->setChecked(rbApp->patchConfig()->cosplayPatch);
+    }
 }

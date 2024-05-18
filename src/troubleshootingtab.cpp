@@ -122,9 +122,9 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     troubleshootingData += "Game.exe hash: " + md5sum("Game.exe") + "\n";
     troubleshootingData +=
         "enscript.mpk hash: " + md5sum("languagebarrier/enscript.mpk") + "\n";
-    troubleshootingData +=
+    /*troubleshootingData +=
         "enscript_c.mpk hash: " + md5sum("languagebarrier/enscript_c.mpk") +
-        "\n";
+        "\n";*/
 
     QString canLoadD3D = "No !!!";
     QString canLoadXAudio = "No !!!";
@@ -155,8 +155,8 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     }
     QProcess::startDetached(
         "dxdiag", QStringList()
-                      << "/whql:off"
-                      << "/t" << rbApp->patchConfigDirectory() + "/dxdiag.txt");
+                      << "/whql:off" << "/t"
+                      << rbApp->patchConfigDirectory() + "/dxdiag.txt");
 
     troubleshootingData += "\n";
     troubleshootingData += "------------------------------------------------\n";

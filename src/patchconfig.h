@@ -28,8 +28,15 @@ class PatchConfig : public QObject {
     bool showAllSettings;
     bool controllerEnabled;
     bool hqFmvAudio;
+    bool hasConsistency = false;
     bool consistency;
+    bool honorifics;
+    bool hasHonorifics = false;
+    bool hasrineBlackNames = false;
+    bool rineBlackNames;
     bool improveDialogueOutlines;
+    bool hasCosplayPatch = true;
+    bool cosplayPatch;
     QString karaokeSubs;
     QString selectedController;
 
