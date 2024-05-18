@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="assets/game_header.png">assets/roboticsnotesdash_header.png</file>
+        <file alias="assets/start_button.png">assets/rnd_start.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="assets/game_header.png">assets/steinsgate_header.png</file>
+        <file alias="assets/start_button.png">assets/sg_start.png</file>
+    </qresource>
+</RCC>

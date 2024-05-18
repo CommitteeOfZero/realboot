@@ -15,12 +15,12 @@ const QString game_Custom2ButtonLabel = "Delusion trigger (Right)";
 const QString game_ReleaseUrl =
     "https://github.com/CommitteeOfZero/cc-patch/releases";
 #if defined(GAME_STEAM)
-const QString game_LauncherTitle = "Chaos;Child Steam Patch Launcher";
+const QString game_LauncherTitle = "CHAOS;CHILD Steam Patch Launcher";
 const QString game_PatchConfPath = "Committee of Zero/CCSteam";
 const QString game_GameConfPath = "mages_steam/CHAOS CHILD/eng";
 const QString game_LaunchCommand = "Game.exe chaoschild EN";
 #else
-const QString game_LauncherTitle = "Chaos;Child English Launcher";
+const QString game_LauncherTitle = "CHAOS;CHILD English Launcher";
 const QString game_PatchConfPath = "Committee of Zero/CC";
 const QString game_GameConfPath = "mages_dmm/CHAOS CHILD";
 const QString game_LaunchCommand = "Game.exe chaoschild";

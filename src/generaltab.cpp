@@ -35,11 +35,11 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     resolutionRow->addStretch(1);
     mainLayout->addLayout(resolutionRow);
 
-    _consistencyCb = new QCheckBox(
+    /*_consistencyCb = new QCheckBox(
         "Edit text for consistency with other SciADV localizations\n(Change "
         "name order to Japanese, use established terms, etc.)",
         this);
-    mainLayout->addWidget(_consistencyCb);
+    mainLayout->addWidget(_consistencyCb);*/
 
     _outlineCb = new QCheckBox("Improve dialogue outlines", this);
     mainLayout->addWidget(_outlineCb);
@@ -102,7 +102,7 @@ void GeneralTab::setConfig() {
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
 
     rbApp->patchConfig()->improveDialogueOutlines = _outlineCb->isChecked();
-    rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
+    //rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
     rbApp->patchConfig()->karaokeSubs =
         PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
     rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
@@ -117,7 +117,7 @@ void GeneralTab::reloadData() {
         ->setChecked(true);
 
     _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
-    _consistencyCb->setChecked(rbApp->patchConfig()->consistency);
+    //_consistencyCb->setChecked(rbApp->patchConfig()->consistency);
     _songSubsComboBox->setCurrentIndex(
         _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
             rbApp->patchConfig()->karaokeSubs)));
