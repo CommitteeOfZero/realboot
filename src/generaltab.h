@@ -18,6 +18,9 @@ class GeneralTab : public QWidget {
    private:
     QComboBox* _resolutionComboBox;
     QCheckBox* _fullscreenCb;
+#if defined(GAME_CHAOSHEADNOAH)
+    QButtonGroup* _languageGroup;
+#endif
     QCheckBox* _outlineCb;
     QCheckBox* _rineBlackNamesCb;
     QCheckBox* _consistencyCb;

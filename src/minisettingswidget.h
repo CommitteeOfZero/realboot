@@ -18,7 +18,11 @@ class MiniSettingsWidget : public QWidget {
    private:
     QComboBox* _resolutionComboBox;
     QCheckBox* _fullscreenCb;
-#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+#if defined(GAME_CHAOSHEADNOAH)
+    QButtonGroup* _languageGroup;
+#endif
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH)
     QButtonGroup* _movieQualityGroup;
 #endif
 };

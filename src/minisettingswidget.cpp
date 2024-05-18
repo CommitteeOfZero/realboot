@@ -34,8 +34,28 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
     resolutionRow->addWidget(_fullscreenCb);
     resolutionRow->addStretch(1);
     mainLayout->addLayout(resolutionRow);
-
-#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+#if defined(GAME_CHAOSHEADNOAH)
+    QHBoxLayout *languageRow = new QHBoxLayout(this);
+    languageRow->setSpacing(8);
+    languageRow->setMargin(0);
+    languageRow->addStretch(1);
+    QLabel *languageLabel = new QLabel("Language:", this);
+    languageRow->addWidget(languageLabel);
+    _languageGroup = new QButtonGroup(this);
+    QRadioButton *japaneseButton = new QRadioButton("日本語", this);
+    _languageGroup->addButton(japaneseButton,
+                              (int)GameConfig::Language::Japanese);
+    languageRow->addWidget(japaneseButton);
+    QRadioButton *englishButton = new QRadioButton("English", this);
+    _languageGroup->addButton(englishButton,
+                              (int)GameConfig::Language::English);
+    languageRow->addWidget(englishButton);
+    languageRow->addStretch(1);
+    mainLayout->addLayout(languageRow);
+    mainLayout->addStretch(1);
+#endif
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH)
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
     movieQualityRow->setMargin(0);
@@ -65,7 +85,8 @@ void MiniSettingsWidget::setConfig() {
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
-#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH)
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
 #endif
@@ -76,7 +97,8 @@ void MiniSettingsWidget::reloadData() {
         _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
-#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
 #endif
