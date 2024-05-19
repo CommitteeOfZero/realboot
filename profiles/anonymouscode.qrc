@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="assets/game_header.png">assets/anonymouscode_header.png</file>
-        <file alias="assets/start_button.png">assets/ac_start.gif</file>
+        <file alias="assets/game_header.png">../assets/anonymouscode_header.png</file>
+        <file alias="assets/start_button.png">../assets/ac_start.gif</file>
     </qresource>
 </RCC>
