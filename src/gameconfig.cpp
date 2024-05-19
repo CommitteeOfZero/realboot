@@ -4,7 +4,7 @@
 #include <QMessageBox>
 
 GameConfig::GameConfig(QObject* parent) : QObject(parent) {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     _path = rbApp->gameConfigDirectory() + "/config.dat";
 
     loadDefaults();
@@ -34,15 +34,17 @@ GameConfig::GameConfig(QObject* parent) : QObject(parent) {
         uint32_t movieQuality_ = *(const uint32_t*)(data + 0x44);
         if (movieQuality_ < (uint32_t)MovieQuality::Num)
             movieQuality = (MovieQuality)movieQuality_;
+#if defined(GAME_CHAOSHEADNOAH)
         language = *(const Language*)(data + 0x48);
         uint32_t language_ = *(const uint32_t*)(data + 0x48);
         if (language_ < (uint32_t)Language::Num) language = (Language)language_;
+#endif
     }
 #endif
 }
 
 void GameConfig::save() {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     QFile outFile(_path);
     if (!outFile.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(0, "Launcher error",
@@ -61,20 +63,24 @@ void GameConfig::save() {
     outFile.write((const char*)&startWindowX, 4);
     outFile.write((const char*)&startWindowY, 4);
     outFile.write((const char*)&movieQuality, 4);
+#if defined(GAME_CHAOSHEADNOAH)
     outFile.write((const char*)&language, 4);
+#endif
     outFile.seek(0x6C);  // padding
 #endif
 }
 
 void GameConfig::loadDefaults() {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     width = 1280;
     height = 720;
     displayMode = DisplayMode::Windowed;
     resolution = Resolution::Res720p;
     startWindowX = 0;
     startWindowY = 0;
+#if defined(GAME_CHAOSHEADNOAH)
     language = Language::English;
+#endif
     movieQuality = MovieQuality::Low720p;
 #endif
 }

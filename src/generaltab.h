@@ -18,7 +18,6 @@ class GeneralTab : public QWidget {
    private:
     QComboBox* _resolutionComboBox;
     QCheckBox* _fullscreenCb;
-#ifndef GAME_ANONYMOUSCODE
 #if defined(GAME_CHAOSHEADNOAH)
     QButtonGroup* _languageGroup;
 #endif
@@ -38,5 +37,7 @@ class GeneralTab : public QWidget {
 #if defined(GAME_ROBOTICSNOTESDASH)
     QCheckBox* _swimsuitPatch;
 #endif
+#if defined(GAME_ANONYMOUSCODE)
+    QCheckBox* _voiceSubsCb;
 #endif
 };

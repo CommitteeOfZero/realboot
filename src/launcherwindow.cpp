@@ -23,6 +23,7 @@
 #include <QtConcurrent>
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QMovie>
 
 // https://curl.haxx.se/libcurl/c/getinmemory.html
 struct MemoryStruct {
@@ -56,7 +57,7 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     ui->setupUi(this);
 
     if (QFileInfo(":/assets/start_button.png").exists()) {
-#ifdef GAME_ANONYMOUSCODE
+#if defined(GAME_ANONYMOUSCODE)
         QMovie *gifIcon = new QMovie(this);
         gifIcon->setFileName(":/assets/start_button.png");
         connect(gifIcon, &QMovie::frameChanged,
@@ -124,7 +125,7 @@ LauncherWindow::LauncherWindow(QWidget *parent)
                 "underline; color: #fff'>Technical Support</span></a>")
             .arg(game_TechSupportUrl));
 
-#ifdef GAME_ANONYMOUSCODE
+#if defined(GAME_ANONYMOUSCODE)
     QString version = "1.0.1";
 #else
     QFile patchdefFile("languagebarrier/patchdef.json");
@@ -205,7 +206,7 @@ void LauncherWindow::startGame() {
 
     saveChanges();
 
-#ifdef IPC_ENABLED
+#if defined(IPC_ENABLED)
     volatile void *ipc;
     HANDLE ipcFile;
     ipcFile = CreateFileMappingW(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, 8,
@@ -214,7 +215,7 @@ void LauncherWindow::startGame() {
     ((volatile uint32_t *)ipc)[1] = game_ipcOut;
 #endif
 
-#ifdef GAME_ANONYMOUSCODE
+#if defined(IGAME_ANONYMOUSCODE)
     if (rbApp->patchConfig()->voiceSubs) {
         QFile file("./c0_subs_disabled.nut");
         file.rename("./c0_subs.nut");
@@ -273,7 +274,7 @@ void LauncherWindow::startGame() {
         "cmd", QStringList() << "/c" << "start " + game_LaunchCommand);
 #endif
 
-#ifdef IPC_ENABLED
+#if defined(IPC_ENABLED)
     QElapsedTimer timer;
     bool started = false;
     timer.start();

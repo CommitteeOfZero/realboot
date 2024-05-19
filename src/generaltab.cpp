@@ -94,7 +94,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     }
 
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _outlineCb = new QCheckBox("Improve dialogue outlines", this);
     mainLayout->addWidget(_outlineCb);
 #endif
@@ -104,15 +104,19 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
             new QCheckBox("Use solid black text for names in RINE", this);
         mainLayout->addWidget(_rineBlackNamesCb);
     }
+#if defined(GAME_ANONYMOUSCODE)
+    _voiceSubsCb = new QCheckBox("Enable subtitles for voice-only lines", this);
+    mainLayout->addWidget(_voiceSubsCb);
+#endif
 
     mainLayout->addSpacing(16);
 
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     QLabel *fmvLabel = new QLabel(this);
     fmvLabel->setText("<b>Videos</b>");
     mainLayout->addWidget(fmvLabel);
 
-#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
     movieQualityRow->setMargin(0);
@@ -157,6 +161,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 #endif
 
     mainLayout->addStretch(1);
+#if defined(GAME_STEINSGATE)
     if (rbApp->patchConfig()->hasCosplayPatch) {
         _cosplayPatch = new QCheckBox(
             "Enable Cosplay Patch\n(Mayuri's Tutturu beam has been fired?! Its "
@@ -165,6 +170,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
         mainLayout->addWidget(_cosplayPatch);
     }
     mainLayout->addStretch(1);
+#endif
     reloadData();
 }
 
@@ -175,12 +181,12 @@ void GeneralTab::setConfig() {
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
 
-#ifdef GAME_CHAOSHEADNOAH
+#if defined(GAME_CHAOSHEADNOAH)
     rbApp->gameConfig()->language =
         (GameConfig::Language)_languageGroup->checkedId();
 #endif
 
-#ifdef GAME_ANONYMOUSCODE
+#if defined(GAME_ANONYMOUSCODE)
     rbApp->patchConfig()->voiceSubs = _voiceSubsCb->isChecked();
 #endif
 
@@ -199,12 +205,14 @@ void GeneralTab::setConfig() {
     if (rbApp->patchConfig()->hasrineBlackNames) {
         rbApp->patchConfig()->rineBlackNames = _rineBlackNamesCb->isChecked();
     }
+#if !defined(GAME_ANONYMOUSCODE)
     rbApp->patchConfig()->karaokeSubs =
         PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
+#endif
     if (rbApp->patchConfig()->hasCosplayPatch) {
         rbApp->patchConfig()->cosplayPatch = _cosplayPatch->isChecked();
     }
-#ifdef defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
+#if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
     rbApp->patchConfig()->rneMouseControls = _rneMouseControls->isChecked();
     rbApp->patchConfig()->scrollDownToAdvanceText =
         _scrollDownToAdvanceText->isChecked();
@@ -215,7 +223,7 @@ void GeneralTab::setConfig() {
     rbApp->patchConfig()->swimsuitPatch = _swimsuitPatch->isChecked();
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
 #endif
 }

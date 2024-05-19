@@ -11,7 +11,7 @@
 
 class ControllerManager;
 
-#ifndef SAFE_RELEASE
+#if !defined(SAFE_RELEASE)
 #define SAFE_RELEASE(p)     \
     {                       \
         if (p) {            \

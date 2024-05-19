@@ -6,7 +6,7 @@
 
 ControllerConfig::ControllerConfig(const QString& guid, QObject* parent)
     : QObject(parent) {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     _path = rbApp->gameConfigDirectory() + "/" + guid;
 
     loadDefaults();
@@ -37,7 +37,7 @@ ControllerConfig::ControllerConfig(const QString& guid, QObject* parent)
 }
 
 void ControllerConfig::loadDefaults() {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     preset = Preset::Default;
 
     binds[(int)Bind::Enter] = Button::A;
@@ -55,7 +55,7 @@ void ControllerConfig::loadDefaults() {
 }
 
 void ControllerConfig::save() {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     QFile outFile(_path);
     if (!outFile.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(0, "Launcher error",
@@ -66,7 +66,7 @@ void ControllerConfig::save() {
     outFile.write((const char*)&preset, 4);
     outFile.write((const char*)&binds, (qint64)Bind::Num);
 #endif
-#ifdef GAME_CHAOSCHILD
+#if defined(GAME_CHAOSCHILD)
     outFile.write((const char*)game_ExtraControllerData,
                   sizeof(game_ExtraControllerData));
 #endif

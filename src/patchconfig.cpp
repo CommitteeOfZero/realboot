@@ -8,7 +8,7 @@
 #include <QJsonObject>
 #include <QDir>
 
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
 QStringList PatchConfig::SongSubsOptions =
     QStringList() << "off" << "all" << "karaonly" << "tlonly";
 #endif
@@ -117,7 +117,7 @@ void PatchConfig::save() {
     outJson["disableScrollDownToCloseBacklog"] =
         disableScrollDownToCloseBacklog;
 #endif
-#if defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_ANONYMOUSCODE)
     outJson["karaokeSubs"] = karaokeSubs;
 #endif
 #if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
@@ -144,7 +144,7 @@ void PatchConfig::loadDefaults() {
     karaokeSubs = "all";
 #endif
     selectedController = "";
-#ifdef GAME_ANONYMOUSCODE
+#if defined(GAME_ANONYMOUSCODE)
     language = "Dub";
 #endif
     displayMode = "windowed";
@@ -155,7 +155,7 @@ void PatchConfig::loadDefaults() {
 void PatchConfig::migrate(QJsonObject& conf) {
     int oldVersion = conf["__schema_version"].toInt();
     if (oldVersion < 3) {
-#ifdef GAME_ANONYMOUSCODE
+#if defined(GAME_ANONYMOUSCODE)
         if (conf["karaokeSubs"].isString() &&
             conf["karaokeSubs"].toString() == "lowQuality") {
             conf["karaokeSubs"] = "all";

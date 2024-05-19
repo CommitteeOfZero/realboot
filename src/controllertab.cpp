@@ -27,7 +27,7 @@ QMap<ControllerConfig::Bind, QString> bindLabelTexts{
     {ControllerConfig::Bind::Custom1, game_Custom1ButtonLabel},
     {ControllerConfig::Bind::Custom2, game_Custom2ButtonLabel}};
 
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
 QString buttonToText(ControllerConfig::Button btn) {
     if (btn == ControllerConfig::Button::Invalid) return "";
 
@@ -41,7 +41,7 @@ QString buttonToText(ControllerConfig::Button btn) {
 #endif
 
 ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(12);
     mainLayout->setMargin(0);
@@ -141,7 +141,7 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
 }
 
 void ControllerTab::showEvent(QShowEvent *e) {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     QWidget::showEvent(e);
     if (_firstShowCaught) return;
     _firstShowCaught = true;
@@ -172,7 +172,7 @@ void ControllerTab::showEvent(QShowEvent *e) {
 }
 
 void ControllerTab::setConfig() {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     if (_controllerCb->isChecked()) {
         rbApp->patchConfig()->controllerEnabled = true;
         if (rbApp->controllerManager()->activeController() != nullptr) {
@@ -190,7 +190,7 @@ void ControllerTab::setConfig() {
 }
 
 void ControllerTab::reloadData() {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     _controllerCb->setChecked(rbApp->patchConfig()->controllerEnabled);
     if (rbApp->controllerManager()->activeController() != nullptr) {
         for (int i = 0; i < (int)ControllerConfig::Bind::Num; i++) {
@@ -204,25 +204,23 @@ void ControllerTab::reloadData() {
 }
 
 BtnRow *ControllerTab::findFocusedBtnRow() {
-#ifndef GAME_ANONYMOUSCODE
     QWidget *fw = rbApp->focusWidget();
     BtnRow *br = nullptr;
     while (fw != nullptr && (br = qobject_cast<BtnRow *>(fw)) == nullptr) {
         fw = fw->parentWidget();
     }
     return br;
-#endif
 }
 
 void ControllerTab::resetButtonClicked() {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     rbApp->controllerManager()->activeController()->config()->loadDefaults();
     reloadData();
 #endif
 }
 
 void ControllerTab::controllerSelected(int index) {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     rbApp->controllerManager()->setActiveController(
         _controllerBox->currentData().toString());
     rbApp->patchConfig()->selectedController =
@@ -232,7 +230,7 @@ void ControllerTab::controllerSelected(int index) {
 
 void ControllerTab::onActiveControllerChanged(DinputController *oldController,
                                               DinputController *newController) {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     if (oldController != nullptr) {
         disconnect(oldController, 0, this, 0);
         oldController->stopTracking();
@@ -269,7 +267,7 @@ void ControllerTab::updateAxesLabel() {
 }
 
 void ControllerTab::onButtonPressed(ControllerConfig::Button button) {
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     BtnRow *br = findFocusedBtnRow();
     if (br != nullptr) {
         auto &confBinds =

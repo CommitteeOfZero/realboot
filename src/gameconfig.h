@@ -6,7 +6,8 @@ class GameConfig : public QObject {
     Q_OBJECT
 
    public:
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     enum class MovieQuality : uint32_t{High1080p = 0, Low720p = 1, Num};
     Q_ENUM(MovieQuality)
 #endif
@@ -54,7 +55,8 @@ class GameConfig : public QObject {
     int startWindowX;
     int startWindowY;
     Language language;
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     MovieQuality movieQuality;
 #endif
     QString controllerGuid = QString();
