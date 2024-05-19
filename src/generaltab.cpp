@@ -225,6 +225,10 @@ void GeneralTab::reloadData() {
         _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
+#if defined(GAME_CHAOSHEADNOAH)
+    _languageGroup->button((int)rbApp->gameConfig()->language)
+        ->setChecked(true);
+#endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)

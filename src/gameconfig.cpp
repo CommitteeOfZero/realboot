@@ -74,11 +74,7 @@ void GameConfig::loadDefaults() {
     resolution = Resolution::Res720p;
     startWindowX = 0;
     startWindowY = 0;
-#if defined(GAME_CHAOSHEADNOAH)
     language = Language::English;
-#elif defined(GAME_ANONYMOUSCODE)
-    language = Language::Dub;
-#endif
     movieQuality = MovieQuality::Low720p;
 #endif
 }
