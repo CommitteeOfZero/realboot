@@ -120,11 +120,14 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
                            QDir(rbApp->patchConfigDirectory()).canonicalPath() +
                            "\n";
     troubleshootingData += "Game.exe hash: " + md5sum("Game.exe") + "\n";
+#if defined(GAME_ANONYMOUSCODE)
+    troubleshootingData +=
+        "scenario_body.bin hash: " + md5sum("./windata/scenario_body.bin") +
+        "\n";
+#else
     troubleshootingData +=
         "enscript.mpk hash: " + md5sum("languagebarrier/enscript.mpk") + "\n";
-    /*troubleshootingData +=
-        "enscript_c.mpk hash: " + md5sum("languagebarrier/enscript_c.mpk") +
-        "\n";*/
+#endif
 
     QString canLoadD3D = "No !!!";
     QString canLoadXAudio = "No !!!";
@@ -158,6 +161,7 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
                       << "/whql:off" << "/t"
                       << rbApp->patchConfigDirectory() + "/dxdiag.txt");
 
+#ifndef GAME_ANONYMOUSCODE
     troubleshootingData += "\n";
     troubleshootingData += "------------------------------------------------\n";
     troubleshootingData += "\n";
@@ -168,6 +172,7 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     } else {
         troubleshootingData += languagebarrierLog.readAll();
     }
+#endif
 
     _infoTe->setReadOnly(true);
     _infoTe->setPlainText(troubleshootingData);

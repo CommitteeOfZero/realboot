@@ -56,9 +56,17 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     ui->setupUi(this);
 
     if (QFileInfo(":/assets/start_button.png").exists()) {
+#ifdef GAME_ANONYMOUSCODE
+        QMovie *gifIcon = new QMovie(this);
+        gifIcon->setFileName(":/assets/start_button.png");
+        connect(gifIcon, &QMovie::frameChanged,
+                [=] { ui->startButton->setIcon(gifIcon->currentPixmap()); });
+        gifIcon->start();
+#else
         ui->startButton->setIcon(QIcon(":/assets/start_button.png"));
         ui->startButton->setIconSize(QSize(32, 32));
         ui->startButton->setProperty("hasIcon", true);
+#endif
         // following is needed for dynamic property based styles to update
         ui->startButton->style()->unpolish(ui->startButton);
         ui->startButton->style()->polish(ui->startButton);
@@ -116,6 +124,9 @@ LauncherWindow::LauncherWindow(QWidget *parent)
                 "underline; color: #fff'>Technical Support</span></a>")
             .arg(game_TechSupportUrl));
 
+#ifdef GAME_ANONYMOUSCODE
+    QString version = "1.0.1";
+#else
     QFile patchdefFile("languagebarrier/patchdef.json");
     if (!patchdefFile.open(QIODevice::ReadOnly)) {
         QMessageBox::critical(this, "Launcher error",
@@ -125,6 +136,7 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     QByteArray patchdefData = patchdefFile.readAll();
     QJsonDocument patchdef = QJsonDocument::fromJson(patchdefData);
     QString version = patchdef.object()["patchVersion"].toString();
+#endif
 
     ui->versionLabel->setTextFormat(Qt::RichText);
     ui->versionLabel->setOpenExternalLinks(true);
@@ -135,8 +147,10 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 
     _generalTab = new GeneralTab(this);
     ui->tabWidget->addTab(_generalTab, "General");
+#ifndef GAME_ANONYMOUSCODE
     _controllerTab = new ControllerTab(this);
     ui->tabWidget->addTab(_controllerTab, "Controller");
+#endif
     TroubleshootingTab *troubleshootingTab = new TroubleshootingTab(this);
     ui->tabWidget->addTab(troubleshootingTab, "Troubleshooting");
 
@@ -200,10 +214,64 @@ void LauncherWindow::startGame() {
     ((volatile uint32_t *)ipc)[1] = game_ipcOut;
 #endif
 
+#ifdef GAME_ANONYMOUSCODE
+    if (rbApp->patchConfig()->voiceSubs) {
+        QFile file("./c0_subs_disabled.nut");
+        file.rename("./c0_subs.nut");
+        file.remove("./c0_subs_disabled.nut");
+    } else {
+        QFile file("./c0_subs.nut");
+        file.rename("./c0_subs_disabled.nut");
+        file.remove("./c0_subs.nut");
+    }
+    if (rbApp->patchConfig()->displayMode == "windowed") {
+        if (rbApp->patchConfig()->resolution == "1080") {
+            QProcess::startDetached(
+                "cmd", QStringList()
+                           << "/c"
+                           << "start " + game_LaunchCommand +
+                                  " --window-size=1920,1080 --fullscreen=0");
+        } else if (rbApp->patchConfig()->resolution == "720") {
+            QProcess::startDetached(
+                "cmd", QStringList()
+                           << "/c"
+                           << "start " + game_LaunchCommand +
+                                  " --window-size=1280,720 --fullscreen=0");
+
+        } else {
+            QProcess::startDetached(
+                "cmd", QStringList()
+                           << "/c"
+                           << "start " + game_LaunchCommand +
+                                  " --window-size=1024,576 --fullscreen=0");
+        }
+    } else {
+        if (rbApp->patchConfig()->resolution == "1080") {
+            QProcess::startDetached(
+                "cmd", QStringList()
+                           << "/c"
+                           << "start " + game_LaunchCommand +
+                                  " --window-size=1920,1080 --fullscreen=1");
+        } else if (rbApp->patchConfig()->resolution == "720") {
+            QProcess::startDetached(
+                "cmd", QStringList()
+                           << "/c"
+                           << "start " + game_LaunchCommand +
+                                  " --window-size=1280,720 --fullscreen=1");
+
+        } else {
+            QProcess::startDetached(
+                "cmd", QStringList()
+                           << "/c"
+                           << "start " + game_LaunchCommand +
+                                  " --window-size=1024,576 --fullscreen=1");
+        }
+    }
+#else
     // allow URLs
-    QProcess::startDetached("cmd", QStringList()
-                                       << "/c"
-                                       << "start " + game_LaunchCommand);
+    QProcess::startDetached(
+        "cmd", QStringList() << "/c" << "start " + game_LaunchCommand);
+#endif
 
 #ifdef IPC_ENABLED
     QElapsedTimer timer;

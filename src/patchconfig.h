@@ -43,8 +43,14 @@ class PatchConfig : public QObject {
     bool swimsuitPatch;
     int fontSize;
     QString fontPath;
+#ifndef GAME_ANONYMOUSCODE
     QString karaokeSubs;
+#endif
     QString selectedController;
+    QString language;
+    QString displayMode;
+    QString resolution;
+    bool voiceSubs;
 
    private:
     QString _path;

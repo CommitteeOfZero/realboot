@@ -55,7 +55,7 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
     mainLayout->addStretch(1);
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
     movieQualityRow->setMargin(0);
@@ -85,8 +85,12 @@ void MiniSettingsWidget::setConfig() {
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
+#ifdef GAME_CHAOSHEADNOAH
+    rbApp->gameConfig()->language =
+        (GameConfig::Language)_languageGroup->checkedId();
+#endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
 #endif
@@ -101,5 +105,9 @@ void MiniSettingsWidget::reloadData() {
     !defined(GAME_ROBOTICSNOTESDASH)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
+#ifdef GAME_CHAOSHEADNOAH
+    _languageGroup->button((int)rbApp->gameConfig()->language)
+        ->setChecked(true);
+#endif
 #endif
 }

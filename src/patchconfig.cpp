@@ -8,8 +8,10 @@
 #include <QJsonObject>
 #include <QDir>
 
+#ifndef GAME_ANONYMOUSCODE
 QStringList PatchConfig::SongSubsOptions =
     QStringList() << "off" << "all" << "karaonly" << "tlonly";
+#endif
 
 PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
     _path = rbApp->patchConfigDirectory() + "/config.json";
@@ -72,11 +74,13 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
         if (inJson["swimsuitPatch"].isBool())
             swimsuitPatch = inJson["swimsuitPatch"].toBool();
 #endif
+#ifndef GAME_ANONYMOUSCODE
         if (inJson["karaokeSubs"].isString()) {
             QString karaokeSubs_ = inJson["karaokeSubs"].toString();
             if (PatchConfig::SongSubsOptions.contains(karaokeSubs_))
                 karaokeSubs = karaokeSubs_;
         }
+#endif
         if (inJson["selectedController"].isString())
             selectedController = inJson["selectedController"].toString();
     }
@@ -113,7 +117,9 @@ void PatchConfig::save() {
     outJson["disableScrollDownToCloseBacklog"] =
         disableScrollDownToCloseBacklog;
 #endif
+#if defined(GAME_ANONYMOUSCODE)
     outJson["karaokeSubs"] = karaokeSubs;
+#endif
 #if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
     outJson["selectedController"] = selectedController;
 #endif
@@ -134,17 +140,27 @@ void PatchConfig::loadDefaults() {
     swimsuitPatch = false;
     improveDialogueOutlines = true;
     cosplayPatch = false;
+#ifndef GAME_ANONYMOUSCODE
     karaokeSubs = "all";
+#endif
     selectedController = "";
+#ifdef GAME_ANONYMOUSCODE
+    language = "Dub";
+#endif
+    displayMode = "windowed";
+    resolution = "720";
+    voiceSubs = true;
 }
 
 void PatchConfig::migrate(QJsonObject& conf) {
     int oldVersion = conf["__schema_version"].toInt();
     if (oldVersion < 3) {
+#ifdef GAME_ANONYMOUSCODE
         if (conf["karaokeSubs"].isString() &&
             conf["karaokeSubs"].toString() == "lowQuality") {
             conf["karaokeSubs"] = "all";
         }
+#endif
     }
     if (oldVersion < 4) {
         conf["controllerEnabled"] = true;

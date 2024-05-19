@@ -112,7 +112,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addWidget(fmvLabel);
 
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
     movieQualityRow->setMargin(0);
@@ -131,6 +131,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addLayout(movieQualityRow);
 #endif
 
+#if !defined(GAME_ANONYMOUSCODE)
     QHBoxLayout *songSubsRow = new QHBoxLayout(this);
     songSubsRow->setSpacing(8);
     songSubsRow->setMargin(0);
@@ -147,9 +148,10 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     songSubsRow->addWidget(_songSubsComboBox);
     songSubsRow->addStretch(1);
     mainLayout->addLayout(songSubsRow);
+#endif
 
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _hqAudioCb = new QCheckBox("Use high-quality audio tracks for OP/ED", this);
     mainLayout->addWidget(_hqAudioCb);
 #endif
@@ -172,8 +174,18 @@ void GeneralTab::setConfig() {
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
+
+#ifdef GAME_CHAOSHEADNOAH
+    rbApp->gameConfig()->language =
+        (GameConfig::Language)_languageGroup->checkedId();
+#endif
+
+#ifdef GAME_ANONYMOUSCODE
+    rbApp->patchConfig()->voiceSubs = _voiceSubsCb->isChecked();
+#endif
+
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
 #endif
@@ -214,12 +226,11 @@ void GeneralTab::reloadData() {
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
-#endif
-
     _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
+#endif
     if (rbApp->patchConfig()->hasConsistency) {
         _consistencyCb->setChecked(rbApp->patchConfig()->consistency);
     }
@@ -229,9 +240,11 @@ void GeneralTab::reloadData() {
     if (rbApp->patchConfig()->hasrineBlackNames) {
         _rineBlackNamesCb->setChecked(rbApp->patchConfig()->rineBlackNames);
     }
+#ifndef GAME_ANONYMOUSCODE
     _songSubsComboBox->setCurrentIndex(
         _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
             rbApp->patchConfig()->karaokeSubs)));
+#endif
     if (rbApp->patchConfig()->hasCosplayPatch) {
         _cosplayPatch->setChecked(rbApp->patchConfig()->cosplayPatch);
     }
@@ -246,7 +259,7 @@ void GeneralTab::reloadData() {
     _swimsuitPatch->setChecked(rbApp->patchConfig()->swimsuitPatch);
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH)
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
 #endif
 }
