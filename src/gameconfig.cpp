@@ -78,8 +78,5 @@ void GameConfig::loadDefaults() {
 #if defined(GAME_CHAOSHEADNOAH)
     language = Language::English;
 #endif
-#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     movieQuality = MovieQuality::Low720p;
-#endif
 }

@@ -48,7 +48,8 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
             disableScrollDownToCloseBacklog =
                 inJson["disableScrollDownToCloseBacklog"].toBool();
 #endif
-#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) !defined(GAME_ANONYMOUSCODE)
         if (inJson["hqFmvAudio"].isBool())
             hqFmvAudio = inJson["hqFmvAudio"].toBool();
         if (inJson["consistency"].isBool()) {
@@ -76,7 +77,7 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
         if (inJson["swimsuitPatch"].isBool())
             swimsuitPatch = inJson["swimsuitPatch"].toBool();
 #endif
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
         if (inJson["karaokeSubs"].isString()) {
             QString karaokeSubs_ = inJson["karaokeSubs"].toString();
             if (PatchConfig::SongSubsOptions.contains(karaokeSubs_))
@@ -100,16 +101,18 @@ void PatchConfig::save() {
     }
 
     QJsonObject outJson;
-    outJson["__schema_version"] = 4;
+    outJson["__schema_version"] = 5;
     outJson["showAllSettings"] = showAllSettings;
-#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) !defined(GAME_ANONYMOUSCODE)
     outJson["controllerEnabled"] = controllerEnabled;
     outJson["hqFmvAudio"] = hqFmvAudio;
 #endif
     if (hasConsistency) outJson["consistency"] = consistency;
     if (hasHonorifics) outJson["honorifics"] = honorifics;
     if (hasrineBlackNames) outJson["rineBlackNames"] = rineBlackNames;
-#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) !defined(GAME_ANONYMOUSCODE)
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
 #endif
     if (hasCosplayPatch) outJson["cosplayPatch"] = cosplayPatch;
@@ -122,7 +125,8 @@ void PatchConfig::save() {
 #if !defined(GAME_ANONYMOUSCODE)
     outJson["karaokeSubs"] = karaokeSubs;
 #endif
-#if !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) !defined(GAME_ANONYMOUSCODE)
     outJson["selectedController"] = selectedController;
 #endif
 
@@ -142,16 +146,16 @@ void PatchConfig::loadDefaults() {
     swimsuitPatch = false;
     improveDialogueOutlines = true;
     cosplayPatch = false;
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     karaokeSubs = "all";
 #endif
     selectedController = "";
 #if defined(GAME_ANONYMOUSCODE)
     language = "Dub";
-#endif
     displayMode = "windowed";
     resolution = "720";
     voiceSubs = true;
+#endif
 }
 
 void PatchConfig::migrate(QJsonObject& conf) {

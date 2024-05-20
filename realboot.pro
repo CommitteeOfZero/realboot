@@ -34,33 +34,45 @@ QMAKE_MOD_RCC = qrc${QMAKE_FUNC_fnPath}
 
 include(kofuna/kofuna.pri)
 
-anonymouscode {
-    DEFINES += GAME_ANONYMOUSCODE
-    RESOURCES += profiles/anonymouscode.qrc
-}
-chaoschild {
-    DEFINES += GAME_CHAOSCHILD
-    RESOURCES += profiles/chaoschild.qrc
-}
 chaosheadnoah {
     DEFINES += GAME_CHAOSHEADNOAH
     RESOURCES += profiles/chaosheadnoah.qrc
-}
-roboticsnotesdash {
-    DEFINES += GAME_ROBOTICSNOTESDASH
-    RESOURCES += profiles/roboticsnotesdash.qrc
-}
-roboticsnoteselite {
-    DEFINES += GAME_ROBOTICSNOTESELITE
-    RESOURCES += profiles/roboticsnoteselite.qrc
 }
 steinsgate {
     DEFINES += GAME_STEINSGATE
     RESOURCES += profiles/steinsgate.qrc
 }
+steinsgateelite {
+    DEFINES += GAME_STEINSGATEELITE
+    RESOURCES += profiles/steinsgateelite.qrc
+}
+steinsgatemde {
+    DEFINES += GAME_STEINSGATEMDE
+    RESOURCES += profiles/steinsgatemde.qrc
+}
+roboticsnoteselite {
+    DEFINES += GAME_ROBOTICSNOTESELITE
+    RESOURCES += profiles/roboticsnoteselite.qrc
+}
+steinsgatelbp {
+    DEFINES += GAME_STEINSGATELBP
+    RESOURCES += profiles/steinsgatelbp.qrc
+}
+chaoschild {
+    DEFINES += GAME_CHAOSCHILD
+    RESOURCES += profiles/chaoschild.qrc
+}
 steinsgate0 {
     DEFINES += GAME_STEINSGATE0
     RESOURCES += profiles/steinsgate0.qrc
+}
+roboticsnotesdash {
+    DEFINES += GAME_ROBOTICSNOTESDASH
+    RESOURCES += profiles/roboticsnotesdash.qrc
+}
+anonymouscode {
+    DEFINES += GAME_ANONYMOUSCODE
+    RESOURCES += profiles/anonymouscode.qrc
 }
 steam {
     DEFINES += GAME_STEAM

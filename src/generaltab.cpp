@@ -164,7 +164,8 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 #endif
 
     mainLayout->addStretch(1);
-#if defined(GAME_STEINSGATE)
+#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
+    defined(GAME_STEINSGATELBP)
     if (rbApp->patchConfig()->hasCosplayPatch) {
         _cosplayPatch = new QCheckBox(
             "Enable Cosplay Patch\n(Mayuri's Tutturu beam has been fired?! Its "

@@ -59,6 +59,33 @@ const wchar_t game_ipcName[] = L"STEINS;GATE";
 #endif
 #endif
 
+#if defined(GAME_STEINSGATEMDE)
+const uint8_t game_ExtraControllerData[] = {
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x28, 0x02, 0x01, 0x00, 0x05,
+    0x09, 0x08, 0x04, 0x03, 0x0B, 0x06, 0x07, 0x00, 0x00, 0x00};
+const QString game_Custom1ButtonLabel = "Phone trigger / Zoom in";
+const QString game_Custom2ButtonLabel = "Phone trigger / Zoom out";
+const QString game_ReleaseUrl =
+    "https://github.com/CommitteeOfZero/sgmde-patch/releases";
+#if defined(GAME_STEAM)
+const QString game_LauncherTitle =
+    "STEINS;GATE: My Darling's Embrace Improvement Patch (Steam) Launcher";
+const QString game_PatchConfPath = "Committee of Zero/SGMDESteam";
+const QString game_GameConfPath = "mages_steam/SG_Darling/eng";
+const QString game_LaunchCommand = "Game.exe mages_sgate";
+#else
+const QString game_LauncherTitle =
+    "STEINS;GATE: My Darling's Embrace Improvement Patch Launcher";
+const QString game_PatchConfPath = "Committee of Zero/SGMDE";
+const QString game_GameConfPath = "mages_dmm/SG_Darling/eng";
+const QString game_LaunchCommand = "Game.exe mages_sgate";
+#define IPC_ENABLED
+const uint32_t game_ipcIn = 0x23F4F1DE;
+const uint32_t game_ipcOut = 0xF0973746;
+const wchar_t game_ipcName[] = L"STEINS;GATE: My Darling's Embrace";
+#endif
+#endif
+
 #if defined(GAME_ROBOTICSNOTESELITE)
 const uint8_t game_ExtraControllerData[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x28, 0x02, 0x01, 0x00, 0x05,
@@ -83,6 +110,33 @@ const QString game_LaunchCommand = "Game.exe roboticsnotese EN";
 const uint32_t game_ipcIn = 0x23F4F1DE;
 const uint32_t game_ipcOut = 0xF0973746;
 const wchar_t game_ipcName[] = L"ROBOTICS;NOTES ELITE";
+#endif
+#endif
+
+#if defined(GAME_STEINSGATELBP)
+const uint8_t game_ExtraControllerData[] = {
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x28, 0x02, 0x01, 0x00, 0x05,
+    0x09, 0x08, 0x04, 0x03, 0x0B, 0x06, 0x07, 0x00, 0x00, 0x00};
+const QString game_Custom1ButtonLabel = "Phone trigger / Zoom in";
+const QString game_Custom2ButtonLabel = "Phone trigger / Zoom out";
+const QString game_ReleaseUrl =
+    "https://github.com/CommitteeOfZero/sglbp-patch/releases";
+#if defined(GAME_STEAM)
+const QString game_LauncherTitle =
+    "STEINS;GATE: Linear Bounded Phenogram Improvement Patch (Steam) Launcher";
+const QString game_PatchConfPath = "Committee of Zero/SGLBPSteam";
+const QString game_GameConfPath = "mages_steam/SG_Phenogram/eng";
+const QString game_LaunchCommand = "Game.exe mages_sgate";
+#else
+const QString game_LauncherTitle =
+    "STEINS;GATE: Linear Bounded Phenogram Improvement Patch Launcher";
+const QString game_PatchConfPath = "Committee of Zero/SGLBP";
+const QString game_GameConfPath = "mages_dmm/SG_Phenogram/eng";
+const QString game_LaunchCommand = "Game.exe mages_sgate";
+#define IPC_ENABLED
+const uint32_t game_ipcIn = 0x23F4F1DE;
+const uint32_t game_ipcOut = 0xF0973746;
+const wchar_t game_ipcName[] = L"STEINS;GATE: Linear Bounded Phenogram";
 #endif
 #endif
 
