@@ -67,8 +67,10 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
             improveDialogueOutlines =
                 inJson["improveDialogueOutlines"].toBool();
 
-        if (inJson["cosplayPatch"].isBool()) hasCosplayPatch = true;
-        cosplayPatch = inJson["cosplayPatch"].toBool();
+        if (inJson["cosplayPatch"].isBool()) {
+            hasCosplayPatch = true;
+            cosplayPatch = inJson["cosplayPatch"].toBool();
+        }
 #endif
 #if defined(GAME_ROBOTICSNOTESDASH)
         if (inJson["swimsuitPatch"].isBool())

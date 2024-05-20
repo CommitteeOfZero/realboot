@@ -22,10 +22,16 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
     QLabel *resolutionLabel = new QLabel("Resolution:", this);
     resolutionRow->addWidget(resolutionLabel);
     _resolutionComboBox = new QComboBox(this);
+#if !defined(GAME_CHAOSHEADNOAH)
     _resolutionComboBox->addItem("1024x576",
                                  (int)GameConfig::Resolution::Res576p);
+#endif
     _resolutionComboBox->addItem("1280x720",
                                  (int)GameConfig::Resolution::Res720p);
+#if defined(GAME_CHAOSHEADNOAH)
+    _resolutionComboBox->addItem("1600x900",
+                                 (int)GameConfig::Resolution::Res900p);
+#endif
     _resolutionComboBox->addItem("1920x1080",
                                  (int)GameConfig::Resolution::Res1080p);
     resolutionRow->addWidget(_resolutionComboBox);

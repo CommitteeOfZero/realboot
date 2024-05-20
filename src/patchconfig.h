@@ -35,7 +35,7 @@ class PatchConfig : public QObject {
     bool hasrineBlackNames = false;
     bool rineBlackNames;
     bool improveDialogueOutlines;
-    bool hasCosplayPatch = true;
+    bool hasCosplayPatch = false;
     bool cosplayPatch;
     bool rneMouseControls;
     bool scrollDownToAdvanceText;
@@ -43,11 +43,13 @@ class PatchConfig : public QObject {
     bool swimsuitPatch;
     int fontSize;
     QString fontPath;
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     QString karaokeSubs;
 #endif
     QString selectedController;
+#if defined(GAME_ANONYMOUSCODE)
     QString language;
+#endif
     QString displayMode;
     QString resolution;
     bool voiceSubs;

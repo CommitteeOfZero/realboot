@@ -111,11 +111,14 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 
     mainLayout->addSpacing(16);
 
-#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_ANONYMOUSCODE)
     QLabel *fmvLabel = new QLabel(this);
     fmvLabel->setText("<b>Videos</b>");
     mainLayout->addWidget(fmvLabel);
+#endif
+
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
 
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
@@ -194,8 +197,8 @@ void GeneralTab::setConfig() {
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
-#endif
     rbApp->patchConfig()->improveDialogueOutlines = _outlineCb->isChecked();
+#endif
     if (rbApp->patchConfig()->hasConsistency) {
         rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
     }
@@ -252,7 +255,7 @@ void GeneralTab::reloadData() {
     if (rbApp->patchConfig()->hasrineBlackNames) {
         _rineBlackNamesCb->setChecked(rbApp->patchConfig()->rineBlackNames);
     }
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     _songSubsComboBox->setCurrentIndex(
         _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
             rbApp->patchConfig()->karaokeSubs)));

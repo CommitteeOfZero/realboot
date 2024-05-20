@@ -148,7 +148,7 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 
     _generalTab = new GeneralTab(this);
     ui->tabWidget->addTab(_generalTab, "General");
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ANONYMOUSCODE)
     _controllerTab = new ControllerTab(this);
     ui->tabWidget->addTab(_controllerTab, "Controller");
 #endif
@@ -215,7 +215,7 @@ void LauncherWindow::startGame() {
     ((volatile uint32_t *)ipc)[1] = game_ipcOut;
 #endif
 
-#if defined(IGAME_ANONYMOUSCODE)
+#if defined(GAME_ANONYMOUSCODE)
     if (rbApp->patchConfig()->voiceSubs) {
         QFile file("./c0_subs_disabled.nut");
         file.rename("./c0_subs.nut");
@@ -301,7 +301,9 @@ void LauncherWindow::startGame() {
 void LauncherWindow::saveChanges() {
     if (_allSettingsMode) {
         _generalTab->setConfig();
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ANONYMOUSCODE)
         _controllerTab->setConfig();
+#endif
     } else {
         ui->miniSettingsWidget->setConfig();
     }
@@ -314,9 +316,11 @@ void LauncherWindow::saveChanges() {
 
 void LauncherWindow::reloadData() {
     if (_allSettingsMode) {
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ANONYMOUSCODE)
         if (rbApp->controllerManager()->activeController() != nullptr) {
             _controllerTab->reloadData();
         }
+#endif
         _generalTab->reloadData();
     } else {
         ui->miniSettingsWidget->reloadData();

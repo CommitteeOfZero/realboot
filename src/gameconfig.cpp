@@ -34,11 +34,9 @@ GameConfig::GameConfig(QObject* parent) : QObject(parent) {
         uint32_t movieQuality_ = *(const uint32_t*)(data + 0x44);
         if (movieQuality_ < (uint32_t)MovieQuality::Num)
             movieQuality = (MovieQuality)movieQuality_;
-#if defined(GAME_CHAOSHEADNOAH)
         language = *(const Language*)(data + 0x48);
         uint32_t language_ = *(const uint32_t*)(data + 0x48);
         if (language_ < (uint32_t)Language::Num) language = (Language)language_;
-#endif
     }
 #endif
 }
@@ -63,9 +61,7 @@ void GameConfig::save() {
     outFile.write((const char*)&startWindowX, 4);
     outFile.write((const char*)&startWindowY, 4);
     outFile.write((const char*)&movieQuality, 4);
-#if defined(GAME_CHAOSHEADNOAH)
     outFile.write((const char*)&language, 4);
-#endif
     outFile.seek(0x6C);  // padding
 #endif
 }
@@ -78,9 +74,12 @@ void GameConfig::loadDefaults() {
     resolution = Resolution::Res720p;
     startWindowX = 0;
     startWindowY = 0;
+#endif
 #if defined(GAME_CHAOSHEADNOAH)
     language = Language::English;
 #endif
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     movieQuality = MovieQuality::Low720p;
 #endif
 }

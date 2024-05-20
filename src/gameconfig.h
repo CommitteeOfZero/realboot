@@ -6,18 +6,22 @@ class GameConfig : public QObject {
     Q_OBJECT
 
    public:
-#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
-    enum class MovieQuality : uint32_t{High1080p = 0, Low720p = 1, Num};
+    enum class MovieQuality : uint32_t { High1080p = 0, Low720p = 1, Num };
     Q_ENUM(MovieQuality)
-#endif
     enum class DisplayMode : uint32_t { Windowed = 0, Fullscreen = 1, Num };
     Q_ENUM(DisplayMode)
     enum class Resolution : uint32_t {
+#if defined(GAME_CHAOSHEADNOAH)
+        Res720p = 0,
+        Res900p = 1,
+        Res1080p = 2,
+        Num
+#else
         Res576p = 0,
         Res720p = 1,
         Res1080p = 2,
         Num
+#endif
     };
     Q_ENUM(Resolution)
 
@@ -55,10 +59,7 @@ class GameConfig : public QObject {
     int startWindowX;
     int startWindowY;
     Language language;
-#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     MovieQuality movieQuality;
-#endif
     QString controllerGuid = QString();
 
    private:
