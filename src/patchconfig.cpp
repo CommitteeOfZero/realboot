@@ -101,7 +101,12 @@ void PatchConfig::save() {
     }
 
     QJsonObject outJson;
+#if defined(GAME_CHAOSHEADNOAH) || defined(GAME_ROBOTICSNOTESELITE) || \
+    defined(GAME_ROBOTICSNOTESDASH) || defined(GAME_ANONYMOUSCODE)
     outJson["__schema_version"] = 5;
+#else
+    outJson["__schema_version"] = 4;
+#endif
     outJson["showAllSettings"] = showAllSettings;
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
     !defined(GAME_ROBOTICSNOTESDASH) !defined(GAME_ANONYMOUSCODE)

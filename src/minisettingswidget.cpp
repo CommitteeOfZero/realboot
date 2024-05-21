@@ -111,9 +111,9 @@ void MiniSettingsWidget::reloadData() {
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
+#endif
 #if defined(GAME_CHAOSHEADNOAH)
     _languageGroup->button((int)rbApp->gameConfig()->language)
         ->setChecked(true);
-#endif
 #endif
 }
