@@ -175,6 +175,13 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     }
     mainLayout->addStretch(1);
 #endif
+
+    QLabel *enableDxvkLabel = new QLabel(this);
+    enableDxvkLabel->setText("<b>Common graphic errors resolution:</b>");
+    mainLayout->addWidget(enableDxvkLabel);
+    _enableDxvkCb = new QCheckBox("Enable DXVK", this);
+    mainLayout->addWidget(_enableDxvkCb);
+    mainLayout->addStretch(1);
     reloadData();
 }
 
@@ -230,6 +237,7 @@ void GeneralTab::setConfig() {
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
 #endif
+    rbApp->patchConfig()->enableDxvk = _enableDxvkCb->isChecked();
 }
 
 void GeneralTab::reloadData() {
@@ -278,4 +286,5 @@ void GeneralTab::reloadData() {
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
 #endif
+    _enableDxvkCb->setChecked(rbApp->patchConfig()->enableDxvk);
 }

@@ -40,4 +40,5 @@ class GeneralTab : public QWidget {
 #if defined(GAME_ANONYMOUSCODE)
     QCheckBox* _voiceSubsCb;
 #endif
+    QCheckBox* _enableDxvkCb;
 };

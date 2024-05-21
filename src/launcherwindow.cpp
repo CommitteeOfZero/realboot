@@ -216,6 +216,37 @@ void LauncherWindow::startGame() {
     ((volatile uint32_t *)ipc)[1] = game_ipcOut;
 #endif
 
+#if defined(GAME_CHAOSHEADNOAH)
+    QString game = "./HEAD NOAH/";
+#elif defined(GAME_STEINSGATE)
+    QString game = "./GATE/";
+#elif defined(GAME_ROBOTICSNOTESELITE)
+    QString game = "./NOTES ELITE/";
+#elif defined(GAME_CHAOSCHILD)
+    QString game = "./CHILD";
+#elif defined(GAME_STEINSGATE0)
+    QString game = "./GATE 0/";
+#elif defined(GAME_STEINSGATE)
+    QString game = "./NOTES DaSH/";
+#else
+    QString game = "./"
+#endif
+    QString dxvkFiles[6] = {"d3d9",      "d3d10", "d3d10_1",
+                            "d3d10core", "d3d11", "dxgi"};
+    if (rbApp->patchConfig()->enableDxvk) {
+        for (int i = 0; i < sizeof(dxvkFiles); i++) {
+            QString path = game % dxvkFiles[i];
+            QFile file(path);
+            file.rename(path % ".dll");
+        }
+    } else {
+        for (int i = 0; i < sizeof(dxvkFiles); i++) {
+            QString path = game % dxvkFiles[i];
+            QFile file(path % ".dll");
+            file.rename(path);
+        }
+    }
+
 #if defined(GAME_ANONYMOUSCODE)
     if (rbApp->patchConfig()->voiceSubs) {
         QFile file("./c0_subs_disabled.nut");

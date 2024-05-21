@@ -84,8 +84,13 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
                 karaokeSubs = karaokeSubs_;
         }
 #endif
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
+    !defined(GAME_ROBOTICSNOTESDASH) !defined(GAME_ANONYMOUSCODE)
         if (inJson["selectedController"].isString())
             selectedController = inJson["selectedController"].toString();
+#endif
+        if (inJson["enableDxvk"].isBool())
+            enableDxvk = inJson["enableDxvk"].toBool();
     }
 }
 
@@ -134,6 +139,7 @@ void PatchConfig::save() {
     !defined(GAME_ROBOTICSNOTESDASH) !defined(GAME_ANONYMOUSCODE)
     outJson["selectedController"] = selectedController;
 #endif
+    outJson["enableDxvk"] = enableDxvk;
 
     QJsonDocument outJsonDocument(outJson);
     outFile.write(outJsonDocument.toJson());
@@ -151,16 +157,12 @@ void PatchConfig::loadDefaults() {
     swimsuitPatch = false;
     improveDialogueOutlines = true;
     cosplayPatch = false;
-#if !defined(GAME_ANONYMOUSCODE)
     karaokeSubs = "all";
-#endif
     selectedController = "";
-#if defined(GAME_ANONYMOUSCODE)
-    language = "Dub";
     displayMode = "windowed";
     resolution = "720";
     voiceSubs = true;
-#endif
+    enableDxvk = false;
 }
 
 void PatchConfig::migrate(QJsonObject& conf) {

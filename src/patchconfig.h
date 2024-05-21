@@ -41,18 +41,14 @@ class PatchConfig : public QObject {
     bool scrollDownToAdvanceText;
     bool disableScrollDownToCloseBacklog;
     bool swimsuitPatch;
+    bool voiceSubs;
+    bool enableDxvk;
     int fontSize;
     QString fontPath;
-#if !defined(GAME_ANONYMOUSCODE)
     QString karaokeSubs;
-#endif
     QString selectedController;
-#if defined(GAME_ANONYMOUSCODE)
-    QString language;
-#endif
     QString displayMode;
     QString resolution;
-    bool voiceSubs;
 
    private:
     QString _path;
