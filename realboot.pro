@@ -46,6 +46,10 @@ steinsgateelite {
     DEFINES += GAME_STEINSGATEELITE
     RESOURCES += profiles/steinsgateelite.qrc
 }
+chaosheadlcc {
+    DEFINES += GAME_CHAOSHEADLCC
+    RESOURCES += profiles/chaosheadlcc.qrc
+}
 steinsgatemde {
     DEFINES += GAME_STEINSGATEMDE
     RESOURCES += profiles/steinsgatemde.qrc
@@ -65,6 +69,10 @@ chaoschild {
 steinsgate0 {
     DEFINES += GAME_STEINSGATE0
     RESOURCES += profiles/steinsgate0.qrc
+}
+chaoschildlcc {
+    DEFINES += GAME_CHAOSCHILDLCC
+    RESOURCES += profiles/chaoschildlcc.qrc
 }
 roboticsnotesdash {
     DEFINES += GAME_ROBOTICSNOTESDASH
