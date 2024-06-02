@@ -161,7 +161,7 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
                       << "/whql:off" << "/t"
                       << rbApp->patchConfigDirectory() + "/dxdiag.txt");
 
-#ifndef GAME_ANONYMOUSCODE
+#if !defined(GAME_ANONYMOUSCODE)
     troubleshootingData += "\n";
     troubleshootingData += "------------------------------------------------\n";
     troubleshootingData += "\n";

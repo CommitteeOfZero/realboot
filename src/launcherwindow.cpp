@@ -226,21 +226,21 @@ void LauncherWindow::startGame() {
     QString game = "./CHILD";
 #elif defined(GAME_STEINSGATE0)
     QString game = "./GATE 0/";
-#elif defined(GAME_STEINSGATE)
+#elif defined(GAME_ROBOTICSNOTESDASH)
     QString game = "./NOTES DaSH/";
 #else
-    QString game = "./"
+    QString game = "./";
 #endif
     QString dxvkFiles[6] = {"d3d9",      "d3d10", "d3d10_1",
                             "d3d10core", "d3d11", "dxgi"};
     if (rbApp->patchConfig()->enableDxvk) {
-        for (int i = 0; i < sizeof(dxvkFiles); i++) {
+        for (int i = 0; i < 6; i++) {
             QString path = game % dxvkFiles[i];
             QFile file(path);
             file.rename(path % ".dll");
         }
     } else {
-        for (int i = 0; i < sizeof(dxvkFiles); i++) {
+        for (int i = 0; i < 6; i++) {
             QString path = game % dxvkFiles[i];
             QFile file(path % ".dll");
             file.rename(path);
@@ -416,7 +416,11 @@ void LauncherWindow::toggleSettings() {
 }
 
 void LauncherWindow::startUpdateCheck() {
+#if defined(GAME_ANONYMOUSCODE)
+    QFile versioninfoFile("./versioninfo.json");
+#else
     QFile versioninfoFile("languagebarrier/versioninfo.json");
+#endif
     if (!versioninfoFile.open(QIODevice::ReadOnly)) {
         updateCheckFailed("Couldn't open update info");
         return;
