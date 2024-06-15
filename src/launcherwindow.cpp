@@ -153,8 +153,8 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     _controllerTab = new ControllerTab(this);
     ui->tabWidget->addTab(_controllerTab, "Controller");
 #endif
-    TroubleshootingTab *troubleshootingTab = new TroubleshootingTab(this);
-    ui->tabWidget->addTab(troubleshootingTab, "Troubleshooting");
+    _troubleshootingTab = new TroubleshootingTab(this);
+    ui->tabWidget->addTab(_troubleshootingTab, "Troubleshooting");
 
     _allSettingsMode = rbApp->patchConfig()->showAllSettings;
     // We respect the user's choice in afterShow(), but we show the full layout first
@@ -333,6 +333,7 @@ void LauncherWindow::startGame() {
 void LauncherWindow::saveChanges() {
     if (_allSettingsMode) {
         _generalTab->setConfig();
+        _troubleshootingTab->setConfig();
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
         _controllerTab->setConfig();
@@ -356,6 +357,7 @@ void LauncherWindow::reloadData() {
         }
 #endif
         _generalTab->reloadData();
+        _troubleshootingTab->reloadData();
     } else {
         ui->miniSettingsWidget->reloadData();
     }

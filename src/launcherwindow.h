@@ -12,6 +12,7 @@ class LauncherWindow;
 
 class GeneralTab;
 class ControllerTab;
+class TroubleshootingTab;
 
 struct UpdateCheckReply {
     CURLcode responseCode;
@@ -46,6 +47,7 @@ class LauncherWindow : public QMainWindow {
     Ui::LauncherWindow *ui;
     GeneralTab *_generalTab;
     ControllerTab *_controllerTab;
+    TroubleshootingTab *_troubleshootingTab;
 
     int _runningIntVersion;
     QString _updateChannel;
