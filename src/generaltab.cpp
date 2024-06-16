@@ -166,13 +166,11 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addStretch(1);
 #if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
     defined(GAME_STEINSGATELBP)
-    if (rbApp->patchConfig()->hasCosplayPatch) {
-        _cosplayPatch = new QCheckBox(
-            "Enable Cosplay Patch\n(Mayuri's Tutturu beam has been fired?! Its "
-            "effect forces everyone to cosplay!)",
-            this);
-        mainLayout->addWidget(_cosplayPatch);
-    }
+    _cosplayPatch = new QCheckBox(
+        "Enable Cosplay Patch\n(Mayuri's Tutturu beam has been fired?! Its "
+        "effect forces everyone to cosplay!)",
+        this);
+    mainLayout->addWidget(_cosplayPatch);
     mainLayout->addStretch(1);
 #endif
     reloadData();
@@ -213,9 +211,10 @@ void GeneralTab::setConfig() {
     rbApp->patchConfig()->karaokeSubs =
         PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
 #endif
-    if (rbApp->patchConfig()->hasCosplayPatch) {
-        rbApp->patchConfig()->cosplayPatch = _cosplayPatch->isChecked();
-    }
+#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
+    defined(GAME_STEINSGATELBP)
+    rbApp->patchConfig()->cosplayPatch = _cosplayPatch->isChecked();
+#endif
 #if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
     rbApp->patchConfig()->rneMouseControls = _rneMouseControls->isChecked();
     rbApp->patchConfig()->scrollDownToAdvanceText =
@@ -261,9 +260,10 @@ void GeneralTab::reloadData() {
         _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
             rbApp->patchConfig()->karaokeSubs)));
 #endif
-    if (rbApp->patchConfig()->hasCosplayPatch) {
-        _cosplayPatch->setChecked(rbApp->patchConfig()->cosplayPatch);
-    }
+#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
+    defined(GAME_STEINSGATELBP)
+    _cosplayPatch->setChecked(rbApp->patchConfig()->cosplayPatch);
+#endif
 #if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
     _rneMouseControls->setChecked(rbApp->patchConfig()->rneMouseControls);
     _scrollDownToAdvanceText->setChecked(

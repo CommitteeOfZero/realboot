@@ -35,7 +35,6 @@ class PatchConfig : public QObject {
     bool hasrineBlackNames = false;
     bool rineBlackNames;
     bool improveDialogueOutlines;
-    bool hasCosplayPatch = false;
     bool cosplayPatch;
     bool rneMouseControls;
     bool scrollDownToAdvanceText;

@@ -67,9 +67,10 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
         if (inJson["improveDialogueOutlines"].isBool())
             improveDialogueOutlines =
                 inJson["improveDialogueOutlines"].toBool();
-
+#endif
+#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
+    defined(GAME_STEINSGATELBP)
         if (inJson["cosplayPatch"].isBool()) {
-            hasCosplayPatch = true;
             cosplayPatch = inJson["cosplayPatch"].toBool();
         }
 #endif
@@ -125,7 +126,11 @@ void PatchConfig::save() {
     !defined(GAME_ROBOTICSNOTESDASH) !defined(GAME_ANONYMOUSCODE)
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
 #endif
-    if (hasCosplayPatch) outJson["cosplayPatch"] = cosplayPatch;
+
+#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
+    defined(GAME_STEINSGATELBP)
+    outJson["cosplayPatch"] = cosplayPatch;
+#endif
 #if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
     outJson["rneMouseControls"] = rneMouseControls;
     outJson["scrollDownToAdvanceText"] = scrollDownToAdvanceText;
