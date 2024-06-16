@@ -131,14 +131,14 @@ void PatchConfig::save() {
     defined(GAME_STEINSGATELBP)
     outJson["cosplayPatch"] = cosplayPatch;
 #endif
+#if defined(GAME_ROBOTICSNOTESDASH)
+    outJson["swimsuitPatch"] = swimsuitPatch;
+#endif
 #if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
     outJson["rneMouseControls"] = rneMouseControls;
     outJson["scrollDownToAdvanceText"] = scrollDownToAdvanceText;
     outJson["disableScrollDownToCloseBacklog"] =
         disableScrollDownToCloseBacklog;
-#endif
-#if defined(GAME_ROBOTICSNOTESDASH)
-    outJson["swimsuitPatch"] = swimsuitPatch;
 #endif
 #if !defined(GAME_ANONYMOUSCODE)
     outJson["karaokeSubs"] = karaokeSubs;
@@ -162,9 +162,9 @@ void PatchConfig::loadDefaults() {
     rneMouseControls = true;
     scrollDownToAdvanceText = false;
     disableScrollDownToCloseBacklog = false;
-    swimsuitPatch = false;
     improveDialogueOutlines = true;
     cosplayPatch = false;
+    swimsuitPatch = false;
     karaokeSubs = "all";
     selectedController = "";
     displayMode = "windowed";

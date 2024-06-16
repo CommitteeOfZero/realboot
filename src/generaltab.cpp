@@ -69,14 +69,6 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
         new QCheckBox("Use scroll wheel for exiting the backlog", this);
     mainLayout->addWidget(_disableScrollDownToCloseBacklog);
 #endif
-#if defined(GAME_ROBOTICSNOTESDASH)
-    mainLayout->addSpacing(8);
-    _swimsuitPatch = new QCheckBox(
-        "Enable Swimsuit Patch\n(Force characters to wear swimsuits at all "
-        "times)",
-        this);
-    mainLayout->addWidget(_swimsuitPatch);
-#endif
 
     if (rbApp->patchConfig()->hasConsistency) {
         _consistencyCb = new QCheckBox(
@@ -171,6 +163,15 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
         "effect forces everyone to cosplay!)",
         this);
     mainLayout->addWidget(_cosplayPatch);
+#endif
+
+#if defined(GAME_ROBOTICSNOTESDASH)
+    mainLayout->addSpacing(8);
+    _swimsuitPatch = new QCheckBox(
+        "Enable Swimsuit Patch\n(Force characters to wear swimsuits at all "
+        "times)",
+        this);
+    mainLayout->addWidget(_swimsuitPatch);
     mainLayout->addStretch(1);
 #endif
     reloadData();
@@ -215,15 +216,15 @@ void GeneralTab::setConfig() {
     defined(GAME_STEINSGATELBP)
     rbApp->patchConfig()->cosplayPatch = _cosplayPatch->isChecked();
 #endif
+#if defined(GAME_ROBOTICSNOTESDASH)
+    rbApp->patchConfig()->swimsuitPatch = _swimsuitPatch->isChecked();
+#endif
 #if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
     rbApp->patchConfig()->rneMouseControls = _rneMouseControls->isChecked();
     rbApp->patchConfig()->scrollDownToAdvanceText =
         _scrollDownToAdvanceText->isChecked();
     rbApp->patchConfig()->disableScrollDownToCloseBacklog =
         !_disableScrollDownToCloseBacklog->isChecked();
-#endif
-#if defined(GAME_ROBOTICSNOTESDASH)
-    rbApp->patchConfig()->swimsuitPatch = _swimsuitPatch->isChecked();
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
@@ -264,15 +265,15 @@ void GeneralTab::reloadData() {
     defined(GAME_STEINSGATELBP)
     _cosplayPatch->setChecked(rbApp->patchConfig()->cosplayPatch);
 #endif
+#if defined(GAME_ROBOTICSNOTESDASH)
+    _swimsuitPatch->setChecked(rbApp->patchConfig()->swimsuitPatch);
+#endif
 #if defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH)
     _rneMouseControls->setChecked(rbApp->patchConfig()->rneMouseControls);
     _scrollDownToAdvanceText->setChecked(
         rbApp->patchConfig()->scrollDownToAdvanceText);
     _disableScrollDownToCloseBacklog->setChecked(
         !rbApp->patchConfig()->disableScrollDownToCloseBacklog);
-#endif
-#if defined(GAME_ROBOTICSNOTESDASH)
-    _swimsuitPatch->setChecked(rbApp->patchConfig()->swimsuitPatch);
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)

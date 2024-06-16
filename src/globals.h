@@ -87,9 +87,6 @@ const wchar_t game_ipcName[] = L"STEINS;GATE: My Darling's Embrace";
 #endif
 
 #if defined(GAME_ROBOTICSNOTESELITE)
-const uint8_t game_ExtraControllerData[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x28, 0x02, 0x01, 0x00, 0x05,
-    0x09, 0x08, 0x04, 0x03, 0x0B, 0x06, 0x07, 0x00, 0x00, 0x00};
 const QString game_Custom1ButtonLabel = "Unused";
 const QString game_Custom2ButtonLabel = "Unused";
 const QString game_ReleaseUrl =
@@ -188,9 +185,6 @@ const wchar_t game_ipcName[] = L"STEINS;GATE 0";
 #endif
 
 #if defined(GAME_ROBOTICSNOTESDASH)
-const uint8_t game_ExtraControllerData[] = {
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x28, 0x02, 0x01, 0x00, 0x05,
-    0x09, 0x08, 0x04, 0x03, 0x0B, 0x06, 0x07, 0x00, 0x00, 0x00};
 const QString game_Custom1ButtonLabel = "Unused";
 const QString game_Custom2ButtonLabel = "Unused";
 const QString game_ReleaseUrl =
