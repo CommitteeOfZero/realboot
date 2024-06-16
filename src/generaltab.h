@@ -34,9 +34,7 @@ class GeneralTab : public QWidget {
     QCheckBox* _scrollDownToAdvanceText;
     QCheckBox* _disableScrollDownToCloseBacklog;
 #endif
-#if defined(GAME_ROBOTICSNOTESDASH)
     QCheckBox* _swimsuitPatch;
-#endif
 #if defined(GAME_ANONYMOUSCODE)
     QCheckBox* _voiceSubsCb;
 #endif

@@ -137,6 +137,9 @@ void PatchConfig::save() {
     outJson["disableScrollDownToCloseBacklog"] =
         disableScrollDownToCloseBacklog;
 #endif
+#if defined(GAME_ROBOTICSNOTESDASH)
+    outJson["swimsuitPatch"] = swimsuitPatch;
+#endif
 #if !defined(GAME_ANONYMOUSCODE)
     outJson["karaokeSubs"] = karaokeSubs;
 #endif

@@ -106,10 +106,6 @@ const QString game_LauncherTitle =
 const QString game_PatchConfPath = "Committee of Zero/RNE";
 const QString game_GameConfPath = "mages_dmm/Robotics Notes ELITE/eng";
 const QString game_LaunchCommand = "Game.exe roboticsnotese EN";
-#define IPC_ENABLED
-const uint32_t game_ipcIn = 0x23F4F1DE;
-const uint32_t game_ipcOut = 0xF0973746;
-const wchar_t game_ipcName[] = L"ROBOTICS;NOTES ELITE";
 #endif
 #endif
 
@@ -211,10 +207,6 @@ const QString game_LauncherTitle =
 const QString game_PatchConfPath = "Committee of Zero/RND";
 const QString game_GameConfPath = "mages_dmm/Robotics Notes DASH/eng";
 const QString game_LaunchCommand = "Game.exe roboticsnotesd EN";
-#define IPC_ENABLED
-const uint32_t game_ipcIn = 0x23F4F1DE;
-const uint32_t game_ipcOut = 0xF0973746;
-const wchar_t game_ipcName[] = L"ROBOTICS;NOTES DaSH";
 #endif
 #endif
 
