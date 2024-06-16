@@ -79,12 +79,6 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
         mainLayout->addWidget(_consistencyCb);
     }
 
-    if (rbApp->patchConfig()->hasHonorifics) {
-        _honorificsCb =
-            new QCheckBox("Edit text to use Japanese honorifics", this);
-        mainLayout->addWidget(_honorificsCb);
-    }
-
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _outlineCb = new QCheckBox("Improve dialogue outlines", this);
@@ -202,9 +196,6 @@ void GeneralTab::setConfig() {
     if (rbApp->patchConfig()->hasConsistency) {
         rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
     }
-    if (rbApp->patchConfig()->hasHonorifics) {
-        rbApp->patchConfig()->honorifics = _honorificsCb->isChecked();
-    }
     if (rbApp->patchConfig()->hasrineBlackNames) {
         rbApp->patchConfig()->rineBlackNames = _rineBlackNamesCb->isChecked();
     }
@@ -249,9 +240,6 @@ void GeneralTab::reloadData() {
 #endif
     if (rbApp->patchConfig()->hasConsistency) {
         _consistencyCb->setChecked(rbApp->patchConfig()->consistency);
-    }
-    if (rbApp->patchConfig()->hasHonorifics) {
-        _honorificsCb->setChecked(rbApp->patchConfig()->honorifics);
     }
     if (rbApp->patchConfig()->hasrineBlackNames) {
         _rineBlackNamesCb->setChecked(rbApp->patchConfig()->rineBlackNames);

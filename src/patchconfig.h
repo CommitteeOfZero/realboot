@@ -30,8 +30,6 @@ class PatchConfig : public QObject {
     bool hqFmvAudio;
     bool hasConsistency = false;
     bool consistency;
-    bool honorifics;
-    bool hasHonorifics = false;
     bool hasrineBlackNames = false;
     bool rineBlackNames;
     bool improveDialogueOutlines;
