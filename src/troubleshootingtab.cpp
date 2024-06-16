@@ -25,14 +25,6 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     mainLayout->setMargin(0);
     setLayout(mainLayout);
 
-    mainLayout->addSpacing(8);
-
-    QLabel *enableDxvkLabel = new QLabel(this);
-    enableDxvkLabel->setText("<b>Common graphic errors resolution:</b>");
-    mainLayout->addWidget(enableDxvkLabel);
-    _enableDxvkCb = new QCheckBox("Enable DXVK", this);
-    mainLayout->addWidget(_enableDxvkCb);
-
     mainLayout->addSpacing(12);
 
     QPushButton *openGameFolderButton =
@@ -187,7 +179,6 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addWidget(_infoTe);
 
     mainLayout->addStretch(1);
-    reloadData();
 }
 
 void TroubleshootingTab::copyInfo() {
@@ -205,12 +196,4 @@ QString TroubleshootingTab::md5sum(const QString &filePath) {
     }
 
     return QString(hash.result().toHex());  // toHex() is lowercase
-}
-
-void TroubleshootingTab::setConfig() {
-    rbApp->patchConfig()->enableDxvk = _enableDxvkCb->isChecked();
-}
-
-void TroubleshootingTab::reloadData() {
-    _enableDxvkCb->setChecked(rbApp->patchConfig()->enableDxvk);
 }

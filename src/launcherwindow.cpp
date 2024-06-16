@@ -9,6 +9,7 @@
 #include "generaltab.h"
 #include "controllertab.h"
 #include "troubleshootingtab.h"
+#include "dxvktab.h"
 
 #include <QMouseEvent>
 #include <QToolButton>
@@ -155,6 +156,9 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 #endif
     _troubleshootingTab = new TroubleshootingTab(this);
     ui->tabWidget->addTab(_troubleshootingTab, "Troubleshooting");
+
+    _dxvkTab = new DxvkTab(this);
+    ui->tabWidget->addTab(_dxvkTab, "DXVK");
 
     _allSettingsMode = rbApp->patchConfig()->showAllSettings;
     // We respect the user's choice in afterShow(), but we show the full layout first
@@ -333,7 +337,7 @@ void LauncherWindow::startGame() {
 void LauncherWindow::saveChanges() {
     if (_allSettingsMode) {
         _generalTab->setConfig();
-        _troubleshootingTab->setConfig();
+        _dxvkTab->setConfig();
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
         _controllerTab->setConfig();
@@ -357,7 +361,7 @@ void LauncherWindow::reloadData() {
         }
 #endif
         _generalTab->reloadData();
-        _troubleshootingTab->reloadData();
+        _dxvkTab->reloadData();
     } else {
         ui->miniSettingsWidget->reloadData();
     }
