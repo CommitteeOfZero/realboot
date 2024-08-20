@@ -64,8 +64,7 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
             improveDialogueOutlines =
                 inJson["improveDialogueOutlines"].toBool();
 #endif
-#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
-    defined(GAME_STEINSGATELBP)
+#if defined(GAME_STEINSGATE)
         if (inJson["cosplayPatch"].isBool()) {
             cosplayPatch = inJson["cosplayPatch"].toBool();
         }
@@ -122,8 +121,7 @@ void PatchConfig::save() {
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
 #endif
 
-#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
-    defined(GAME_STEINSGATELBP)
+#if defined(GAME_STEINSGATE)
     outJson["cosplayPatch"] = cosplayPatch;
 #endif
 #if defined(GAME_ROBOTICSNOTESDASH)

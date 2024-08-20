@@ -150,8 +150,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 #endif
 
     mainLayout->addStretch(1);
-#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
-    defined(GAME_STEINSGATELBP)
+#if defined(GAME_STEINSGATE)
     _cosplayPatch = new QCheckBox(
         "Enable Cosplay Patch\n(Mayuri's Tutturu beam has been fired?! Its "
         "effect forces everyone to cosplay!)",
@@ -203,8 +202,7 @@ void GeneralTab::setConfig() {
     rbApp->patchConfig()->karaokeSubs =
         PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
 #endif
-#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
-    defined(GAME_STEINSGATELBP)
+#if defined(GAME_STEINSGATE)
     rbApp->patchConfig()->cosplayPatch = _cosplayPatch->isChecked();
 #endif
 #if defined(GAME_ROBOTICSNOTESDASH)
@@ -249,8 +247,7 @@ void GeneralTab::reloadData() {
         _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
             rbApp->patchConfig()->karaokeSubs)));
 #endif
-#if defined(GAME_STEINSGATE) || defined(GAME_STEINSGATEMDE) || \
-    defined(GAME_STEINSGATELBP)
+#if defined(GAME_STEINSGATE)
     _cosplayPatch->setChecked(rbApp->patchConfig()->cosplayPatch);
 #endif
 #if defined(GAME_ROBOTICSNOTESDASH)
