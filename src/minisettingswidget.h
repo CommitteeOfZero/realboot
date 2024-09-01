@@ -21,8 +21,9 @@ class MiniSettingsWidget : public QWidget {
 #if defined(GAME_CHAOSHEADNOAH)
     QButtonGroup* _languageGroup;
 #endif
-#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_ROBOTICSNOTESELITE) && \
-    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
+    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
+    !defined(GAME_ANONYMOUSCODE)
     QButtonGroup* _movieQualityGroup;
 #endif
 };

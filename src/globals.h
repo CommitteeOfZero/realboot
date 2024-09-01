@@ -59,6 +59,26 @@ const wchar_t game_ipcName[] = L"STEINS;GATE";
 #endif
 #endif
 
+#if defined(GAME_STEINSGATEELITE)
+const QString game_Custom1ButtonLabel = "Unused";
+const QString game_Custom2ButtonLabel = "Unused";
+const QString game_ReleaseUrl =
+    "https://github.com/CommitteeOfZero/sge-patch/releases";
+#if defined(GAME_STEAM)
+const QString game_LauncherTitle =
+    "STEINS;GATE ELITE Improvement Patch (Steam) Launcher";
+const QString game_PatchConfPath = "Committee of Zero/SGESteam";
+const QString game_GameConfPath = "mages_steam/Steins Gate ELITE/eng";
+const QString game_LaunchCommand = "Game.exe steinsgatee EN";
+#else
+const QString game_LauncherTitle =
+    "STEINS;GATE ELITE Improvement Patch Launcher";
+const QString game_PatchConfPath = "Committee of Zero/SGE";
+const QString game_GameConfPath = "mages_dmm/Steins Gate ELITE";
+const QString game_LaunchCommand = "Game.exe steinsgatee EN";
+#endif
+#endif
+
 #if defined(GAME_STEINSGATEMDE)
 const uint8_t game_ExtraControllerData[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x28, 0x02, 0x01, 0x00, 0x05,
