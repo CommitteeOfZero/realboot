@@ -228,7 +228,7 @@ void LauncherWindow::startGame() {
 #elif defined(GAME_ROBOTICSNOTESELITE)
     QString game = "./NOTES ELITE/";
 #elif defined(GAME_CHAOSCHILD)
-    QString game = "./CHILD";
+    QString game = "./CHILD/";
 #elif defined(GAME_STEINSGATE0)
     QString game = "./GATE 0/";
 #elif defined(GAME_ROBOTICSNOTESDASH)
@@ -238,6 +238,7 @@ void LauncherWindow::startGame() {
 #endif
     QString dxvkFiles[6] = {"d3d9",      "d3d10", "d3d10_1",
                             "d3d10core", "d3d11", "dxgi"};
+#if defined(GAME_STEAM)
     if (rbApp->patchConfig()->enableDxvk) {
         for (int i = 0; i < 6; i++) {
             QString path = game % dxvkFiles[i];
@@ -251,6 +252,28 @@ void LauncherWindow::startGame() {
             file.rename(path);
         }
     }
+#else
+    // Making it work with both GOG ways of installation
+    if (rbApp->patchConfig()->enableDxvk) {
+        for (int i = 0; i < 6; i++) {
+            QString pathWithSemicolon = game % dxvkFiles[i];
+            QFile fileWithSemicolon(pathWithSemicolon);
+            fileWithSemicolon.rename(pathWithSemicolon % ".dll");
+            QString path = "./" % dxvkFiles[i];
+            QFile file(path);
+            file.rename(path % ".dll");
+        }
+    } else {
+        for (int i = 0; i < 6; i++) {
+            QString pathWithSemicolon = game % dxvkFiles[i];
+            QFile fileWithSemicolon(pathWithSemicolon % ".dll");
+            fileWithSemicolon.rename(pathWithSemicolon);
+            QString path = "./" % dxvkFiles[i];
+            QFile file(path % ".dll");
+            file.rename(path);
+        }
+    }
+#endif
 
 #if defined(GAME_ANONYMOUSCODE)
     if (rbApp->patchConfig()->voiceSubs) {
