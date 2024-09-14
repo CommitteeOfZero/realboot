@@ -173,6 +173,10 @@ const QString game_LauncherTitle =
 const QString game_PatchConfPath = "Committee of Zero/CCGOG";
 const QString game_GameConfPath = "Mages Inc/CHAOS;CHILD/eng";
 const QString game_LaunchCommand = "Game.exe chaoschild EN";
+#define IPC_ENABLED
+const uint32_t game_ipcIn = 0x23F4F1DE;
+const uint32_t game_ipcOut = 0xF0973746;
+const wchar_t game_ipcName[] = L"CHAOS;CHILD";
 #endif
 #endif
 

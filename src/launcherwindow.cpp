@@ -335,24 +335,9 @@ void LauncherWindow::startGame() {
 #endif
 
 #if defined(IPC_ENABLED)
-    QElapsedTimer timer;
-    bool started = false;
-    timer.start();
-    while (timer.elapsed() < 5000) {
-        if (((volatile uint32_t *)ipc)[0] == game_ipcIn) {
-            started = true;
-            break;
-        }
-        Sleep(1);
-    }
     UnmapViewOfFile((LPCVOID)ipc);
     CloseHandle(ipcFile);
-    if (started) {
-        QApplication::quit();
-    } else {
-        QMessageBox::critical(this, "Launcher error", "Couldn't start game");
-        setEnabled(true);
-    }
+    QApplication::quit();
 #else
     QApplication::quit();
 #endif
