@@ -70,15 +70,6 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addWidget(_disableScrollDownToCloseBacklog);
 #endif
 
-    if (rbApp->patchConfig()->hasConsistency) {
-        _consistencyCb = new QCheckBox(
-            "Edit text for consistency with other SciADV "
-            "localizations\n(Change "
-            "name order to Japanese, use established terms, etc.)",
-            this);
-        mainLayout->addWidget(_consistencyCb);
-    }
-
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
     !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
     !defined(GAME_ANONYMOUSCODE)
@@ -196,9 +187,6 @@ void GeneralTab::setConfig() {
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
     rbApp->patchConfig()->improveDialogueOutlines = _outlineCb->isChecked();
 #endif
-    if (rbApp->patchConfig()->hasConsistency) {
-        rbApp->patchConfig()->consistency = _consistencyCb->isChecked();
-    }
     if (rbApp->patchConfig()->hasrineBlackNames) {
         rbApp->patchConfig()->rineBlackNames = _rineBlackNamesCb->isChecked();
     }
@@ -242,9 +230,6 @@ void GeneralTab::reloadData() {
         ->setChecked(true);
     _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
 #endif
-    if (rbApp->patchConfig()->hasConsistency) {
-        _consistencyCb->setChecked(rbApp->patchConfig()->consistency);
-    }
     if (rbApp->patchConfig()->hasrineBlackNames) {
         _rineBlackNamesCb->setChecked(rbApp->patchConfig()->rineBlackNames);
     }

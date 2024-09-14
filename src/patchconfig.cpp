@@ -53,10 +53,6 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
     !defined(GAME_ANONYMOUSCODE)
         if (inJson["hqFmvAudio"].isBool())
             hqFmvAudio = inJson["hqFmvAudio"].toBool();
-        if (inJson["consistency"].isBool()) {
-            hasConsistency = true;
-            consistency = inJson["consistency"].toBool();
-        }
         if (inJson["rineBlackNames"].isBool()) {
             hasrineBlackNames = true;
             rineBlackNames = inJson["rineBlackNames"].toBool();
@@ -118,7 +114,6 @@ void PatchConfig::save() {
     outJson["controllerEnabled"] = controllerEnabled;
     outJson["hqFmvAudio"] = hqFmvAudio;
 #endif
-    if (hasConsistency) outJson["consistency"] = consistency;
     if (hasrineBlackNames) outJson["rineBlackNames"] = rineBlackNames;
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
     !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
@@ -156,7 +151,6 @@ void PatchConfig::loadDefaults() {
     showAllSettings = false;
     controllerEnabled = true;
     hqFmvAudio = true;
-    consistency = true;
     rneMouseControls = true;
     scrollDownToAdvanceText = false;
     disableScrollDownToCloseBacklog = false;

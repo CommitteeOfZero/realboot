@@ -23,7 +23,6 @@ class GeneralTab : public QWidget {
 #endif
     QCheckBox* _outlineCb;
     QCheckBox* _rineBlackNamesCb;
-    QCheckBox* _consistencyCb;
     QButtonGroup* _movieQualityGroup;
     QComboBox* _songSubsComboBox;
     QCheckBox* _hqAudioCb;

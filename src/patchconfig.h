@@ -28,8 +28,6 @@ class PatchConfig : public QObject {
     bool showAllSettings;
     bool controllerEnabled;
     bool hqFmvAudio;
-    bool hasConsistency = false;
-    bool consistency;
     bool hasrineBlackNames = false;
     bool rineBlackNames;
     bool improveDialogueOutlines;
