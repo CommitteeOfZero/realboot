@@ -12,9 +12,9 @@ class GameConfig : public QObject {
     Q_ENUM(DisplayMode)
     enum class Resolution : uint32_t {
 #if defined(GAME_CHAOSHEADNOAH)
-        Res720p = 0,
+        Res720p = 2,
         Res900p = 1,
-        Res1080p = 2,
+        Res1080p = 0,
         Num
 #else
         Res576p = 0,
