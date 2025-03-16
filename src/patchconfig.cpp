@@ -186,3 +186,97 @@ void PatchConfig::migrate(QJsonObject& conf) {
         conf["selectedController"] = "";
     }
 }
+
+void PatchConfig::readLuaConfig(QString &filePath) {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    if (luaL_dofile(L, filePath.toUtf8().constData()) != LUA_OK) {
+        qWarning() << "Lua error:" << lua_tostring(L, -1);
+        lua_close(L);
+        return;
+    }
+
+    lua_getglobal(L, "root");
+
+    if (lua_istable(L, -1)) {
+        lua_getfield(L, -1, "Language");
+        QString language = lua_isstring(L, -1) ? lua_tostring(L, -1) : "English";
+        lua_pop(L, 1);
+
+        lua_getfield(L, -1, "ResolutionWidth");
+        int width = lua_isinteger(L, -1) ? lua_tointeger(L, -1) : 1920;
+        lua_pop(L, 1);
+
+        lua_getfield(L, -1, "ResolutionHeight");
+        int height = lua_isinteger(L, -1) ? lua_tointeger(L, -1) : 1080;
+        lua_pop(L, 1);
+
+        lua_getfield(L, -1, "Fullscreen");
+        bool fullscreen = lua_isboolean(L, -1) ? lua_toboolean(L, -1) : false;
+        lua_pop(L, 1);
+
+        lua_getfield(L, -1, "Subtitles");
+        QString subtitles = lua_isstring(L, -1) ? lua_tostring(L, -1) : "all";
+        lua_pop(L, 1);
+    }
+
+    lua_close(L);
+}
+
+void PatchConfig::updateLuaConfig(QString &filePath, QString &key, QVariant &newValue) {
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+
+    if (luaL_dofile(L, filePath.toUtf8().constData()) != LUA_OK) {
+        lua_close(L);
+        return;
+    }
+
+    lua_getglobal(L, "root");
+    if (!lua_istable(L, -1)) {
+        lua_close(L);
+        return;
+    }
+
+    QString newValueStr;
+    if (newValue.type() == QVariant::String) {
+        newValueStr = QString("\"%1\"").arg(newValue.toString());
+    } else if (newValue.type() == QVariant::Int) {
+        newValueStr = QString::number(newValue.toInt());
+    } else if (newValue.type() == QVariant::Bool) {
+        newValueStr = newValue.toBool() ? "true" : "false";
+    } else {
+        lua_close(L);
+        return;
+    }
+
+    lua_close(L);
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return;
+    }
+
+    QStringList lines;
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        if (line.startsWith("root." + key + " =")) {
+            line = QString("root.%1 = %2;").arg(key, newValueStr);
+        }
+        lines.append(line);
+    }
+    file.close();
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+        return;
+    }
+
+    QTextStream out(&file);
+    for (const QString &line : lines) {
+        out << line << "\n";
+    }
+
+    file.close();
+}

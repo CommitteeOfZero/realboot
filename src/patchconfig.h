@@ -51,4 +51,6 @@ class PatchConfig : public QObject {
     QString _path;
 
     void migrate(QJsonObject& conf);
+    void readLuaConfig(QString &filePath);
+    void updateLuaConfig(QString &filePath, QString &key, QVariant &newValue);
 };
