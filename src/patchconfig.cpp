@@ -15,10 +15,14 @@ QStringList PatchConfig::SongSubsOptions =
 #endif
 
 PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
+#if defined(GAME_CHAOSHEADLCC) || defined(GAME_CHAOSCHILDLCC)
+    _path = rbApp->patchConfigDirectory() + "/config.lua";
+#else
     _path = rbApp->patchConfigDirectory() + "/config.json";
-
     loadDefaults();
+#endif
 
+#if !defined(GAME_CHAOSHEADLCC) && !defined(GAME_CHAOSCHILDLCC)
     if (QFileInfo(_path).exists()) {
         QFile inFile(_path);
         if (!inFile.open(QIODevice::ReadOnly)) {
@@ -91,9 +95,13 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
         if (inJson["enableDxvk"].isBool())
             enableDxvk = inJson["enableDxvk"].toBool();
     }
+#else
+    readLuaConfig(_path);
+#endif
 }
 
 void PatchConfig::save() {
+#if !defined(GAME_CHAOSHEADLCC) && !defined(GAME_CHAOSCHILDLCC)
     QDir dir(rbApp->patchConfigDirectory());
     if (!dir.exists()) dir.mkpath(".");
 
@@ -151,6 +159,11 @@ void PatchConfig::save() {
 
     QJsonDocument outJsonDocument(outJson);
     outFile.write(outJsonDocument.toJson());
+#else
+    QString languageKey = "Language";
+    QVariant languageValue = "English";
+    updateLuaConfig(_path, languageKey, languageValue);
+#endif
 }
 
 void PatchConfig::loadDefaults() {
@@ -191,8 +204,13 @@ void PatchConfig::readLuaConfig(QString &filePath) {
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
 
+    lua_newtable(L);
+    lua_setglobal(L, "root");
+
     if (luaL_dofile(L, filePath.toUtf8().constData()) != LUA_OK) {
-        qWarning() << "Lua error:" << lua_tostring(L, -1);
+        QMessageBox::critical(0, "Launcher error",
+            QString("Couldn't read %1").arg(lua_tostring(L, -1)));
+        QApplication::quit();
         lua_close(L);
         return;
     }
@@ -201,15 +219,15 @@ void PatchConfig::readLuaConfig(QString &filePath) {
 
     if (lua_istable(L, -1)) {
         lua_getfield(L, -1, "Language");
-        QString language = lua_isstring(L, -1) ? lua_tostring(L, -1) : "English";
+        QString language = lua_isstring(L, -1) ? lua_tostring(L, -1) : "Unknown";
         lua_pop(L, 1);
 
         lua_getfield(L, -1, "ResolutionWidth");
-        int width = lua_isinteger(L, -1) ? lua_tointeger(L, -1) : 1920;
+        int width = lua_isinteger(L, -1) ? lua_tointeger(L, -1) : 0;
         lua_pop(L, 1);
 
         lua_getfield(L, -1, "ResolutionHeight");
-        int height = lua_isinteger(L, -1) ? lua_tointeger(L, -1) : 1080;
+        int height = lua_isinteger(L, -1) ? lua_tointeger(L, -1) : 0;
         lua_pop(L, 1);
 
         lua_getfield(L, -1, "Fullscreen");
@@ -217,7 +235,7 @@ void PatchConfig::readLuaConfig(QString &filePath) {
         lua_pop(L, 1);
 
         lua_getfield(L, -1, "Subtitles");
-        QString subtitles = lua_isstring(L, -1) ? lua_tostring(L, -1) : "all";
+        QString subtitles = lua_isstring(L, -1) ? lua_tostring(L, -1) : "Unknown";
         lua_pop(L, 1);
     }
 
@@ -228,13 +246,22 @@ void PatchConfig::updateLuaConfig(QString &filePath, QString &key, QVariant &new
     lua_State *L = luaL_newstate();
     luaL_openlibs(L);
 
+    lua_newtable(L);
+    lua_setglobal(L, "root");
+
     if (luaL_dofile(L, filePath.toUtf8().constData()) != LUA_OK) {
+        QMessageBox::critical(0, "Launcher error",
+            QString("Couldn't read %1").arg(lua_tostring(L, -1)));
+        QApplication::quit();
         lua_close(L);
         return;
     }
 
     lua_getglobal(L, "root");
     if (!lua_istable(L, -1)) {
+        QMessageBox::critical(0, "Launcher error",
+            QString("Root is not a valid table!"));
+        QApplication::quit();
         lua_close(L);
         return;
     }
@@ -255,6 +282,8 @@ void PatchConfig::updateLuaConfig(QString &filePath, QString &key, QVariant &new
 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::critical(0, "Launcher error",
+            QString("Failed to open file for writing!"));
         return;
     }
 
@@ -270,6 +299,8 @@ void PatchConfig::updateLuaConfig(QString &filePath, QString &key, QVariant &new
     file.close();
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
+        QMessageBox::critical(0, "Launcher error",
+            QString("Failed to open file for writing!"));
         return;
     }
 

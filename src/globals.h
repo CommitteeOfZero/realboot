@@ -79,6 +79,18 @@ const QString game_LaunchCommand = "Game.exe steinsgatee EN";
 #endif
 #endif
 
+#if defined(GAME_CHAOSHEADLCC)
+const QString game_Custom1ButtonLabel = "Unused";
+const QString game_Custom2ButtonLabel = "Unused";
+const QString game_ReleaseUrl =
+    "https://github.com/CommitteeOfZero/chlcc-patch/releases";
+const QString game_LauncherTitle =
+    "CHAOS;HEAD Love Chu☆Chu! Translation Patch Launcher";
+const QString game_PatchConfPath = "profiles/chlcc";
+const QString game_GameConfPath = "";
+const QString game_LaunchCommand = "impacto.exe";
+#endif
+
 #if defined(GAME_STEINSGATEMDE)
 const uint8_t game_ExtraControllerData[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x28, 0x02, 0x01, 0x00, 0x05,
@@ -216,6 +228,18 @@ const uint32_t game_ipcIn = 0x23F4F1DE;
 const uint32_t game_ipcOut = 0xF0973746;
 const wchar_t game_ipcName[] = L"STEINS;GATE 0";
 #endif
+#endif
+
+#if defined(GAME_CHAOSCHILDLCC)
+const QString game_Custom1ButtonLabel = "Unused";
+const QString game_Custom2ButtonLabel = "Unused";
+const QString game_ReleaseUrl =
+    "https://github.com/CommitteeOfZero/cclcc-patch/releases";
+const QString game_LauncherTitle =
+    "CHAOS;CHILD Love Chu☆Chu!! Translation Patch Launcher";
+const QString game_PatchConfPath = "profiles/cclcc";
+const QString game_GameConfPath = "";
+const QString game_LaunchCommand = "impacto.exe";
 #endif
 
 #if defined(GAME_ROBOTICSNOTESDASH)

@@ -38,21 +38,29 @@ LauncherApplication::LauncherApplication(int& argc, char** argv)
 LauncherApplication::~LauncherApplication() { delete w; }
 
 QString LauncherApplication::gameConfigDirectory() const {
+#if defined(GAME_CHAOSHEADLCC) || defined(GAME_CHAOSCHILDLCC)
+    return "./" + game_PatchConfPath;
+#else
     PWSTR myDocumentsPath;
     SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &myDocumentsPath);
     QString myGamesPath =
         QString::fromWCharArray(myDocumentsPath) + "/My Games/";
     CoTaskMemFree(myDocumentsPath);
     return myGamesPath + game_GameConfPath;
+#endif
 }
 
 QString LauncherApplication::patchConfigDirectory() const {
+#if defined(GAME_CHAOSHEADLCC) || defined(GAME_CHAOSCHILDLCC)
+    return "./" + game_PatchConfPath;
+#else
     PWSTR localAppDataPath;
     SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &localAppDataPath);
     QString patchConfigPath =
         QString::fromWCharArray(localAppDataPath) + "/" + game_PatchConfPath;
     CoTaskMemFree(localAppDataPath);
     return patchConfigPath;
+#endif
 }
 
 void LauncherApplication::showWindow() { w->show(); }
