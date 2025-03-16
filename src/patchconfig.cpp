@@ -49,8 +49,8 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
                 inJson["disableScrollDownToCloseBacklog"].toBool();
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
         if (inJson["hqFmvAudio"].isBool())
             hqFmvAudio = inJson["hqFmvAudio"].toBool();
         if (inJson["rineBlackNames"].isBool()) {
@@ -82,8 +82,8 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
         }
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
         if (inJson["selectedController"].isString())
             selectedController = inJson["selectedController"].toString();
 #endif
@@ -104,25 +104,25 @@ void PatchConfig::save() {
     }
 
     QJsonObject outJson;
-#if defined(GAME_CHAOSHEADNOAH) || defined(GAME_STEINSGATEELITE) ||        \
-    defined(GAME_ROBOTICSNOTESELITE) || defined(GAME_ROBOTICSNOTESDASH) || \
-    defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     outJson["__schema_version"] = 5;
 #else
     outJson["__schema_version"] = 4;
 #endif
     outJson["showAllSettings"] = showAllSettings;
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     outJson["controllerEnabled"] = controllerEnabled;
     outJson["hqFmvAudio"] = hqFmvAudio;
 #endif
     if (hasrineBlackNames) outJson["rineBlackNames"] = rineBlackNames;
     if (hasAutoSkipHide) outJson["hideAutoSkip"] = hideAutoSkip;
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     outJson["improveDialogueOutlines"] = improveDialogueOutlines;
 #endif
 
@@ -142,8 +142,8 @@ void PatchConfig::save() {
     outJson["karaokeSubs"] = karaokeSubs;
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     outJson["selectedController"] = selectedController;
 #endif
     outJson["enableDxvk"] = enableDxvk;

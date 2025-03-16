@@ -150,8 +150,8 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     _generalTab = new GeneralTab(this);
     ui->tabWidget->addTab(_generalTab, "General");
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _controllerTab = new ControllerTab(this);
     ui->tabWidget->addTab(_controllerTab, "Controller");
 #endif
@@ -364,9 +364,9 @@ void LauncherWindow::saveChanges() {
 
 void LauncherWindow::reloadData() {
     if (_allSettingsMode) {
-#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+        #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
+        !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+        !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
         if (rbApp->controllerManager()->activeController() != nullptr) {
             _controllerTab->reloadData();
         }

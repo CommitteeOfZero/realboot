@@ -106,6 +106,18 @@ const wchar_t game_ipcName[] = L"STEINS;GATE: My Darling's Embrace";
 #endif
 #endif
 
+#if defined(GAME_STEINSGATEVSO)
+const QString game_Custom1ButtonLabel = "Unused";
+const QString game_Custom2ButtonLabel = "Unused";
+const QString game_ReleaseUrl =
+    "https://github.com/CommitteeOfZero/sgvso-patch/releases";
+const QString game_LauncherTitle =
+    "STEINS;GATE: Variant Space Octet Improvement Patch Launcher";
+const QString game_PatchConfPath = "Committee of Zero/SGVSO";
+const QString game_GameConfPath = "";
+const QString game_LaunchCommand = "LEProc.exe sg8bit.exe -run";
+#endif
+
 #if defined(GAME_ROBOTICSNOTESELITE)
 const QString game_Custom1ButtonLabel = "Unused";
 const QString game_Custom2ButtonLabel = "Unused";

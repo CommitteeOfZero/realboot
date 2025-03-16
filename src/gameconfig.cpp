@@ -4,7 +4,7 @@
 #include <QMessageBox>
 
 GameConfig::GameConfig(QObject* parent) : QObject(parent) {
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_ANONYMOUSCODE) && !defined(GAME_STEINSGATEVSO)
     _path = rbApp->gameConfigDirectory() + "/config.dat";
 
     loadDefaults();
@@ -42,7 +42,7 @@ GameConfig::GameConfig(QObject* parent) : QObject(parent) {
 }
 
 void GameConfig::save() {
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_ANONYMOUSCODE) && !defined(GAME_STEINSGATEVSO)
     QFile outFile(_path);
     if (!outFile.open(QIODevice::WriteOnly)) {
         QMessageBox::critical(0, "Launcher error",
@@ -67,7 +67,7 @@ void GameConfig::save() {
 }
 
 void GameConfig::loadDefaults() {
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_ANONYMOUSCODE) && !defined(GAME_STEINSGATEVSO)
     width = 1280;
     height = 720;
     displayMode = DisplayMode::Windowed;
