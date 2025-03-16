@@ -90,6 +90,13 @@ DEFINES += WIN32_LEAN_AND_MEAN
 INCLUDEPATH += $$(DXSDK_DIR)/include vendor/curl/include
 LIBS += $$quote(-L$$PWD/vendor/curl/lib) libcurl.lib $$quote(-L$$(DXSDK_DIR)/lib/x86) dinput8.lib dxguid.lib Shell32.lib Ole32.lib OleAut32.lib
 
+INCLUDEPATH += $$PWD/vendor/lua/src
+SOURCES += $$files($$PWD/vendor/lua/src/*.c, true)
+
+# Exclude files that contain main()
+SOURCES -= $$PWD/vendor/lua/src/lua.c
+SOURCES -= $$PWD/vendor/lua/src/luac.c
+
 INCLUDEPATH += src
 
 SOURCES += $$files(src/*.cpp, true)

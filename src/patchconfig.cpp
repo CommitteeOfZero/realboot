@@ -7,6 +7,7 @@
 #include <QJsonValue>
 #include <QJsonObject>
 #include <QDir>
+#include "lua.hpp"
 
 #if !defined(GAME_ANONYMOUSCODE)
 QStringList PatchConfig::SongSubsOptions =
