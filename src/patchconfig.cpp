@@ -57,6 +57,10 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
             hasrineBlackNames = true;
             rineBlackNames = inJson["rineBlackNames"].toBool();
         }
+        if (inJson["hideAutoSkip"].isBool()) {
+            hasAutoSkipHide = true;
+            hideAutoSkip = inJson["hideAutoSkip"].toBool();
+        }
         if (inJson["improveDialogueOutlines"].isBool())
             improveDialogueOutlines =
                 inJson["improveDialogueOutlines"].toBool();
@@ -115,6 +119,7 @@ void PatchConfig::save() {
     outJson["hqFmvAudio"] = hqFmvAudio;
 #endif
     if (hasrineBlackNames) outJson["rineBlackNames"] = rineBlackNames;
+    if (hasAutoSkipHide) outJson["hideAutoSkip"] = hideAutoSkip;
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
     !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
     !defined(GAME_ANONYMOUSCODE)

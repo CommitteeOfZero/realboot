@@ -30,6 +30,8 @@ class PatchConfig : public QObject {
     bool hqFmvAudio;
     bool hasrineBlackNames = false;
     bool rineBlackNames;
+    bool hasAutoSkipHide = false;
+    bool hideAutoSkip;
     bool improveDialogueOutlines;
     bool cosplayPatch;
     bool rneMouseControls;

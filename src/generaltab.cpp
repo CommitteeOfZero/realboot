@@ -82,6 +82,12 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
             new QCheckBox("Use solid black text for names in RINE", this);
         mainLayout->addWidget(_rineBlackNamesCb);
     }
+
+    if (rbApp->patchConfig()->hasAutoSkipHide) {
+        _autoSkipHideCb =
+            new QCheckBox("Hide Auto/Skip buttons", this);
+        mainLayout->addWidget(_autoSkipHideCb);
+    }
 #if defined(GAME_ANONYMOUSCODE)
     _voiceSubsCb = new QCheckBox("Enable subtitles for voice-only lines", this);
     mainLayout->addWidget(_voiceSubsCb);
@@ -190,6 +196,9 @@ void GeneralTab::setConfig() {
     if (rbApp->patchConfig()->hasrineBlackNames) {
         rbApp->patchConfig()->rineBlackNames = _rineBlackNamesCb->isChecked();
     }
+    if (rbApp->patchConfig()->hasAutoSkipHide) {
+        rbApp->patchConfig()->hideAutoSkip = _autoSkipHideCb->isChecked();
+    }
 #if !defined(GAME_ANONYMOUSCODE)
     rbApp->patchConfig()->karaokeSubs =
         PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
@@ -232,6 +241,9 @@ void GeneralTab::reloadData() {
 #endif
     if (rbApp->patchConfig()->hasrineBlackNames) {
         _rineBlackNamesCb->setChecked(rbApp->patchConfig()->rineBlackNames);
+    }
+    if (rbApp->patchConfig()->hasAutoSkipHide) {
+        _autoSkipHideCb->setChecked(rbApp->patchConfig()->hideAutoSkip);
     }
 #if !defined(GAME_ANONYMOUSCODE)
     _songSubsComboBox->setCurrentIndex(
