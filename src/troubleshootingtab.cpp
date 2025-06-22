@@ -119,11 +119,29 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     troubleshootingData += "Patch config path: " +
                            QDir(rbApp->patchConfigDirectory()).canonicalPath() +
                            "\n";
+
+#if defined(GAME_ANONYMOUSCODE)
+    troubleshootingData += "game.exe hash: " + md5sum("game.exe") + "\n";
+#elif defined(GAME_STEINSGATEVSO)
+    troubleshootingData += "sg8bit.exe hash: " + md5sum("sg8bit.exe") + "\n";
+#else
     troubleshootingData += "Game.exe hash: " + md5sum("Game.exe") + "\n";
+#endif
+
 #if defined(GAME_ANONYMOUSCODE)
     troubleshootingData +=
         "scenario_body.bin hash: " + md5sum("./windata/scenario_body.bin") +
         "\n";
+#elif defined(GAME_CHAOSHEADNOAH)
+    troubleshootingData +=
+        "c0script.cpk hash: " + md5sum("languagebarrier/c0script.cpk") +
+        "\n";
+#elif defined(GAME_STEINSGATEVSO)
+    troubleshootingData +=
+        "data.xp3 hash: " + md5sum("data.xp3") +
+        "\n";
+#elif defined(GAME_STEINSGATEELITE) || defined(GAME_ROBOTICSNOTESELITE) ||  defined(GAME_ROBOTICSNOTESDASH)
+
 #else
     troubleshootingData +=
         "enscript.mpk hash: " + md5sum("languagebarrier/enscript.mpk") + "\n";
@@ -161,7 +179,7 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
                       << "/whql:off" << "/t"
                       << rbApp->patchConfigDirectory() + "/dxdiag.txt");
 
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_ANONYMOUSCODE)
     troubleshootingData += "\n";
     troubleshootingData += "------------------------------------------------\n";
     troubleshootingData += "\n";

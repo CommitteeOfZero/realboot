@@ -125,8 +125,9 @@ LauncherWindow::LauncherWindow(QWidget *parent)
         QString("<a href='%1'><span style='font-weight: 600; text-decoration: "
                 "underline; color: #fff'>Technical Support</span></a>")
             .arg(game_TechSupportUrl));
-
-#if defined(GAME_ANONYMOUSCODE)
+#if defined(GAME_STEINSGATEVSO)
+    QString version = "1.0.0";
+#elif defined(GAME_ANONYMOUSCODE)
     QString version = "1.0.1";
 #else
     QFile patchdefFile("languagebarrier/patchdef.json");
@@ -147,8 +148,10 @@ LauncherWindow::LauncherWindow(QWidget *parent)
                 "underline; color: #fff'>Version:</span></a> %2")
             .arg(game_ReleaseUrl, version));
 
+#if !defined(GAME_STEINSGATEVSO)
     _generalTab = new GeneralTab(this);
     ui->tabWidget->addTab(_generalTab, "General");
+#endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
     !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
@@ -157,9 +160,10 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 #endif
     _troubleshootingTab = new TroubleshootingTab(this);
     ui->tabWidget->addTab(_troubleshootingTab, "Troubleshooting");
-
+#if !defined(GAME_STEINSGATEVSO)
     _dxvkTab = new DxvkTab(this);
     ui->tabWidget->addTab(_dxvkTab, "DXVK");
+#endif
 
     _allSettingsMode = rbApp->patchConfig()->showAllSettings;
     // We respect the user's choice in afterShow(), but we show the full layout first
@@ -221,6 +225,7 @@ void LauncherWindow::startGame() {
     ((volatile uint32_t *)ipc)[1] = game_ipcOut;
 #endif
 
+#if !defined(GAME_STEINSGATEVSO)
 #if defined(GAME_CHAOSHEADNOAH)
     QString game = "./HEAD NOAH/";
 #elif defined(GAME_STEINSGATE)
@@ -273,6 +278,7 @@ void LauncherWindow::startGame() {
             file.rename(path);
         }
     }
+#endif
 #endif
 
 #if defined(GAME_ANONYMOUSCODE)
@@ -345,11 +351,13 @@ void LauncherWindow::startGame() {
 
 void LauncherWindow::saveChanges() {
     if (_allSettingsMode) {
+#if !defined(GAME_STEINSGATEVSO)
         _generalTab->setConfig();
         _dxvkTab->setConfig();
+#endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
         _controllerTab->setConfig();
 #endif
     } else {
@@ -364,15 +372,17 @@ void LauncherWindow::saveChanges() {
 
 void LauncherWindow::reloadData() {
     if (_allSettingsMode) {
-        #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-        !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
-        !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
         if (rbApp->controllerManager()->activeController() != nullptr) {
             _controllerTab->reloadData();
         }
 #endif
+#if !defined(GAME_STEINSGATEVSO)
         _generalTab->reloadData();
         _dxvkTab->reloadData();
+#endif
     } else {
         ui->miniSettingsWidget->reloadData();
     }
@@ -433,7 +443,7 @@ void LauncherWindow::toggleSettings() {
 }
 
 void LauncherWindow::startUpdateCheck() {
-#if defined(GAME_ANONYMOUSCODE)
+#if defined(GAME_STEINSGATEVSO) || defined(GAME_ANONYMOUSCODE)
     QFile versioninfoFile("./versioninfo.json");
 #else
     QFile versioninfoFile("languagebarrier/versioninfo.json");

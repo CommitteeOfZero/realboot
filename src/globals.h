@@ -124,10 +124,10 @@ const QString game_Custom2ButtonLabel = "Unused";
 const QString game_ReleaseUrl =
     "https://github.com/CommitteeOfZero/sgvso-patch/releases";
 const QString game_LauncherTitle =
-    "STEINS;GATE: Variant Space Octet Improvement Patch Launcher";
+    "STEINS;GATE: Variant Space Octet Translation Patch Launcher";
 const QString game_PatchConfPath = "Committee of Zero/SGVSO";
 const QString game_GameConfPath = "";
-const QString game_LaunchCommand = "LEProc.exe sg8bit.exe -run";
+const QString game_LaunchCommand = "sg8bit.exe";
 #endif
 
 #if defined(GAME_ROBOTICSNOTESELITE)

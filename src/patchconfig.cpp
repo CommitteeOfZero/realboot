@@ -9,7 +9,7 @@
 #include <QDir>
 #include "lua.hpp"
 
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_ANONYMOUSCODE)
 QStringList PatchConfig::SongSubsOptions =
     QStringList() << "off" << "all" << "karaonly" << "tlonly";
 #endif
@@ -79,7 +79,7 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
         if (inJson["swimsuitPatch"].isBool())
             swimsuitPatch = inJson["swimsuitPatch"].toBool();
 #endif
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_ANONYMOUSCODE)
         if (inJson["karaokeSubs"].isString()) {
             QString karaokeSubs_ = inJson["karaokeSubs"].toString();
             if (PatchConfig::SongSubsOptions.contains(karaokeSubs_))
@@ -147,7 +147,7 @@ void PatchConfig::save() {
     outJson["disableScrollDownToCloseBacklog"] =
         disableScrollDownToCloseBacklog;
 #endif
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_ANONYMOUSCODE)
     outJson["karaokeSubs"] = karaokeSubs;
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \

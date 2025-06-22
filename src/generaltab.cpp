@@ -9,6 +9,7 @@
 #include <QRadioButton>
 
 GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
+#if !defined(GAME_STEINSGATEVSO)
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(8);
     mainLayout->setMargin(0);
@@ -71,8 +72,8 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 #endif
 
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _outlineCb = new QCheckBox("Improve dialogue outlines", this);
     mainLayout->addWidget(_outlineCb);
 #endif
@@ -95,15 +96,15 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 
     mainLayout->addSpacing(16);
 
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_ANONYMOUSCODE)
     QLabel *fmvLabel = new QLabel(this);
     fmvLabel->setText("<b>Videos</b>");
     mainLayout->addWidget(fmvLabel);
 #endif
 
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
 
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
@@ -123,7 +124,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addLayout(movieQualityRow);
 #endif
 
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_ANONYMOUSCODE)
     QHBoxLayout *songSubsRow = new QHBoxLayout(this);
     songSubsRow->setSpacing(8);
     songSubsRow->setMargin(0);
@@ -143,8 +144,8 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 #endif
 
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _hqAudioCb = new QCheckBox("Use high-quality audio tracks for OP/ED", this);
     mainLayout->addWidget(_hqAudioCb);
 #endif
@@ -167,10 +168,12 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     mainLayout->addWidget(_swimsuitPatch);
     mainLayout->addStretch(1);
 #endif
+#endif
     reloadData();
 }
 
 void GeneralTab::setConfig() {
+#if !defined(GAME_STEINSGATEVSO)
     rbApp->gameConfig()->resolution =
         (GameConfig::Resolution)_resolutionComboBox->currentData().toInt();
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
@@ -187,8 +190,8 @@ void GeneralTab::setConfig() {
 #endif
 
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
     rbApp->patchConfig()->improveDialogueOutlines = _outlineCb->isChecked();
@@ -199,7 +202,7 @@ void GeneralTab::setConfig() {
     if (rbApp->patchConfig()->hasAutoSkipHide) {
         rbApp->patchConfig()->hideAutoSkip = _autoSkipHideCb->isChecked();
     }
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_ANONYMOUSCODE)
     rbApp->patchConfig()->karaokeSubs =
         PatchConfig::SongSubsOptions[_songSubsComboBox->currentData().toInt()];
 #endif
@@ -217,13 +220,15 @@ void GeneralTab::setConfig() {
         !_disableScrollDownToCloseBacklog->isChecked();
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     rbApp->patchConfig()->hqFmvAudio = _hqAudioCb->isChecked();
+#endif
 #endif
 }
 
 void GeneralTab::reloadData() {
+#if !defined(GAME_STEINSGATEVSO)
     _resolutionComboBox->setCurrentIndex(
         _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
@@ -233,8 +238,8 @@ void GeneralTab::reloadData() {
         ->setChecked(true);
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
     _outlineCb->setChecked(rbApp->patchConfig()->improveDialogueOutlines);
@@ -245,7 +250,7 @@ void GeneralTab::reloadData() {
     if (rbApp->patchConfig()->hasAutoSkipHide) {
         _autoSkipHideCb->setChecked(rbApp->patchConfig()->hideAutoSkip);
     }
-#if !defined(GAME_ANONYMOUSCODE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_ANONYMOUSCODE)
     _songSubsComboBox->setCurrentIndex(
         _songSubsComboBox->findData(PatchConfig::SongSubsOptions.indexOf(
             rbApp->patchConfig()->karaokeSubs)));
@@ -264,8 +269,9 @@ void GeneralTab::reloadData() {
         !rbApp->patchConfig()->disableScrollDownToCloseBacklog);
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _hqAudioCb->setChecked(rbApp->patchConfig()->hqFmvAudio);
+#endif
 #endif
 }
