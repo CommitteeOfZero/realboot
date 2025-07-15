@@ -160,7 +160,7 @@ LauncherWindow::LauncherWindow(QWidget *parent)
 #endif
     _troubleshootingTab = new TroubleshootingTab(this);
     ui->tabWidget->addTab(_troubleshootingTab, "Troubleshooting");
-#if !defined(GAME_STEINSGATEVSO)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_CHAOSHEADNOAH)
     _dxvkTab = new DxvkTab(this);
     ui->tabWidget->addTab(_dxvkTab, "DXVK");
 #endif
@@ -225,10 +225,8 @@ void LauncherWindow::startGame() {
     ((volatile uint32_t *)ipc)[1] = game_ipcOut;
 #endif
 
-#if !defined(GAME_STEINSGATEVSO)
-#if defined(GAME_CHAOSHEADNOAH)
-    QString game = "./HEAD NOAH/";
-#elif defined(GAME_STEINSGATE)
+#if !defined(GAME_STEINSGATEVSO) && !defined(GAME_CHAOSHEADNOAH)
+#if defined(GAME_STEINSGATE)
     QString game = "./GATE/";
 #elif defined(GAME_ROBOTICSNOTESELITE)
     QString game = "./NOTES ELITE/";
@@ -353,7 +351,9 @@ void LauncherWindow::saveChanges() {
     if (_allSettingsMode) {
 #if !defined(GAME_STEINSGATEVSO)
         _generalTab->setConfig();
+#if !defined(GAME_CHAOSHEADNOAH)
         _dxvkTab->setConfig();
+#endif
 #endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
     !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
@@ -381,7 +381,9 @@ void LauncherWindow::reloadData() {
 #endif
 #if !defined(GAME_STEINSGATEVSO)
         _generalTab->reloadData();
+#if !defined(GAME_CHAOSHEADNOAH)
         _dxvkTab->reloadData();
+#endif
 #endif
     } else {
         ui->miniSettingsWidget->reloadData();
