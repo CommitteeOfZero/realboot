@@ -11,14 +11,14 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
 #if !defined(GAME_STEINSGATEVSO)
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(8);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 
     mainLayout->addSpacing(8);
 
     QHBoxLayout *resolutionRow = new QHBoxLayout(this);
     resolutionRow->setSpacing(8);
-    resolutionRow->setMargin(0);
+    resolutionRow->setContentsMargins(0, 0, 0, 0);
     resolutionRow->addStretch(1);
     QLabel *resolutionLabel = new QLabel("Resolution:", this);
     resolutionRow->addWidget(resolutionLabel);
@@ -44,7 +44,7 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
 #if defined(GAME_CHAOSHEADNOAH)
     QHBoxLayout *languageRow = new QHBoxLayout(this);
     languageRow->setSpacing(8);
-    languageRow->setMargin(0);
+    languageRow->setContentsMargins(0, 0, 0, 0);
     languageRow->addStretch(1);
     QLabel *languageLabel = new QLabel("Language:", this);
     languageRow->addWidget(languageLabel);
@@ -66,7 +66,7 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
-    movieQualityRow->setMargin(0);
+    movieQualityRow->setContentsMargins(0, 0, 0, 0);
     movieQualityRow->addStretch(1);
     QLabel *movieQualityLabel = new QLabel("Video Quality:", this);
     movieQualityRow->addWidget(movieQualityLabel);
