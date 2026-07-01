@@ -22,7 +22,7 @@
 TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(8);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 
     mainLayout->addSpacing(12);
@@ -154,7 +154,7 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     QFile launcherdiag(rbApp->patchConfigDirectory() + "/launcherdiag.txt");
     if (launcherdiag.open(QFile::WriteOnly)) {
         QTextStream launcherdiagOut(&launcherdiag);
-        launcherdiagOut << troubleshootingData << endl;
+        launcherdiagOut << troubleshootingData << Qt::endl;
     }
     QProcess::startDetached(
         "dxdiag", QStringList()

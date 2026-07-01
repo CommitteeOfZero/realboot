@@ -11,14 +11,14 @@
 GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(8);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 
     mainLayout->addSpacing(8);
 
     QHBoxLayout *resolutionRow = new QHBoxLayout(this);
     resolutionRow->setSpacing(8);
-    resolutionRow->setMargin(0);
+    resolutionRow->setContentsMargins(0, 0, 0, 0);
     QLabel *resolutionLabel = new QLabel("Resolution:", this);
     resolutionRow->addWidget(resolutionLabel);
     _resolutionComboBox = new QComboBox(this);
@@ -43,7 +43,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 #if defined(GAME_CHAOSHEADNOAH)
     QHBoxLayout *languageRow = new QHBoxLayout(this);
     languageRow->setSpacing(8);
-    languageRow->setMargin(0);
+    languageRow->setContentsMargins(0, 0, 0, 0);
     QLabel *languageLabel = new QLabel("Language:", this);
     languageRow->addWidget(languageLabel);
     _languageGroup = new QButtonGroup(this);
@@ -107,7 +107,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 
     QHBoxLayout *movieQualityRow = new QHBoxLayout(this);
     movieQualityRow->setSpacing(8);
-    movieQualityRow->setMargin(0);
+    movieQualityRow->setContentsMargins(0, 0, 0, 0);
     QLabel *movieQualityLabel = new QLabel("Quality:", this);
     movieQualityRow->addWidget(movieQualityLabel);
     _movieQualityGroup = new QButtonGroup(this);
@@ -126,7 +126,7 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 #if !defined(GAME_ANONYMOUSCODE)
     QHBoxLayout *songSubsRow = new QHBoxLayout(this);
     songSubsRow->setSpacing(8);
-    songSubsRow->setMargin(0);
+    songSubsRow->setContentsMargins(0, 0, 0, 0);
     QLabel *songSubsLabel = new QLabel("Song subtitles:", this);
     songSubsRow->addWidget(songSubsLabel);
     _songSubsComboBox = new QComboBox(this);

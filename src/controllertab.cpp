@@ -41,12 +41,12 @@ QString buttonToText(ControllerConfig::Button btn) {
 ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(12);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 
     QHBoxLayout *controllerRow = new QHBoxLayout(this);
     controllerRow->setSpacing(8);
-    controllerRow->setMargin(0);
+    controllerRow->setContentsMargins(0, 0, 0, 0);
     controllerRow->setAlignment(Qt::AlignVCenter);
 
     _controllerCb = new QCheckBox("Enabled", this);
@@ -94,7 +94,7 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
 
         QHBoxLayout *btnsLayout = new QHBoxLayout(this);
         btnsLayout->setSpacing(12);
-        btnsLayout->setMargin(0);
+        btnsLayout->setContentsMargins(0, 0, 0, 0);
         mainLayout->addLayout(btnsLayout);
 
         int rightNum = (int)ControllerConfig::Bind::Num / 2;
@@ -104,7 +104,7 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
         leftCol->setSizePolicy(spCol);
         QVBoxLayout *leftColLayout = new QVBoxLayout(leftCol);
         leftColLayout->setSpacing(12);
-        leftColLayout->setMargin(0);
+        leftColLayout->setContentsMargins(0, 0, 0, 0);
         leftCol->setLayout(leftColLayout);
 
         for (int i = 0; i < leftNum; i++) {
@@ -118,7 +118,7 @@ ControllerTab::ControllerTab(QWidget *parent) : QWidget(parent) {
         rightCol->setSizePolicy(spCol);
         QVBoxLayout *rightColLayout = new QVBoxLayout(rightCol);
         rightColLayout->setSpacing(12);
-        rightColLayout->setMargin(0);
+        rightColLayout->setContentsMargins(0, 0, 0, 0);
         rightCol->setLayout(rightColLayout);
 
         for (int i = leftNum; i < leftNum + rightNum; i++) {

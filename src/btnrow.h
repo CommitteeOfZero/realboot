@@ -18,7 +18,7 @@ class BtnRow : public QWidget {
         _bind = bind;
         QHBoxLayout *lay = new QHBoxLayout;
         lay->setSpacing(0);
-        lay->setMargin(0);
+        lay->setContentsMargins(0, 0, 0, 0);
         lay->setAlignment(Qt::AlignVCenter);
         QLabel *lbl = new QLabel(bindLabelTexts[bind]);
         lay->addWidget(lbl);
