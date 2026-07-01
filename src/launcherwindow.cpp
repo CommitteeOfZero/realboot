@@ -16,6 +16,7 @@
 #include <QProcess>
 #include <QElapsedTimer>
 #include <QMessageBox>
+#include <QIcon>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
@@ -100,11 +101,15 @@ LauncherWindow::LauncherWindow(QWidget *parent)
     // widgets while passing through input events that don't hit any of its
     // child widgets
     QToolButton *crossButton = new QToolButton(this);
+    QIcon crossIcon;
+    crossIcon.addFile(":/assets/cross.png", QSize(18, 18), QIcon::Normal);
+    crossIcon.addFile(":/assets/cross_hover.png", QSize(18, 18), QIcon::Active);
+    crossButton->setIcon(crossIcon);
+    crossButton->setIconSize(QSize(18, 18));
     crossButton->setStyleSheet(
-        "QToolButton { image: url(':/assets/cross.png'); }"
-        "QToolButton:hover { image: url(':/assets/cross_hover.png'); }");
+        "QToolButton { background: transparent; border: 0; padding: 0; }");
     crossButton->setCursor(QCursor(Qt::PointingHandCursor));
-    crossButton->resize(18, 18);
+    crossButton->setFixedSize(18, 18);
     crossButton->move(width() - (crossButton->width() + 12), 12);
     connect(crossButton, &QAbstractButton::clicked, this,
             &LauncherWindow::cancelRequested);
