@@ -1,4 +1,4 @@
-Qt 5.9 is licensed under the GNU Lesser General Public License, version 3
+Qt 6.11 is licensed under the GNU Lesser General Public License, version 3
 
    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -178,11 +178,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 -------------------------------
 
-libcurl 7.64.0
+libcurl 8.21.0
 
 COPYRIGHT AND PERMISSION NOTICE
 
-Copyright (c) 1996 - 2019, Daniel Stenberg, <daniel@haxx.se>, and many
+Copyright (c) 1996 - 2026, Daniel Stenberg, <daniel@haxx.se>, and many
 contributors, see the THANKS file.
 
 All rights reserved.

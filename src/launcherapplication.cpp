@@ -20,16 +20,14 @@ LauncherApplication::LauncherApplication(int& argc, char** argv)
     cm = new ControllerManager(this);
     w = new LauncherWindow(0);
 
-    // I would *like* to apply the style to the whole application
-    // (for unparented MessageBoxes), but that breaks the X button image...
-    w->setStyle(QStyleFactory::create("windows"));
+    setStyle(QStyleFactory::create("windows"));
     QFile qssFile(":/kofuna/style.qss");
     qssFile.open(QFile::ReadOnly | QFile::Text);
     QTextStream ts(&qssFile);
     QFile qssFile2(":/assets/realboot.qss");
     qssFile2.open(QFile::ReadOnly | QFile::Text);
     QTextStream ts2(&qssFile2);
-    w->setStyleSheet(ts.readAll() + ts2.readAll());
+    setStyleSheet(ts.readAll() + ts2.readAll());
 
     w->show();
     w->afterShow();
