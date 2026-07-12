@@ -50,6 +50,10 @@ chaosheadlcc {
     DEFINES += GAME_CHAOSHEADLCC
     RESOURCES += profiles/chaosheadlcc.qrc
 }
+steinsgatevso {
+    DEFINES += GAME_STEINSGATEVSO
+    RESOURCES += profiles/steinsgatevso.qrc
+}
 steinsgatemde {
     DEFINES += GAME_STEINSGATEMDE
     RESOURCES += profiles/steinsgatemde.qrc

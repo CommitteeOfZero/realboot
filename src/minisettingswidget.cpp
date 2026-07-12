@@ -8,6 +8,7 @@
 #include <QRadioButton>
 
 MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
+#if !defined(GAME_STEINSGATEVSO)
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(8);
     mainLayout->setMargin(0);
@@ -82,11 +83,13 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
     mainLayout->addLayout(movieQualityRow);
     mainLayout->addStretch(1);
 #endif
+#endif
 
     reloadData();
 }
 
 void MiniSettingsWidget::setConfig() {
+#if !defined(GAME_STEINSGATEVSO)
     rbApp->gameConfig()->resolution =
         (GameConfig::Resolution)_resolutionComboBox->currentData().toInt();
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
@@ -102,21 +105,24 @@ void MiniSettingsWidget::setConfig() {
     rbApp->gameConfig()->movieQuality =
         (GameConfig::MovieQuality)_movieQualityGroup->checkedId();
 #endif
+#endif
 }
 
 void MiniSettingsWidget::reloadData() {
+#if !defined(GAME_STEINSGATEVSO)
     _resolutionComboBox->setCurrentIndex(
         _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
-    !defined(GAME_ROBOTICSNOTESELITE) && !defined(GAME_ROBOTICSNOTESDASH) && \
-    !defined(GAME_ANONYMOUSCODE)
+    !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
+    !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)
     _movieQualityGroup->button((int)rbApp->gameConfig()->movieQuality)
         ->setChecked(true);
 #endif
 #if defined(GAME_CHAOSHEADNOAH)
     _languageGroup->button((int)rbApp->gameConfig()->language)
         ->setChecked(true);
+#endif
 #endif
 }
