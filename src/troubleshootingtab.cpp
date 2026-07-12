@@ -16,6 +16,9 @@
 #include <QSizePolicy>
 #include <QTextStream>
 #include <QProcess>
+#include <QOpenGLContext>
+#include <QOffscreenSurface>
+#include <QOpenGLFunctions>
 
 #include <windows.h>
 
@@ -68,6 +71,32 @@ TroubleshootingTab::TroubleshootingTab(QWidget *parent) : QWidget(parent) {
     troubleshootingData +=
         "Operating System: " + QSysInfo::prettyProductName() + " (" +
         QSysInfo::kernelVersion() + ")\n";
+            QSysInfo::kernelType() + " " + QSysInfo::kernelVersion() + ")\n";
+    troubleshootingData +=
+        "CPU Architecture: " + QSysInfo::buildCpuArchitecture() + "\n";
+
+    QString gpuInfo;
+
+    QOpenGLContext context;
+    context.create();
+
+    QOffscreenSurface surface;
+    surface.create();
+
+    context.makeCurrent(&surface);
+
+    QOpenGLFunctions *f = context.functions();
+    const GLubyte *vendor   = f->glGetString(GL_VENDOR);
+    const GLubyte *renderer = f->glGetString(GL_RENDERER);
+    const GLubyte *version  = f->glGetString(GL_VERSION);
+
+    gpuInfo += "GPU Vendor: " + QString::fromLatin1(reinterpret_cast<const char*>(vendor)) + "\n";
+    gpuInfo += "GPU Renderer: " + QString::fromLatin1(reinterpret_cast<const char*>(renderer)) + "\n";
+    gpuInfo += "OpenGL Version: " + QString::fromLatin1(reinterpret_cast<const char*>(version)) + "\n";
+
+    context.doneCurrent();
+
+    troubleshootingData += gpuInfo;
 
     QString wine = "Not detected\n";
     typedef const char *(__cdecl * wine_info_proc)();
