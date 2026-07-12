@@ -127,8 +127,6 @@ LauncherWindow::LauncherWindow(QWidget *parent)
             .arg(game_TechSupportUrl));
 #if defined(GAME_STEINSGATEVSO)
     QString version = "1.0.0";
-#elif defined(GAME_ANONYMOUSCODE)
-    QString version = "1.0.1";
 #else
     QFile patchdefFile("languagebarrier/patchdef.json");
     if (!patchdefFile.open(QIODevice::ReadOnly)) {
@@ -445,7 +443,7 @@ void LauncherWindow::toggleSettings() {
 }
 
 void LauncherWindow::startUpdateCheck() {
-#if defined(GAME_STEINSGATEVSO) || defined(GAME_ANONYMOUSCODE)
+#if defined(GAME_STEINSGATEVSO)
     QFile versioninfoFile("./versioninfo.json");
 #else
     QFile versioninfoFile("languagebarrier/versioninfo.json");
