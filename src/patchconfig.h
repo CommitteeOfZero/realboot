@@ -18,6 +18,11 @@ class PatchConfig : public QObject {
     };
     Q_ENUM(SongSubs)
     static QStringList SongSubsOptions;
+    static QStringList ResolutionOptions;
+
+    enum class DisplayMode : uint32_t { Windowed = 0, Fullscreen = 1, Num };
+    Q_ENUM(DisplayMode)
+    static QStringList DisplayModeOptions;
 
     explicit PatchConfig(QObject* parent = 0);
     ~PatchConfig() {}

@@ -287,7 +287,8 @@ void LauncherWindow::startGame() {
         file.rename("./c0_subs_disabled.nut");
         file.remove("./c0_subs.nut");
     }
-    if (rbApp->patchConfig()->displayMode == "windowed") {
+    if (rbApp->patchConfig()->displayMode ==
+        PatchConfig::DisplayModeOptions[(int)PatchConfig::DisplayMode::Windowed]) {
         if (rbApp->patchConfig()->resolution == "1080") {
             QProcess::startDetached(
                 "cmd", QStringList()

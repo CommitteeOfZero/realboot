@@ -13,6 +13,12 @@
 QStringList PatchConfig::SongSubsOptions =
     QStringList() << "off" << "all" << "karaonly" << "tlonly";
 #endif
+#if defined(GAME_ANONYMOUSCODE)
+QStringList PatchConfig::ResolutionOptions =
+    QStringList() << "576" << "720" << "1080";
+QStringList PatchConfig::DisplayModeOptions =
+    QStringList() << "windowed" << "fullscreen";
+#endif
 
 PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
 #if defined(GAME_CHAOSHEADLCC) || defined(GAME_CHAOSCHILDLCC)
@@ -94,6 +100,14 @@ PatchConfig::PatchConfig(QObject* parent) : QObject(parent) {
 #endif
         if (inJson["enableDxvk"].isBool())
             enableDxvk = inJson["enableDxvk"].toBool();
+#if defined(GAME_ANONYMOUSCODE)
+        if (inJson["resolution"].isString())
+            resolution = inJson["resolution"].toString();
+        if (inJson["displayMode"].isString())
+            displayMode = inJson["displayMode"].toString();
+        if (inJson["voiceSubs"].isBool())
+            voiceSubs = inJson["voiceSubs"].toBool();
+#endif
     }
 #else
     readLuaConfig(_path);
@@ -156,6 +170,11 @@ void PatchConfig::save() {
     outJson["selectedController"] = selectedController;
 #endif
     outJson["enableDxvk"] = enableDxvk;
+#if defined(GAME_ANONYMOUSCODE)
+    outJson["resolution"] = resolution;
+    outJson["displayMode"] = displayMode;
+    outJson["voiceSubs"] = voiceSubs;
+#endif
 
     QJsonDocument outJsonDocument(outJson);
     outFile.write(outJsonDocument.toJson());

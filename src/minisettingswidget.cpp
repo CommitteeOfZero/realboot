@@ -1,6 +1,7 @@
 #include "minisettingswidget.h"
 #include "launcherapplication.h"
 #include "gameconfig.h"
+#include "patchconfig.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -90,11 +91,19 @@ MiniSettingsWidget::MiniSettingsWidget(QWidget *parent) : QWidget(parent) {
 
 void MiniSettingsWidget::setConfig() {
 #if !defined(GAME_STEINSGATEVSO)
+#if defined(GAME_ANONYMOUSCODE)
+    rbApp->patchConfig()->resolution = PatchConfig::ResolutionOptions[
+        _resolutionComboBox->currentData().toInt()];
+    rbApp->patchConfig()->displayMode = PatchConfig::DisplayModeOptions[(int)(
+        _fullscreenCb->isChecked() ? PatchConfig::DisplayMode::Fullscreen
+                                    : PatchConfig::DisplayMode::Windowed)];
+#else
     rbApp->gameConfig()->resolution =
         (GameConfig::Resolution)_resolutionComboBox->currentData().toInt();
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
+#endif
 #if defined(GAME_CHAOSHEADNOAH)
     rbApp->gameConfig()->language =
         (GameConfig::Language)_languageGroup->checkedId();
@@ -110,10 +119,18 @@ void MiniSettingsWidget::setConfig() {
 
 void MiniSettingsWidget::reloadData() {
 #if !defined(GAME_STEINSGATEVSO)
+#if defined(GAME_ANONYMOUSCODE)
+    _resolutionComboBox->setCurrentIndex(
+        _resolutionComboBox->findData(qMax(0, PatchConfig::ResolutionOptions.indexOf(
+            rbApp->patchConfig()->resolution))));
+    _fullscreenCb->setChecked(rbApp->patchConfig()->displayMode ==
+        PatchConfig::DisplayModeOptions[(int)PatchConfig::DisplayMode::Fullscreen]);
+#else
     _resolutionComboBox->setCurrentIndex(
         _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
+#endif
 #if !defined(GAME_CHAOSHEADNOAH) && !defined(GAME_STEINSGATEELITE) &&        \
     !defined(GAME_STEINSGATEVSO) && !defined(GAME_ROBOTICSNOTESELITE) &&     \
     !defined(GAME_ROBOTICSNOTESDASH) && !defined(GAME_ANONYMOUSCODE)

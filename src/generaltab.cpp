@@ -174,11 +174,19 @@ GeneralTab::GeneralTab(QWidget *parent) : QWidget(parent) {
 
 void GeneralTab::setConfig() {
 #if !defined(GAME_STEINSGATEVSO)
+#if defined(GAME_ANONYMOUSCODE)
+    rbApp->patchConfig()->resolution = PatchConfig::ResolutionOptions[
+        _resolutionComboBox->currentData().toInt()];
+    rbApp->patchConfig()->displayMode = PatchConfig::DisplayModeOptions[(int)(
+        _fullscreenCb->isChecked() ? PatchConfig::DisplayMode::Fullscreen
+                                    : PatchConfig::DisplayMode::Windowed)];
+#else
     rbApp->gameConfig()->resolution =
         (GameConfig::Resolution)_resolutionComboBox->currentData().toInt();
     rbApp->gameConfig()->displayMode = _fullscreenCb->isChecked()
                                            ? GameConfig::DisplayMode::Fullscreen
                                            : GameConfig::DisplayMode::Windowed;
+#endif
 
 #if defined(GAME_CHAOSHEADNOAH)
     rbApp->gameConfig()->language =
@@ -229,10 +237,19 @@ void GeneralTab::setConfig() {
 
 void GeneralTab::reloadData() {
 #if !defined(GAME_STEINSGATEVSO)
+#if defined(GAME_ANONYMOUSCODE)
+    _resolutionComboBox->setCurrentIndex(
+        _resolutionComboBox->findData(qMax(0, PatchConfig::ResolutionOptions.indexOf(
+            rbApp->patchConfig()->resolution))));
+    _fullscreenCb->setChecked(rbApp->patchConfig()->displayMode ==
+        PatchConfig::DisplayModeOptions[(int)PatchConfig::DisplayMode::Fullscreen]);
+    _voiceSubsCb->setChecked(rbApp->patchConfig()->voiceSubs);
+#else
     _resolutionComboBox->setCurrentIndex(
         _resolutionComboBox->findData((int)rbApp->gameConfig()->resolution));
     _fullscreenCb->setChecked(rbApp->gameConfig()->displayMode ==
                               GameConfig::DisplayMode::Fullscreen);
+#endif
 #if defined(GAME_CHAOSHEADNOAH)
     _languageGroup->button((int)rbApp->gameConfig()->language)
         ->setChecked(true);
